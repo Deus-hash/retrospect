@@ -10,13 +10,40 @@
     <span id="emulator-status"></span>
   </div>
 
-  <div class="emulator__canvas-wrap">
-    <canvas id="retrospect-canvas" class="emulator__canvas" width="640" height="480"></canvas>
-    <div id="emulator-start-overlay" class="emulator__start-overlay">
-      <div class="emulator__start-overlay-btn">
-        <span class="start-icon">▶</span>
-        <span class="start-text">НАЖМИТЕ ДЛЯ СТАРТА</span>
-        <span class="start-sub">{{#if game.title}}{{game.title}}{{else}}{{console.name}}{{/if}}</span>
+  <div id="emulator-viewport" class="emulator__viewport">
+    <div class="emulator__canvas-wrap">
+      <canvas id="retrospect-canvas" class="emulator__canvas" width="640" height="480" tabindex="0"></canvas>
+      <div id="emulator-start-overlay" class="emulator__start-overlay">
+        <div class="emulator__start-overlay-btn">
+          <span class="start-icon">▶</span>
+          <span class="start-text">НАЖМИТЕ ДЛЯ СТАРТА</span>
+          <span class="start-sub">{{#if game.title}}{{game.title}}{{else}}{{console.name}}{{/if}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Сенсорный геймпад для мобильных устройств (внутри fullscreen-контейнера) -->
+    <div id="emulator-touch-gamepad" class="emulator__touch-gamepad" style="display: none;">
+      <div class="touch-dpad">
+        <button class="touch-btn touch-btn--up" data-btn="up" data-code="ArrowUp" data-key="ArrowUp" data-code-num="38">▲</button>
+        <div class="touch-dpad-middle">
+          <button class="touch-btn touch-btn--left" data-btn="left" data-code="ArrowLeft" data-key="ArrowLeft" data-code-num="37">◀</button>
+          <div class="touch-dpad-center">●</div>
+          <button class="touch-btn touch-btn--right" data-btn="right" data-code="ArrowRight" data-key="ArrowRight" data-code-num="39">▶</button>
+        </div>
+        <button class="touch-btn touch-btn--down" data-btn="down" data-code="ArrowDown" data-key="ArrowDown" data-code-num="40">▼</button>
+      </div>
+
+      <div class="touch-center-controls">
+        <button class="touch-btn touch-btn--select" data-btn="select" data-code="ShiftRight" data-key="Shift" data-code-num="16">SELECT</button>
+        <button class="touch-btn touch-btn--start" data-btn="start" data-code="Enter" data-key="Enter" data-code-num="13">START</button>
+      </div>
+
+      <div class="touch-actions">
+        <button class="touch-btn touch-btn--action touch-btn--y" data-btn="y" data-code="KeyA" data-key="a" data-code-num="65">Y</button>
+        <button class="touch-btn touch-btn--action touch-btn--x" data-btn="x" data-code="KeyS" data-key="s" data-code-num="83">X</button>
+        <button class="touch-btn touch-btn--action touch-btn--b" data-btn="b" data-code="KeyZ" data-key="z" data-code-num="90">B</button>
+        <button class="touch-btn touch-btn--action touch-btn--a" data-btn="a" data-code="KeyX" data-key="x" data-code-num="88">A</button>
       </div>
     </div>
   </div>
@@ -31,37 +58,16 @@
     <button class="pixel-btn pixel-btn--sm emulator__btn" data-action="fullscreen" title="Во весь экран">⛶ Во весь экран</button>
   </div>
 
-  <div id="emulator-touch-gamepad" class="emulator__touch-gamepad" style="display: none;">
-    <div class="touch-dpad">
-      <button class="touch-btn touch-btn--up" data-key="38">▲</button>
-      <div class="touch-dpad-middle">
-        <button class="touch-btn touch-btn--left" data-key="37">◀</button>
-        <button class="touch-btn touch-btn--center">●</button>
-        <button class="touch-btn touch-btn--right" data-key="39">▶</button>
-      </div>
-      <button class="touch-btn touch-btn--down" data-key="40">▼</button>
-    </div>
-
-    <div class="touch-center-controls">
-      <button class="touch-btn touch-btn--select" data-key="16">SELECT</button>
-      <button class="touch-btn touch-btn--start" data-key="13">START</button>
-    </div>
-
-    <div class="touch-actions">
-      <button class="touch-btn touch-btn--action" data-key="89">Y</button>
-      <button class="touch-btn touch-btn--action" data-key="88">X</button>
-      <button class="touch-btn touch-btn--action" data-key="90">B</button>
-      <button class="touch-btn touch-btn--action" data-key="65">A</button>
-    </div>
-  </div>
-
   <div class="emulator__controls">
     <p class="emulator__controls-hint">
       <strong>Управление:</strong> <strong>Стрелки / WASD</strong> — перемещение, <strong>Z / X</strong> (или <strong>J / K</strong>) — действие, <strong>Enter</strong> — Start, <strong>Shift</strong> — Select · <span id="gamepad-status-indicator" class="gamepad-status-indicator">🎮 Геймпад: ожидание ввода</span>
+    </p>
+    <p class="emulator__controls-mobile-hint" style="display: none;">
+      🎮 Сенсорный джойстик активен · Поддерживаются Bluetooth-геймпады
     </p>
   </div>
 </div>
 
 <script src="/js/emulator/nostalgist.umd.js"></script>
 <script src="/js/emulator/jsnes.min.js"></script>
-<script src="/js/emulator/unified-emulator.js?v=3.0"></script>
+<script src="/js/emulator/unified-emulator.js?v=3.1"></script>

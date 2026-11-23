@@ -143,6 +143,10 @@
       if (dropzone) dropzone.style.display = 'none';
       if (startOverlay) startOverlay.style.display = 'none';
 
+      focusActiveCanvas();
+      setTimeout(focusActiveCanvas, 150);
+      setTimeout(focusActiveCanvas, 500);
+
       var startBtn = emulatorEl.querySelector('[data-action="start"]');
       if (startBtn) startBtn.textContent = 'Перезапуск';
 
@@ -363,6 +367,7 @@
   emulatorEl.querySelectorAll('[data-action]').forEach(function(btn) {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
+      focusActiveCanvas();
       var action = this.dataset.action;
       if (action === 'start') {
         if (!isRunning) startEmulator(currentRomSource);
@@ -376,7 +381,7 @@
       } else if (action === 'crt') {
         toggleCrt();
       } else if (action === 'fullscreen') {
-        var elem = canvasWrap || canvas;
+        var elem = document.getElementById('emulator-viewport') || canvasWrap || canvas;
         var isFull = document.fullscreenElement || document.webkitFullscreenElement;
         if (!isFull) {
           if (elem && elem.requestFullscreen) {
@@ -391,38 +396,108 @@
             document.webkitExitFullscreen();
           }
         }
+        focusActiveCanvas();
       } else if (action === 'toggle-gamepad') {
         if (touchGamepad) {
           var isHidden = touchGamepad.style.display === 'none' || !touchGamepad.style.display;
           touchGamepad.style.display = isHidden ? 'flex' : 'none';
           this.classList.toggle('pixel-btn--active', isHidden);
         }
+        focusActiveCanvas();
       }
     });
   });
 
+  function focusActiveCanvas() {
+    var c = (currentInstance && currentInstance.getCanvas) ? currentInstance.getCanvas() : canvas;
+    if (!c) c = document.getElementById('retrospect-canvas') || document.querySelector('.emulator__canvas-wrap canvas');
+    if (c) {
+      if (!c.getAttribute('tabindex')) c.setAttribute('tabindex', '0');
+      try { c.focus(); } catch(e) {}
+    }
+  }
+
   // Виртуальный сенсорный геймпад для смартфонов
   if (touchGamepad) {
-    touchGamepad.querySelectorAll('[data-key]').forEach(function(padBtn) {
-      var keyCode = parseInt(padBtn.dataset.key, 10);
-      function pressKey(down) {
+    // Автоматически показываем сенсорные кнопки на смартфонах/планшетах
+    if (window.innerWidth <= 768 || 'ontouchstart' in window) {
+      touchGamepad.style.display = 'flex';
+      var touchToggleBtn = emulatorEl.querySelector('[data-action="toggle-gamepad"]');
+      if (touchToggleBtn) touchToggleBtn.classList.add('pixel-btn--active');
+    }
+
+    touchGamepad.querySelectorAll('.touch-btn').forEach(function(padBtn) {
+      var btnName = padBtn.dataset.btn;
+      var code = padBtn.dataset.code || 'ArrowUp';
+      var key = padBtn.dataset.key || 'ArrowUp';
+      var keyCode = parseInt(padBtn.dataset.codeNum || padBtn.dataset.key, 10);
+
+      function press(down) {
+        padBtn.classList.toggle('touch-btn--pressed', down);
+        focusActiveCanvas();
+
+        // 1. Direct Nostalgist Core API
+        if (currentInstance) {
+          try {
+            if (btnName && currentInstance.pressDown && currentInstance.pressUp) {
+              if (down) {
+                currentInstance.pressDown(btnName, 1);
+              } else {
+                currentInstance.pressUp(btnName, 1);
+              }
+            } else if (currentInstance.keyboardDown && currentInstance.keyboardUp) {
+              if (down) {
+                currentInstance.keyboardDown(code);
+              } else {
+                currentInstance.keyboardUp(code);
+              }
+            }
+          } catch(e) {}
+        }
+
+        // 2. Direct JSNES API
+        if (jsnesInstance && typeof jsnes !== 'undefined' && jsnes.Controller) {
+          var jBtn = null;
+          if (btnName === 'up' || keyCode === 38) jBtn = jsnes.Controller.BUTTON_UP;
+          else if (btnName === 'down' || keyCode === 40) jBtn = jsnes.Controller.BUTTON_DOWN;
+          else if (btnName === 'left' || keyCode === 37) jBtn = jsnes.Controller.BUTTON_LEFT;
+          else if (btnName === 'right' || keyCode === 39) jBtn = jsnes.Controller.BUTTON_RIGHT;
+          else if (btnName === 'a' || keyCode === 88) jBtn = jsnes.Controller.BUTTON_A;
+          else if (btnName === 'b' || keyCode === 90) jBtn = jsnes.Controller.BUTTON_B;
+          else if (btnName === 'start' || keyCode === 13) jBtn = jsnes.Controller.BUTTON_START;
+          else if (btnName === 'select' || keyCode === 16) jBtn = jsnes.Controller.BUTTON_SELECT;
+
+          if (jBtn !== null) {
+            try {
+              if (down) jsnesInstance.buttonDown(1, jBtn);
+              else jsnesInstance.buttonUp(1, jBtn);
+            } catch(e) {}
+          }
+        }
+
+        // 3. Dispatch genuine synthetic KeyboardEvents with code & key
         var eventType = down ? 'keydown' : 'keyup';
         var ev = new KeyboardEvent(eventType, {
-          bubbles: true,
-          cancelable: true,
+          key: key,
+          code: code,
           keyCode: keyCode,
           which: keyCode,
+          bubbles: true,
+          cancelable: true,
         });
+        ev._synthesized = true;
+        var c = (currentInstance && currentInstance.getCanvas) ? currentInstance.getCanvas() : canvas;
+        if (c) c.dispatchEvent(ev);
         window.dispatchEvent(ev);
-        padBtn.classList.toggle('touch-btn--pressed', down);
       }
 
-      padBtn.addEventListener('mousedown', function(e) { e.preventDefault(); pressKey(true); });
-      padBtn.addEventListener('mouseup', function(e) { e.preventDefault(); pressKey(false); });
-      padBtn.addEventListener('mouseleave', function(e) { pressKey(false); });
+      padBtn.addEventListener('mousedown', function(e) { e.preventDefault(); press(true); });
+      padBtn.addEventListener('mouseup', function(e) { e.preventDefault(); press(false); });
+      padBtn.addEventListener('mouseleave', function(e) { press(false); });
 
-      padBtn.addEventListener('touchstart', function(e) { e.preventDefault(); pressKey(true); });
-      padBtn.addEventListener('touchend', function(e) { e.preventDefault(); pressKey(false); });
+      padBtn.addEventListener('touchstart', function(e) { e.preventDefault(); e.stopPropagation(); press(true); }, { passive: false });
+      padBtn.addEventListener('touchend', function(e) { e.preventDefault(); e.stopPropagation(); press(false); }, { passive: false });
+      padBtn.addEventListener('touchcancel', function(e) { press(false); });
     });
   }
 
@@ -468,8 +543,19 @@
     }
   }
 
-  window.addEventListener('keydown', function(e) { handleKeyTranslation(e, true); });
-  window.addEventListener('keyup', function(e) { handleKeyTranslation(e, false); });
+  window.addEventListener('keydown', function(e) {
+    if (isRunning) {
+      var tag = (document.activeElement && document.activeElement.tagName) || '';
+      if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+        focusActiveCanvas();
+      }
+    }
+    handleKeyTranslation(e, true);
+  }, true);
+
+  window.addEventListener('keyup', function(e) {
+    handleKeyTranslation(e, false);
+  }, true);
 
   // --- HTML5 Gamepad API (Геймпады для ПК, Android, iOS) ---
   var prevPadButtons = {};

@@ -926,14 +926,57 @@ a:hover {
   .header__inner {
     flex-direction: column;
     align-items: stretch;
+    gap: 12px;
+  }
+
+  .header__brand {
+    text-align: center;
+    width: 100%;
+  }
+
+  .header__logo {
+    font-size: 1.1rem;
+    display: inline-block;
+  }
+
+  .header__nav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .header__link {
+    font-size: 0.55rem;
+    text-align: center;
+    padding: 8px 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
   }
 
   .header__search {
     margin-left: 0;
+    width: 100%;
   }
 
   .header__search-input {
-    width: 100%;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .emulator__controls-hint {
+    display: none !important;
+  }
+
+  .emulator__controls-mobile-hint {
+    display: block !important;
   }
 
   .games-layout {
