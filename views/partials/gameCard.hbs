@@ -1,0 +1,28 @@
+<a href="/games/{{this.slug}}" class="game-card {{#if this.isPlayableOnline}}game-card--playable{{/if}}">
+  <div class="game-card__image">
+    {{#if this.screenshots.length}}
+    <img src="{{this.screenshots.[0]}}" alt="{{this.title}}" loading="lazy">
+    {{else}}
+    <div class="game-card__no-image">🎮</div>
+    {{/if}}
+    {{#if this.isPlayableOnline}}
+    <span class="game-card__emu-tag">PLAY</span>
+    {{/if}}
+  </div>
+  <div class="game-card__info">
+    <h3 class="game-card__title">{{this.title}}</h3>
+    <div class="game-card__sub">
+      <span class="game-card__year">{{this.year}}</span>
+      <span class="game-card__console">{{this.consoleId.name}}</span>
+    </div>
+    {{#if this.developer}}
+    <div class="game-card__author">{{this.developer}}</div>
+    {{/if}}
+    <div class="game-card__bottom">
+      <div class="game-card__rating">{{#stars this.rating}}{{/stars}}</div>
+      {{#if this.isHomebrew}}
+      <span class="game-card__homebrew-pill">Homebrew</span>
+      {{/if}}
+    </div>
+  </div>
+</a>

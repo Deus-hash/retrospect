@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="console-detail">
+    <div class="console-detail__top-nav">
+      <a href="/consoles" class="pixel-btn pixel-btn--sm">◀ Назад к консолям</a>
+      <a href="/games?console={{console.slug}}" class="pixel-btn pixel-btn--sm pixel-btn--secondary">Игры платформы ({{games.length}})</a>
+    </div>
+
+    <div class="console-detail__header" style="--console-color: {{console.color}};">
+      <div class="console-detail__image">
+        <img src="{{console.image}}" alt="{{console.name}}">
+      </div>
+      <div class="console-detail__info">
+        <h1 class="console-detail__title">{{console.name}}</h1>
+        <p class="console-detail__year">{{console.manufacturer}} · {{console.year}} г. · {{console.bitness}}-bit архитектура</p>
+        <p class="console-detail__desc">{{console.description}}</p>
+      </div>
+    </div>
+
+    {{#if featuredGame.romFile}}
+    <section class="console-emulator-section">
+      <div class="section-header-row">
+        <h2 class="section-title">Лаборатория эмуляции {{console.name}}</h2>
+        <span class="section-subtitle">Загружена игра: <strong>{{featuredGame.title}}</strong></span>
+      </div>
+      {{> emulator console=console game=featuredGame romFile=featuredGame.romFile}}
+    </section>
+    {{/if}}
+
+    <section class="console-games">
+      <div class="section-header-row">
+        <h2 class="section-title">Каталог игр платформы ({{games.length}})</h2>
+        <a href="/games?console={{console.slug}}" class="pixel-btn pixel-btn--sm">Фильтр игр</a>
+      </div>
+      {{#if games.length}}
+      <div class="game-grid">
+        {{#each games}}
+        {{> gameCard this}}
+        {{/each}}
+      </div>
+      {{else}}
+      <div class="empty-state">
+        <p>Для этой консоли пока нет игр</p>
+      </div>
+      {{/if}}
+    </section>
+
+    {{#if accessories.length}}
+    <section class="console-accessories">
+      <h2 class="section-title">Фирменные аксессуары</h2>
+      <div class="accessories-grid">
+        {{#each accessories}}
+        <div class="accessory-card">
+          <h3 class="accessory-card__name">{{this.name}}</h3>
+          <p class="accessory-card__desc">{{this.description}}</p>
+        </div>
+        {{/each}}
+      </div>
+    </section>
+    {{/if}}
+  </div>
+</div>

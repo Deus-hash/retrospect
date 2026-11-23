@@ -1,0 +1,114 @@
+<div class="container">
+  <div class="game-detail">
+    <div class="game-detail__top-nav">
+      <a href="/games" class="pixel-btn pixel-btn--sm game-detail__back">◀ Назад к играм</a>
+      <a href="/consoles/{{game.consoleId.slug}}" class="pixel-btn pixel-btn--sm pixel-btn--secondary">{{game.consoleId.name}}</a>
+    </div>
+
+    <div class="game-detail__header">
+      <h1 class="game-detail__title">{{game.title}}</h1>
+      <div class="game-detail__meta">
+        <span class="game-detail__rating">{{#stars game.rating}}{{/stars}}</span>
+        <span class="game-detail__year">{{game.year}} г.</span>
+        <span class="game-detail__console">{{game.consoleId.name}}</span>
+        <span class="game-detail__genre">{{game.genre}}</span>
+        {{#if game.isPlayableOnline}}
+        <span class="badge badge--playable">Играть онлайн</span>
+        {{else}}
+        <span class="badge badge--wiki">Каталог</span>
+        {{/if}}
+      </div>
+    </div>
+
+    {{#if game.romFile}}
+    {{> emulator console=game.consoleId game=game romFile=game.romFile}}
+    {{else}}
+    <div class="wiki-notice-card">
+      <div class="wiki-notice-card__badge">🏛️ Энциклопедическая запись</div>
+      <h3 class="wiki-notice-card__title">Историческая справка об игре</h3>
+      <p class="wiki-notice-card__text">
+        Эта классическая игра представлена в нашей открытой базе знаний. Вы можете ознакомиться с подробными характеристиками, историей создания и скриншотами. Чтобы запустить доступные игры для этой платформы прямо в браузере, перейдите в веб-эмулятор.
+      </p>
+      <div class="wiki-notice-card__action">
+        <a href="/emulators?console={{game.consoleId.slug}}" class="pixel-btn pixel-btn--sm">
+          🎮 Играть в доступные игры {{game.consoleId.name}} онлайн ▶
+        </a>
+      </div>
+    </div>
+    {{/if}}
+
+    <div class="game-detail__info">
+      <div class="game-detail__desc">
+        <h2 class="section-title">Описание игры</h2>
+        <p>{{game.description}}</p>
+      </div>
+      <div class="game-detail__specs">
+        <h2 class="section-title">Характеристики</h2>
+        <ul class="specs-list">
+          <li><strong>Издатель:</strong> {{game.publisher}}</li>
+          <li><strong>Разработчик:</strong> {{#if game.developer}}{{game.developer}}{{else}}{{game.publisher}}{{/if}}</li>
+          <li><strong>Год выпуска:</strong> {{game.year}}</li>
+          <li><strong>Жанр:</strong> {{game.genre}}</li>
+          <li><strong>Игроков:</strong> {{game.players}}</li>
+          <li><strong>Платформа:</strong> {{game.consoleId.name}} ({{game.consoleId.bitness}}-bit)</li>
+          <li><strong>Статус:</strong> <span class="license-tag">{{#if game.isPlayableOnline}}Доступна онлайн{{else}}Архивная статья{{/if}}</span></li>
+          {{#if game.developer}}
+          <li><strong>Создатель:</strong> {{game.developer}}</li>
+          {{/if}}
+          {{#if game.licenseUrl}}
+          <li><strong>Сайт проекта:</strong> <a href="{{game.licenseUrl}}" target="_blank" rel="noopener" class="link--highlight">Страница разработчика</a></li>
+          {{/if}}
+        </ul>
+      </div>
+    </div>
+
+    {{#if game.screenshots.length}}
+    <section class="screenshots">
+      <h2 class="section-title">Скриншоты и материалы</h2>
+      <div class="screenshots__grid">
+        {{#each game.screenshots}}
+        <div class="screenshots__item">
+          <img src="{{this}}" alt="Скриншот игры {{../game.title}}" loading="lazy">
+        </div>
+        {{/each}}
+      </div>
+    </section>
+    {{/if}}
+
+    {{#if game.accessories.length}}
+    <section class="accessories-section">
+      <h2 class="section-title">Совместимые аксессуары</h2>
+      <div class="accessories-list">
+        {{#each game.accessories}}
+        <div class="accessory-item">
+          <span class="accessory-item__name">{{this.name}}</span>
+          <span class="accessory-item__desc">{{this.description}}</span>
+        </div>
+        {{/each}}
+      </div>
+    </section>
+    {{/if}}
+
+    {{#if game.tags.length}}
+    <section class="tags-section">
+      <h2 class="section-title">Теги</h2>
+      <div class="tags-list">
+        {{#each game.tags}}
+        <a href="/games?search={{this}}" class="tag">{{this}}</a>
+        {{/each}}
+      </div>
+    </section>
+    {{/if}}
+
+    {{#if similarGames.length}}
+    <section class="similar-section">
+      <h2 class="section-title">Похожие игры</h2>
+      <div class="game-grid">
+        {{#each similarGames}}
+        {{> gameCard this}}
+        {{/each}}
+      </div>
+    </section>
+    {{/if}}
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240">
+  <defs>
+    <linearGradient id="g_2" x1="0" y1="0" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090a0f"/>
+      <stop offset="50%" stop-color="#1a1c2e"/>
+      <stop offset="100%" stop-color="#080710"/>
+    </linearGradient>
+    <pattern id="scanlines" width="320" height="4" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="320" y2="0" stroke="rgba(0,0,0,0.22)" stroke-width="1.2"/>
+    </pattern>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="320" height="240" fill="url(#g_2)"/>
+
+  <!-- Gameplay Layer -->
+  
+      <!-- Starfield -->
+      <g fill="#ffffff">
+        <circle cx="25" cy="45" r="1.5" opacity="0.8"/>
+        <circle cx="78" cy="85" r="1" opacity="0.9"/>
+        <circle cx="140" cy="50" r="2" opacity="0.7"/>
+        <circle cx="195" cy="100" r="1.5" opacity="0.5"/>
+        <circle cx="270" cy="65" r="1.8" opacity="0.85"/>
+        <circle cx="295" cy="160" r="1" opacity="0.9"/>
+        <circle cx="85" cy="190" r="2" opacity="0.6"/>
+      </g>
+      <!-- Nebula Gas -->
+      <ellipse cx="230" cy="120" rx="70" ry="40" fill="#a55eea" opacity="0.25"/>
+      <!-- Alien Battle Cruiser (Boss) -->
+      <g transform="translate(180, 80)">
+        <polygon points="90,30 20,0 35,30 20,60" fill="#eb3b5a" stroke="#2d98da" stroke-width="1.5"/>
+        <circle cx="45" cy="30" r="8" fill="#fed330"/>
+        <circle cx="45" cy="30" r="4" fill="#fc5c65"/>
+        <polygon points="45,10 65,30 45,50" fill="#778ca3"/>
+        <line x1="20" y1="30" x2="0" y2="30" stroke="#45aaf2" stroke-width="3" stroke-dasharray="6,4"/>
+      </g>
+      <!-- Player Starfighter -->
+      <g transform="translate(40, 110)">
+        <polygon points="40,15 10,5 16,15 10,25" fill="#2bcbba" stroke="#ffffff" stroke-width="1"/>
+        <polygon points="20,10 32,15 20,20" fill="#45aaf2"/>
+        <line x1="42" y1="12" x2="160" y2="12" stroke="#fed330" stroke-width="2.5"/>
+        <line x1="42" y1="18" x2="160" y2="18" stroke="#fed330" stroke-width="2.5"/>
+      </g>
+    
+
+  <!-- CRT Scanlines -->
+  <rect width="320" height="240" fill="url(#scanlines)" pointer-events="none"/>
+
+  <!-- HUD -->
+  
+      <rect x="0" y="0" width="320" height="22" fill="rgba(0,0,0,0.85)"/>
+      <text x="10" y="15" fill="#2bcbba" font-family="'Press Start 2P', monospace" font-size="7">1UP 094820</text>
+      <text x="140" y="15" fill="#fed330" font-family="'Press Start 2P', monospace" font-size="7">HIGH 150000</text>
+      <text x="260" y="15" fill="#fc5c65" font-family="'Press Start 2P', monospace" font-size="7">BOMB x2</text>
+    
+
+  <!-- CRT Bevel Glass Edge -->
+  <rect x="2" y="2" width="316" height="236" rx="8" fill="none" stroke="#222" stroke-width="4"/>
+  <rect x="4" y="4" width="312" height="232" rx="6" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+</svg>

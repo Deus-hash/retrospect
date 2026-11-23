@@ -1,0 +1,20 @@
+{{#if (gt totalPages 1)}}
+<nav class="pagination">
+  {{#if (gt currentPage 1)}}
+  <a href="{{pageUrl filters (subtract currentPage 1)}}" class="pixel-btn pixel-btn--sm" title="Предыдущая страница">◀</a>
+  {{/if}}
+
+  {{#each (paginationPages currentPage totalPages)}}
+    {{#if this.isEllipsis}}
+      <span class="pagination__ellipsis">…</span>
+    {{else}}
+      <a href="{{pageUrl ../filters this.page}}"
+         class="pixel-btn pixel-btn--sm {{#if this.isCurrent}}pixel-btn--active{{/if}}">{{this.page}}</a>
+    {{/if}}
+  {{/each}}
+
+  {{#if (lt currentPage totalPages)}}
+  <a href="{{pageUrl filters (add currentPage 1)}}" class="pixel-btn pixel-btn--sm" title="Следующая страница">▶</a>
+  {{/if}}
+</nav>
+{{/if}}

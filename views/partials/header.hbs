@@ -1,0 +1,17 @@
+<header class="header">
+  <div class="container header__inner">
+    <div class="header__brand">
+      <a href="/" class="header__logo">RETROSPECT</a>
+    </div>
+    <nav class="header__nav">
+      <a href="/consoles" class="header__link">Консоли</a>
+      <a href="/games" class="header__link">Каталог игр</a>
+      <a href="/emulators" class="header__link">Эмуляторы</a>
+      <a href="/accessories" class="header__link">Аксессуары</a>
+    </nav>
+    <form action="/search" method="GET" class="header__search">
+      <input type="text" name="q" class="pixel-input header__search-input" placeholder="Поиск игр, консолей..." value="{{query}}">
+      <button type="submit" class="pixel-btn pixel-btn--sm">Найти</button>
+    </form>
+  </div>
+</header>

@@ -1,0 +1,20 @@
+<div class="container">
+  <div class="section-header-row">
+    <div>
+      <h1 class="section-title">Игровые консоли (9 платформ)</h1>
+      <p class="section-desc">Архитектура 8, 16, 32 и 64-битных систем со встроенной поддержкой эмуляции WebAssembly</p>
+    </div>
+    <a href="/emulators" class="pixel-btn pixel-btn--primary">🕹 Открыть лабораторию эмуляции</a>
+  </div>
+
+  {{#each (entries grouped)}}
+  <section class="console-section">
+    <h2 class="section-title section-title--sm">{{this.key}}-bit поколение консолей</h2>
+    <div class="console-grid">
+      {{#each this.value}}
+      {{> consoleCard this}}
+      {{/each}}
+    </div>
+  </section>
+  {{/each}}
+</div>

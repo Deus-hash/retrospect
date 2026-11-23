@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240">
+  <defs>
+    <linearGradient id="g_2" x1="0" y1="0" x2="0" y2="100%">
+      <stop offset="0%" stop-color="#4a69bd"/>
+      <stop offset="65%" stop-color="#82ccdd"/>
+      <stop offset="65%" stop-color="#78e08f"/>
+      <stop offset="100%" stop-color="#38ada9"/>
+    </linearGradient>
+    <pattern id="scanlines" width="320" height="4" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="320" y2="0" stroke="rgba(0,0,0,0.22)" stroke-width="1.2"/>
+    </pattern>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="320" height="240" fill="url(#g_2)"/>
+
+  <!-- Gameplay Layer -->
+  
+      <!-- Distant Hills -->
+      <polygon points="0,155 45,120 100,155 170,115 240,155 320,120 320,155 0,155" fill="#079992" opacity="0.6"/>
+      <!-- Floating Brick Platforms -->
+      <g stroke="#000" stroke-width="1.5">
+        <rect x="75" y="105" width="22" height="22" fill="#b71540"/>
+        <rect x="97" y="105" width="22" height="22" fill="#fa983a"/>
+        <text x="108" y="121" font-family="'Press Start 2P', monospace" font-size="11" font-weight="bold" fill="#6a1b9a" text-anchor="middle">?</text>
+        <rect x="119" y="105" width="22" height="22" fill="#b71540"/>
+
+        <rect x="210" y="85" width="22" height="22" fill="#fa983a"/>
+        <text x="221" y="101" font-family="'Press Start 2P', monospace" font-size="11" font-weight="bold" fill="#6a1b9a" text-anchor="middle">?</text>
+      </g>
+      <!-- Gold Coins -->
+      <ellipse cx="108" cy="80" rx="5" ry="8" fill="#f6b93b" stroke="#e58e26" stroke-width="1.5"/>
+      <ellipse cx="221" cy="60" rx="5" ry="8" fill="#f6b93b" stroke="#e58e26" stroke-width="1.5"/>
+      <!-- Pipe -->
+      <g stroke="#000" stroke-width="1.5">
+        <rect x="250" y="130" width="36" height="45" fill="#009432"/>
+        <rect x="245" y="120" width="46" height="12" fill="#4cd137"/>
+      </g>
+      <!-- Hero Character -->
+      <g transform="translate(85, 138)">
+        <rect x="4" y="0" width="14" height="6" fill="#eb2f06"/>
+        <rect x="6" y="6" width="12" height="6" fill="#f8c291"/>
+        <rect x="4" y="12" width="14" height="12" fill="#eb2f06"/>
+        <rect x="2" y="14" width="4" height="8" fill="#1e3799"/>
+        <rect x="5" y="24" width="5" height="10" fill="#1e3799"/>
+        <rect x="12" y="24" width="5" height="10" fill="#1e3799"/>
+        <rect x="3" y="32" width="7" height="4" fill="#6a2c70"/>
+        <rect x="12" y="32" width="7" height="4" fill="#6a2c70"/>
+      </g>
+    
+
+  <!-- CRT Scanlines -->
+  <rect width="320" height="240" fill="url(#scanlines)" pointer-events="none"/>
+
+  <!-- HUD -->
+  
+      <rect x="0" y="0" width="320" height="22" fill="rgba(0,0,0,0.85)"/>
+      <text x="10" y="15" fill="#ffffff" font-family="'Press Start 2P', monospace" font-size="7">SCORE 038500</text>
+      <text x="145" y="15" fill="#f6b93b" font-family="'Press Start 2P', monospace" font-size="7">🪙x18</text>
+      <text x="230" y="15" fill="#ffffff" font-family="'Press Start 2P', monospace" font-size="7">STAGE 1-2</text>
+    
+
+  <!-- CRT Bevel Glass Edge -->
+  <rect x="2" y="2" width="316" height="236" rx="8" fill="none" stroke="#222" stroke-width="4"/>
+  <rect x="4" y="4" width="312" height="232" rx="6" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+</svg>

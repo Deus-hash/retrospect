@@ -1,0 +1,101 @@
+<div class="container">
+  <div class="emulators-page">
+    <div class="emulators-page__header">
+      <h1 class="section-title">Лаборатория веб-эмуляции Retrospect</h1>
+      <p class="section-desc">Запускайте игры прямо в браузере с аппаратным ускорением WebAssembly без установки стороннего ПО и плагинов.</p>
+    </div>
+
+    <!-- Селектор консолей -->
+    <div class="console-selector">
+      <span class="console-selector__label">Выберите платформу:</span>
+      <div class="console-selector__list">
+        {{#each consoles}}
+        <a href="/emulators?console={{this.slug}}"
+           class="console-selector__item {{#if (eq this.slug ../activeConsole.slug)}}console-selector__item--active{{/if}}"
+           style="--active-color: {{this.color}};">
+          <span class="console-selector__name">{{this.name}}</span>
+          <span class="console-selector__bits">{{this.bitness}}-bit</span>
+        </a>
+        {{/each}}
+      </div>
+    </div>
+
+    {{#if activeConsole}}
+    <div class="active-emulator-wrapper">
+      <div class="active-emulator-info">
+        <h2 class="active-emulator-title">{{activeConsole.name}}</h2>
+        <p class="active-emulator-meta">{{activeConsole.manufacturer}} ({{activeConsole.year}} г.) · Ядро эмулятора: <code>{{activeConsole.emulatorCore}}</code></p>
+        <p class="active-emulator-desc">{{activeConsole.description}}</p>
+      </div>
+
+      <!-- Встроенный эмулятор -->
+      {{> emulator console=activeConsole game=featuredGame romFile=featuredGame.romFile}}
+
+      <!-- Список доступных игр для этой консоли -->
+      <div class="console-homebrew-showcase">
+        <h3 class="section-title section-title--sm">Доступные игры для {{activeConsole.name}} (всего: {{gamesForConsole.length}}):</h3>
+        {{#if gamesForConsole.length}}
+        <div class="homebrew-quick-list">
+          {{#each gamesForConsole}}
+          <div class="homebrew-quick-card {{#if (eq this.slug ../featuredGame.slug)}}homebrew-quick-card--selected{{/if}}">
+            <div class="homebrew-quick-thumb">
+              {{#if this.screenshots.[0]}}
+              <img src="{{this.screenshots.[0]}}" alt="{{this.title}}" loading="lazy">
+              {{else}}
+              <div class="homebrew-quick-thumb-fallback">🎮</div>
+              {{/if}}
+              {{#if (eq this.slug ../featuredGame.slug)}}
+              <span class="active-pill">В эмуляторе</span>
+              {{/if}}
+            </div>
+            <div class="homebrew-quick-info">
+              <h4 class="homebrew-quick-title">{{this.title}}</h4>
+              <p class="homebrew-quick-sub">{{this.year}} г. · {{this.genre}}</p>
+            </div>
+            <div class="homebrew-quick-actions">
+              <a href="/emulators?console={{../activeConsole.slug}}&game={{this.slug}}&autoplay=1" class="pixel-btn pixel-btn--sm">Выбрать ▶</a>
+              <a href="/games/{{this.slug}}?autoplay=1" class="pixel-btn pixel-btn--sm pixel-btn--secondary" title="Подробнее об игре и запуск">Инфо ▶</a>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+        {{else}}
+        <div class="empty-state">
+          <p>Для этой платформы игры в данный момент подготавливаются к каталогизации. Выберите платформу с готовыми играми в меню выше (Dendy, Mega Drive, SNES, Master System, Atari 2600, Nintendo 64, PlayStation, PC Engine).</p>
+        </div>
+        {{/if}}
+
+        <!-- Ссылка на полный исторический каталог консоли -->
+        <div class="console-catalog-banner">
+          <div class="console-catalog-banner__info">
+            <h4>🏛️ Энциклопедический каталог {{activeConsole.name}} ({{totalGamesForConsole}} игр)</h4>
+            <p>В открытой базе знаний Retrospect доступны подробные исторические справки, обзоры, характеристики и скриншоты культовой классики платформы (Tekken, Silent Hill, Crash Bandicoot, Metal Gear Solid, Gran Turismo и др.).</p>
+          </div>
+          <a href="/games?console={{activeConsole.slug}}" class="pixel-btn pixel-btn--sm pixel-btn--secondary">
+            Все {{totalGamesForConsole}} игр платформы в каталоге ▶
+          </a>
+        </div>
+      </div>
+    </div>
+    {{/if}}
+
+    <!-- Блок о технологии эмуляции -->
+    <div class="tech-card">
+      <h3 class="tech-card__title">Архитектура и производительность эмуляции</h3>
+      <div class="tech-card__grid">
+        <div class="tech-card__item">
+          <h4>Песочница WebAssembly</h4>
+          <p>Эмуляторы транслируются из оригинального C/C++ кода ядер Libretro в высокопроизводительный WebAssembly. Код исполняется изолированно и плавно в браузере.</p>
+        </div>
+        <div class="tech-card__item">
+          <h4>Мгновенный запуск</h4>
+          <p>Все игры предварительно оптимизированы и запускаются с сервера в один клик. Никаких ручных скачиваний, поиска BIOS или сложных конфигураций.</p>
+        </div>
+        <div class="tech-card__item">
+          <h4>Универсальная поддержка</h4>
+          <p>Работает на Windows, macOS, Linux, Android, iOS и Smart TV без необходимости скачивать эмуляторы, устанавливать драйверы или стороннее ПО.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

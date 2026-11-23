@@ -1,0 +1,54 @@
+<aside class="filters">
+  <div class="filters__header">
+    <h3 class="filters__title">Фильтры каталога</h3>
+  </div>
+  <form action="/games" method="GET" class="filters__form">
+    <div class="filters__group">
+      <label class="filters__label">Консоль</label>
+      <select name="console" class="pixel-select">
+        <option value="">Все 9 консолей</option>
+        {{#each consoles}}
+        <option value="{{this.slug}}" {{#if (eq ../filters.console this.slug)}}selected{{/if}}>{{this.name}}</option>
+        {{/each}}
+      </select>
+    </div>
+
+    <div class="filters__group">
+      <label class="filters__label">Жанр</label>
+      <select name="genre" class="pixel-select">
+        <option value="">Все жанры</option>
+        {{#each genres}}
+        <option value="{{this}}" {{#if (eq ../filters.genre this)}}selected{{/if}}>{{this}}</option>
+        {{/each}}
+      </select>
+    </div>
+
+    <div class="filters__group filters__group--checkbox">
+      <label class="filters__checkbox-label">
+        <input type="checkbox" name="playable" value="1" {{#if (eq filters.playable "1")}}checked{{/if}}>
+        <span>Только играбельные онлайн</span>
+      </label>
+    </div>
+
+    <div class="filters__group filters__group--row">
+      <div>
+        <label class="filters__label">Год от</label>
+        <input type="number" name="yearMin" class="pixel-input" value="{{filters.yearMin}}" placeholder="1977" min="1970" max="2026">
+      </div>
+      <div>
+        <label class="filters__label">Год до</label>
+        <input type="number" name="yearMax" class="pixel-input" value="{{filters.yearMax}}" placeholder="2026" min="1970" max="2026">
+      </div>
+    </div>
+
+    <div class="filters__group">
+      <label class="filters__label">Ключевое слово</label>
+      <input type="text" name="search" class="pixel-input" value="{{filters.search}}" placeholder="Поиск по играм...">
+    </div>
+
+    <div class="filters__actions">
+      <button type="submit" class="pixel-btn">Применить</button>
+      <a href="/games" class="pixel-btn pixel-btn--secondary">Сбросить</a>
+    </div>
+  </form>
+</aside>

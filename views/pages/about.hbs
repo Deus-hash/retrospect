@@ -1,0 +1,84 @@
+<div class="container">
+  <div class="about-page">
+    <div class="about-page__header">
+      <span class="badge badge--accent">RETROSPECT PLATFORM</span>
+      <h1 class="section-title">О проекте Retrospect</h1>
+      <p class="section-desc">Интерактивная веб-энциклопедия и облачная платформа ретро-гейминга с моментальным запуском классических игр прямо в браузере.</p>
+    </div>
+
+    <!-- 1. Концепция и возможности -->
+    <div class="about-card">
+      <h2 class="section-title section-title--sm">Миссия и философия платформы</h2>
+      <div class="about-grid-2">
+        <div class="about-box about-box--solution">
+          <h3>🎮 Сохранение игрового наследия</h3>
+          <p>
+            Retrospect создан для фанатов, исследователей и любителей видеоигр. Мы бережно собираем историю развития игровых систем от ранних 8-битных приставок до эпохи 3D-графики: исторические факты, технические спецификации микропроцессоров, графических чипов и архивные материалы.
+          </p>
+        </div>
+        <div class="about-box about-box--solution">
+          <h3>⚡ Нулевой порог входа (Zero-Install)</h3>
+          <p>
+            Вам больше не нужно вручную скачивать сторонние программы-эмуляторы, настраивать плагины видеовывода, искать микрокоды BIOS или разбираться в конфигах. Все доступные игры запускаются в 1 клик на ПК, ноутбуках, смартфонах и планшетах.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Платформа в цифрах -->
+    <div class="about-card">
+      <h2 class="section-title section-title--sm">Платформа в цифрах</h2>
+      <div class="market-metrics-grid">
+        <div class="metric-card">
+          <span class="metric-card__value">{{totalGames}}</span>
+          <span class="metric-card__title">Игр в энциклопедии</span>
+          <p class="metric-card__desc">Подробные иллюстрированные описания, характеристики, даты релизов и скриншоты.</p>
+        </div>
+        <div class="metric-card">
+          <span class="metric-card__value">{{playableGames}}</span>
+          <span class="metric-card__title">Игр онлайн</span>
+          <p class="metric-card__desc">Доступны для мгновенного прохождения прямо в окне браузера.</p>
+        </div>
+        <div class="metric-card">
+          <span class="metric-card__value">{{totalConsoles}}</span>
+          <span class="metric-card__title">Игровых систем</span>
+          <p class="metric-card__desc">От 8-битной Dendy и Atari 2600 до 32-битной PlayStation и 64-битной N64.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Технологический стек -->
+    <div class="about-card">
+      <h2 class="section-title section-title--sm">Технологии и архитектура</h2>
+      <div class="tech-card__grid">
+        <div class="tech-card__item">
+          <h4>WebAssembly & Libretro</h4>
+          <p>Нативная производительность ядер эмуляции со стабильными 60 кадрами в секунду, чистым синтезом звука и минимальной задержкой отклика.</p>
+        </div>
+        <div class="tech-card__item">
+          <h4>Универсальное управление</h4>
+          <p>Автоматическая поддержка клавиатуры, внешних USB и Bluetooth геймпадов (HTML5 Gamepad API) и виртуального сенсорного джойстика на смартфонах.</p>
+        </div>
+        <div class="tech-card__item">
+          <h4>Сохранения и CRT-фильтр</h4>
+          <p>Функции мгновенного быстрого сохранения и загрузки (Quick Save / Load), скриншоты в один клик и аутентичный визуальный фильтр кинескопа.</p>
+        </div>
+        <div class="tech-card__item">
+          <h4>Node.js, Express & MongoDB</h4>
+          <p>Масштабируемый быстрый бэкенд с полнотекстовым поиском, фильтрацией по поколениям, жанрам и годам выпуска.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Разработчикам -->
+    <div class="about-card">
+      <h2 class="section-title section-title--sm">Открытый API для разработчиков</h2>
+      <p>Retrospect предоставляет открытый программный интерфейс для интеграции каталога, статистики и метаданных в сторонние проекты:</p>
+      <div class="about-api-links">
+        <a href="/api/games" class="pixel-btn pixel-btn--sm" target="_blank">GET /api/games</a>
+        <a href="/api/consoles" class="pixel-btn pixel-btn--sm" target="_blank">GET /api/consoles</a>
+        <a href="/api/stats" class="pixel-btn pixel-btn--sm" target="_blank">GET /api/stats</a>
+      </div>
+    </div>
+  </div>
+</div>

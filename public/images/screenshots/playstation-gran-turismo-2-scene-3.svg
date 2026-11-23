@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240">
+  <defs>
+    <linearGradient id="g_2" x1="0" y1="0" x2="0" y2="100%">
+      <stop offset="0%" stop-color="#ff5555"/>
+      <stop offset="45%" stop-color="#f1fa8c"/>
+      <stop offset="45%" stop-color="#44475a"/>
+      <stop offset="100%" stop-color="#282a36"/>
+    </linearGradient>
+    <pattern id="scanlines" width="320" height="4" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="320" y2="0" stroke="rgba(0,0,0,0.22)" stroke-width="1.2"/>
+    </pattern>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="320" height="240" fill="url(#g_2)"/>
+
+  <!-- Gameplay Layer -->
+  
+      <!-- Distant Hills -->
+      <polygon points="0,110 50,85 110,110 180,80 250,110 320,90 320,110 0,110" fill="#6272a4"/>
+      <!-- Perspective Road -->
+      <polygon points="120,110 200,110 320,240 0,240" fill="#282a36"/>
+      <!-- Road Curbs (Red / White) -->
+      <polygon points="116,110 120,110 0,240 -12,240" fill="#ff5555"/>
+      <polygon points="200,110 204,110 332,240 320,240" fill="#f8f8f2"/>
+      <!-- Center Dashed Line -->
+      <polygon points="158,110 162,110 170,240 150,240" fill="#f1fa8c" stroke-dasharray="10,8"/>
+      <!-- Player Sports Car (Rear View) -->
+      <g transform="translate(130, 168)">
+        <!-- Spoiler -->
+        <rect x="6" y="0" width="48" height="5" fill="#bd93f9" rx="1"/>
+        <rect x="14" y="5" width="4" height="6" fill="#111"/>
+        <rect x="42" y="5" width="4" height="6" fill="#111"/>
+        <!-- Chassis -->
+        <polygon points="8,10 52,10 58,26 2,26" fill="#ff5555"/>
+        <rect x="4" y="26" width="52" height="12" fill="#d82020" rx="3"/>
+        <!-- Tail Lights -->
+        <rect x="8" y="27" width="12" height="5" fill="#ff0000"/>
+        <circle cx="14" cy="29" r="2" fill="#ffb86c"/>
+        <rect x="40" y="27" width="12" height="5" fill="#ff0000"/>
+        <circle cx="46" cy="29" r="2" fill="#ffb86c"/>
+        <!-- License Plate -->
+        <rect x="25" y="28" width="10" height="6" fill="#fff"/>
+        <!-- Wheels -->
+        <rect x="2" y="32" width="10" height="12" fill="#111" rx="2"/>
+        <rect x="48" y="32" width="10" height="12" fill="#111" rx="2"/>
+        <!-- Exhaust flame -->
+        <circle cx="12" cy="38" r="3" fill="#50fa7b"/>
+      </g>
+    
+
+  <!-- CRT Scanlines -->
+  <rect width="320" height="240" fill="url(#scanlines)" pointer-events="none"/>
+
+  <!-- HUD -->
+  
+      <rect x="0" y="0" width="320" height="22" fill="rgba(0,0,0,0.85)"/>
+      <text x="10" y="15" fill="#50fa7b" font-family="'Press Start 2P', monospace" font-size="7">POS 1/8</text>
+      <text x="110" y="15" fill="#f1fa8c" font-family="'Press Start 2P', monospace" font-size="7">LAP 2/3</text>
+      <text x="210" y="15" fill="#ff79c6" font-family="'Press Start 2P', monospace" font-size="7">184 KM/H</text>
+    
+
+  <!-- CRT Bevel Glass Edge -->
+  <rect x="2" y="2" width="316" height="236" rx="8" fill="none" stroke="#222" stroke-width="4"/>
+  <rect x="4" y="4" width="312" height="232" rx="6" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+</svg>

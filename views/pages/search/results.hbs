@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="section-header-row">
+    <h1 class="section-title">Результаты поиска: «{{query}}»</h1>
+    <span class="section-subtitle">Найдено записей: {{totalFound}}</span>
+  </div>
+
+  {{#if games.length}}
+  <section class="search-section">
+    <h2 class="section-title section-title--sm">Игры ({{games.length}})</h2>
+    <div class="game-grid">
+      {{#each games}}
+      {{> gameCard this}}
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+  {{#if consoles.length}}
+  <section class="search-section">
+    <h2 class="section-title section-title--sm">Консоли ({{consoles.length}})</h2>
+    <div class="console-grid">
+      {{#each consoles}}
+      {{> consoleCard this}}
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+  {{#if accessories.length}}
+  <section class="search-section">
+    <h2 class="section-title section-title--sm">Аксессуары ({{accessories.length}})</h2>
+    <div class="accessories-grid">
+      {{#each accessories}}
+      <div class="accessory-card">
+        <h3 class="accessory-card__name">
+          <a href="/accessories/{{this.slug}}">{{this.name}}</a>
+        </h3>
+        <p class="accessory-card__desc">{{this.description}}</p>
+      </div>
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+  {{#unless games.length}}
+  {{#unless consoles.length}}
+  {{#unless accessories.length}}
+  <div class="empty-state">
+    <p>Ничего не найдено по запросу «{{query}}»</p>
+    <a href="/games" class="pixel-btn">Смотреть весь каталог игр</a>
+  </div>
+  {{/unless}}
+  {{/unless}}
+  {{/unless}}
+</div>

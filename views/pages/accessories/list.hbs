@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="section-header-row">
+    <h1 class="section-title">Аксессуары и периферия</h1>
+    <span class="section-subtitle">Световые пистолеты, геймпады, мультитапы и расширения</span>
+  </div>
+
+  <form action="/accessories" method="GET" class="filters__form filters__form--inline">
+    <div class="filters__group">
+      <select name="console" class="pixel-select">
+        <option value="">Все поддерживаемые консоли</option>
+        {{#each consoles}}
+        <option value="{{this.slug}}" {{#if (eq ../selectedConsole this.slug)}}selected{{/if}}>{{this.name}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <button type="submit" class="pixel-btn pixel-btn--sm">Фильтровать</button>
+    {{#if selectedConsole}}
+    <a href="/accessories" class="pixel-btn pixel-btn--sm pixel-btn--secondary">Сброс</a>
+    {{/if}}
+  </form>
+
+  {{#if accessories.length}}
+  <div class="accessories-grid">
+    {{#each accessories}}
+    <div class="accessory-card">
+      <div class="accessory-card__info">
+        <h3 class="accessory-card__name">
+          <a href="/accessories/{{this.slug}}" class="accessory-card__link">{{this.name}}</a>
+        </h3>
+        <p class="accessory-card__desc">{{this.description}}</p>
+        <div class="accessory-card__consoles">
+          {{#each this.consoleIds}}
+          <a href="/consoles/{{this.slug}}" class="tag">{{this.name}}</a>
+          {{/each}}
+        </div>
+        {{#if this.gamesSupported.length}}
+        <p class="accessory-card__games">Совместимые игры: <strong>{{join this.gamesSupported ", "}}</strong></p>
+        {{/if}}
+        <div class="accessory-card__action">
+          <a href="/accessories/{{this.slug}}" class="pixel-btn pixel-btn--sm">Подробнее</a>
+        </div>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+  {{else}}
+  <div class="empty-state">
+    <p>Аксессуары не найдены для выбранной консоли</p>
+    <a href="/accessories" class="pixel-btn">Показать все</a>
+  </div>
+  {{/if}}
+</div>

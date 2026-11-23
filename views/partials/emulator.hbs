@@ -1,0 +1,67 @@
+<div class="emulator" data-console="{{console.slug}}" data-rom="{{romFile}}">
+  <div class="emulator__header">
+    <div class="emulator__title-group">
+      <span class="emulator__title">{{#if game.title}}{{game.title}}{{else}}{{console.name}} Эмулятор{{/if}}</span>
+    </div>
+    <span class="emulator__badge emulator__badge--console" style="background-color: {{console.color}};">{{console.name}} ({{console.bitness}}-bit)</span>
+  </div>
+
+  <div id="emulator-status-box" class="emulator__status" style="display: none;">
+    <span id="emulator-status"></span>
+  </div>
+
+  <div class="emulator__canvas-wrap">
+    <canvas id="retrospect-canvas" class="emulator__canvas" width="640" height="480"></canvas>
+    <div id="emulator-start-overlay" class="emulator__start-overlay">
+      <div class="emulator__start-overlay-btn">
+        <span class="start-icon">▶</span>
+        <span class="start-text">НАЖМИТЕ ДЛЯ СТАРТА</span>
+        <span class="start-sub">{{#if game.title}}{{game.title}}{{else}}{{console.name}}{{/if}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="emulator__toolbar">
+    <button class="pixel-btn pixel-btn--sm emulator__btn" data-action="start">▶ Старт</button>
+    <button class="pixel-btn pixel-btn--sm emulator__btn" data-action="pause">⏸ Пауза</button>
+    <button class="pixel-btn pixel-btn--sm emulator__btn" data-action="sound">🔊 Звук</button>
+    <button class="pixel-btn pixel-btn--sm emulator__btn" data-action="screenshot" title="Снимок экрана">📸 Скриншот</button>
+    <button class="pixel-btn pixel-btn--sm emulator__btn" data-action="crt" title="Ретро-фильтр кинескопа">📺 CRT</button>
+    <button class="pixel-btn pixel-btn--sm emulator__btn emulator__btn--mobile-only" data-action="toggle-gamepad" title="Сенсорный джойстик">🎮 Сенсор</button>
+    <button class="pixel-btn pixel-btn--sm emulator__btn" data-action="fullscreen" title="Во весь экран">⛶ Во весь экран</button>
+  </div>
+
+  <div id="emulator-touch-gamepad" class="emulator__touch-gamepad" style="display: none;">
+    <div class="touch-dpad">
+      <button class="touch-btn touch-btn--up" data-key="38">▲</button>
+      <div class="touch-dpad-middle">
+        <button class="touch-btn touch-btn--left" data-key="37">◀</button>
+        <button class="touch-btn touch-btn--center">●</button>
+        <button class="touch-btn touch-btn--right" data-key="39">▶</button>
+      </div>
+      <button class="touch-btn touch-btn--down" data-key="40">▼</button>
+    </div>
+
+    <div class="touch-center-controls">
+      <button class="touch-btn touch-btn--select" data-key="16">SELECT</button>
+      <button class="touch-btn touch-btn--start" data-key="13">START</button>
+    </div>
+
+    <div class="touch-actions">
+      <button class="touch-btn touch-btn--action" data-key="89">Y</button>
+      <button class="touch-btn touch-btn--action" data-key="88">X</button>
+      <button class="touch-btn touch-btn--action" data-key="90">B</button>
+      <button class="touch-btn touch-btn--action" data-key="65">A</button>
+    </div>
+  </div>
+
+  <div class="emulator__controls">
+    <p class="emulator__controls-hint">
+      <strong>Управление:</strong> <strong>Стрелки / WASD</strong> — перемещение, <strong>Z / X</strong> (или <strong>J / K</strong>) — действие, <strong>Enter</strong> — Start, <strong>Shift</strong> — Select · <span id="gamepad-status-indicator" class="gamepad-status-indicator">🎮 Геймпад: ожидание ввода</span>
+    </p>
+  </div>
+</div>
+
+<script src="/js/emulator/nostalgist.umd.js"></script>
+<script src="/js/emulator/jsnes.min.js"></script>
+<script src="/js/emulator/unified-emulator.js?v=3.0"></script>

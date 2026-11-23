@@ -1,0 +1,37 @@
+<div class="container games-layout">
+  {{> filters consoles=consoles genres=genres filters=filters}}
+
+  <div class="games-content">
+    <div class="games-header">
+      <div>
+        <h1 class="section-title">Каталог игр</h1>
+        <div class="games-filter-pills">
+          {{#if (eq filters.playable "1")}}
+          <span class="badge badge--playable">Только играбельные онлайн</span>
+          {{/if}}
+          {{#if filters.console}}
+          <span class="badge badge--wiki">Консоль: {{filters.console}}</span>
+          {{/if}}
+          {{#if filters.genre}}
+          <span class="badge badge--legal">Жанр: {{filters.genre}}</span>
+          {{/if}}
+        </div>
+      </div>
+      <span class="games-count">Найдено: <strong>{{total}}</strong></span>
+    </div>
+
+    {{#if games.length}}
+    <div class="game-grid">
+      {{#each games}}
+      {{> gameCard this}}
+      {{/each}}
+    </div>
+    {{> pagination currentPage=currentPage totalPages=totalPages filters=filters}}
+    {{else}}
+    <div class="empty-state">
+      <p>Игр по вашему запросу не найдено</p>
+      <a href="/games" class="pixel-btn">Сбросить все фильтры</a>
+    </div>
+    {{/if}}
+  </div>
+</div>

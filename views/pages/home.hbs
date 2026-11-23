@@ -1,0 +1,83 @@
+<div class="container">
+  <section class="hero">
+    <div class="hero__badge">РЕТРО-ГЕЙМИНГ В ОДИН КЛИК</div>
+    <h1 class="hero__title">RETROSPECT</h1>
+    <p class="hero__subtitle">Интерактивная открытая энциклопедия ретро-гейминга и браузерная эмуляция классических видеоигр</p>
+
+    <div class="hero__stats">
+      <div class="hero__stat-card">
+        <span class="hero__stat-number">{{stats.totalConsoles}}</span>
+        <span class="hero__stat-label">Культовых консолей</span>
+      </div>
+      <div class="hero__stat-card">
+        <span class="hero__stat-number">{{stats.totalGames}}</span>
+        <span class="hero__stat-label">Игр в каталоге</span>
+      </div>
+      <div class="hero__stat-card">
+        <span class="hero__stat-number">{{stats.playableCount}}</span>
+        <span class="hero__stat-label">Игр доступно онлайн</span>
+      </div>
+    </div>
+  </section>
+
+  {{#if gameOfDay}}
+  <section class="game-day">
+    <div class="section-header-row">
+      <h2 class="section-title">⭐ Рекомендация дня</h2>
+      <span class="section-badge">{{#if gameOfDay.isPlayableOnline}}Доступна для игры онлайн{{else}}Статья в каталоге{{/if}}</span>
+    </div>
+    <div class="game-day__card">
+      <div class="game-day__image">
+        {{#if gameOfDay.screenshots.length}}
+        <img src="{{gameOfDay.screenshots.[0]}}" alt="{{gameOfDay.title}}">
+        {{else}}
+        <div class="game-day__no-img">🎮</div>
+        {{/if}}
+      </div>
+      <div class="game-day__info">
+        <div class="game-day__header">
+          <h3 class="game-day__title">{{gameOfDay.title}}</h3>
+          <span class="game-day__rating">{{#stars gameOfDay.rating}}{{/stars}}</span>
+        </div>
+        <p class="game-day__meta">{{gameOfDay.consoleId.name}} · {{gameOfDay.year}} г. · Жанр: {{gameOfDay.genre}}</p>
+        <p class="game-day__desc">{{gameOfDay.description}}</p>
+        <div class="game-day__actions">
+          <a href="/games/{{gameOfDay.slug}}" class="pixel-btn">{{#if gameOfDay.isPlayableOnline}}▶ Играть в браузере{{else}}▶ Подробнее об игре{{/if}}</a>
+          <a href="/emulators?console={{gameOfDay.consoleId.slug}}" class="pixel-btn pixel-btn--secondary">Открыть эмулятор платформы</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  {{/if}}
+
+  {{#if playableGames.length}}
+  <section class="featured-playable">
+    <div class="section-header-row">
+      <div>
+        <h2 class="section-title">🎮 Популярные игры онлайн</h2>
+        <p class="section-desc">Мгновенный запуск прямо в браузере без скачивания и установки</p>
+      </div>
+      <a href="/games?playable=1" class="pixel-btn pixel-btn--sm">Все {{stats.playableCount}} онлайн-игр ▶</a>
+    </div>
+    <div class="game-grid">
+      {{#each playableGames}}
+      {{> gameCard this}}
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+  {{#each (entries grouped)}}
+  <section class="console-section">
+    <div class="section-header-row">
+      <h2 class="section-title">{{this.key}}-bit архитектура</h2>
+      <span class="section-desc">Поколение видеоигр</span>
+    </div>
+    <div class="console-grid">
+      {{#each this.value}}
+      {{> consoleCard this}}
+      {{/each}}
+    </div>
+  </section>
+  {{/each}}
+</div>

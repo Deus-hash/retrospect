@@ -1,0 +1,24 @@
+{
+  "name": "retrospect",
+  "version": "1.0.0",
+  "description": "Retrospect — интерактивная открытая энциклопедия ретро-гейминга с браузерными эмуляторами и каталогом легальных игр",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "test": "node test-server.js",
+    "seed": "node src/seeds/index.js",
+    "download-legal-roms": "node scripts/download-legal-roms.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "express-handlebars": "^8.0.0",
+    "jsnes": "^1.2.1",
+    "mongoose": "^8.7.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

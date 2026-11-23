@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="console-detail">
+    <a href="/accessories" class="pixel-btn pixel-btn--sm">Назад к аксессуарам</a>
+
+    <div class="console-detail__header" style="--console-color: var(--accent);">
+      <div class="console-detail__info">
+        <h1 class="console-detail__title">{{accessory.name}}</h1>
+        <p class="console-detail__desc">{{accessory.description}}</p>
+        <div class="accessory-detail__consoles">
+          {{#each accessory.consoleIds}}
+          <a href="/consoles/{{this.slug}}" class="tag">{{this.name}}</a>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+
+    {{#if accessory.gamesSupported.length}}
+    <section class="accessory-detail__supported">
+      <h2 class="section-title">Поддерживаемые игры</h2>
+      <ul class="accessory-detail__game-list">
+        {{#each accessory.gamesSupported}}
+        <li class="accessory-detail__game-item">{{this}}</li>
+        {{/each}}
+      </ul>
+    </section>
+    {{/if}}
+
+    <section class="console-games">
+      <h2 class="section-title">Совместимые игры ({{games.length}})</h2>
+      {{#if games.length}}
+      <div class="game-grid">
+        {{#each games}}
+        {{> gameCard this}}
+        {{/each}}
+      </div>
+      {{else}}
+      <div class="empty-state">
+        <p>Совместимые игры не найдены</p>
+      </div>
+      {{/if}}
+    </section>
+  </div>
+</div>
