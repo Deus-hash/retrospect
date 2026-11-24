@@ -1,48 +1,15 @@
 const { Router } = require('express');
-const Console = require('../models/Console');
-const Game = require('../models/Game');
+const dataStore = require('../utils/dataStore');
 
 const router = Router();
 
 // Главная страница
 router.get('/', async (req, res, next) => {
   try {
-    const [consoles, playableGames, totalGamesCount, totalConsolesCount, playableCount, activeEmulators] = await Promise.all([
-      Console.find().sort({ bitness: 1, year: 1 }).lean(),
-      Game.find({ isPlayableOnline: true }).populate('consoleId').limit(8).lean(),
-      Game.countDocuments(),
-      Console.countDocuments(),
-      Game.countDocuments({ isPlayableOnline: true }),
-      Console.countDocuments({ hasEmulator: true }),
-    ]);
-
-    const grouped = { 8: [], 16: [], 32: [] };
-    consoles.forEach(c => {
-      if (c.bitness <= 8) grouped[8].push(c);
-      else if (c.bitness <= 16) grouped[16].push(c);
-      else grouped[32].push(c);
-    });
-
-    let gameOfDay = null;
-    if (playableGames.length > 0) {
-      gameOfDay = playableGames[Math.floor(Math.random() * playableGames.length)];
-    } else if (totalGamesCount > 0) {
-      const skip = Math.floor(Math.random() * totalGamesCount);
-      gameOfDay = await Game.findOne().populate('consoleId').skip(skip).lean();
-    }
-
+    const homeData = await dataStore.getHomeData();
     res.render('pages/home', {
       title: 'Главная',
-      grouped,
-      consoles,
-      playableGames,
-      gameOfDay,
-      stats: {
-        totalGames: totalGamesCount,
-        totalConsoles: totalConsolesCount,
-        playableCount,
-        activeEmulators,
-      },
+      ...homeData
     });
   } catch (err) {
     next(err);

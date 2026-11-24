@@ -1,19 +1,12 @@
-const Console = require('../models/Console');
-const Game = require('../models/Game');
-const Accessory = require('../models/Accessory');
+const dataStore = require('../utils/dataStore');
 
 exports.list = async (req, res, next) => {
   try {
-    const consoles = await Console.find().sort({ bitness: 1, year: 1 }).lean();
-    const grouped = {
-      8: consoles.filter(c => c.bitness === 8),
-      16: consoles.filter(c => c.bitness === 16),
-      32: consoles.filter(c => c.bitness >= 32),
-    };
+    const data = await dataStore.getConsolesList();
     res.render('pages/consoles/list', {
       title: 'Консоли',
-      grouped,
-      consoles,
+      grouped: data.grouped,
+      consoles: data.consoles,
     });
   } catch (err) {
     next(err);
@@ -22,21 +15,17 @@ exports.list = async (req, res, next) => {
 
 exports.detail = async (req, res, next) => {
   try {
-    const consoleDoc = await Console.findOne({ slug: req.params.slug }).lean();
-    if (!consoleDoc) return res.status(404).render('pages/404', { title: 'Консоль не найдена' });
-
-    const [games, accessories, featuredGame] = await Promise.all([
-      Game.find({ consoleId: consoleDoc._id }).sort({ isPlayableOnline: -1, year: 1, title: 1 }).lean(),
-      Accessory.find({ consoleIds: consoleDoc._id }).lean(),
-      Game.findOne({ consoleId: consoleDoc._id, isPlayableOnline: true }).sort({ year: -1 }).lean(),
-    ]);
+    const data = await dataStore.getConsoleDetail(req.params.slug);
+    if (!data || !data.consoleDoc) {
+      return res.status(404).render('pages/404', { title: 'Консоль не найдена' });
+    }
 
     res.render('pages/consoles/detail', {
-      title: consoleDoc.name,
-      console: consoleDoc,
-      games,
-      accessories,
-      featuredGame,
+      title: data.consoleDoc.name,
+      console: data.consoleDoc,
+      games: data.games,
+      accessories: data.accessories,
+      featuredGame: data.featuredGame,
     });
   } catch (err) {
     next(err);
