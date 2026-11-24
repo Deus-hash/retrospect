@@ -123,7 +123,7 @@ app.use((err, req, res, next) => {
 
 // Подключение к MongoDB и запуск
 if (require.main === module) {
-  mongoose.connect(config.mongodbUri)
+  mongoose.connect(config.mongodbUri, { serverSelectionTimeoutMS: 5000 })
     .then(async () => {
       await autoSeed();
       app.listen(config.port, () => {
@@ -131,8 +131,11 @@ if (require.main === module) {
       });
     })
     .catch((err) => {
-      console.error('Ошибка подключения к MongoDB:', err.message);
-      process.exit(1);
+      console.warn('Внимание: Не удалось подключиться к MongoDB:', err.message);
+      console.warn('Сервер запускается для раздачи статических ассетов, эмуляторов и презентации...');
+      app.listen(config.port, () => {
+        console.log(`Retrospect запущен на http://localhost:${config.port} (автономный режим)`);
+      });
     });
 }
 
