@@ -1133,6 +1133,8 @@ const homebrewGames = [
   },
 ];
 
+const fs = require('fs');
+const path = require('path');
 const { curatedExpansion } = require('./curated-expansion');
 
 async function seedGames(Console) {
@@ -1143,9 +1145,43 @@ async function seedGames(Console) {
   }
 
   const GameModel = Console.db.model('Game');
-
-  // 1. Seed legal playable games (homebrew, public domain, open source)
   const cleanExpansion = curatedExpansion.map(({ _candKey, ...rest }) => rest);
+
+  // Preserve audited baseline records (with authentic real screenshots & PS1 titles) if present
+  const baselinePath = path.join(__dirname, 'baseline-media.json');
+  if (fs.existsSync(baselinePath)) {
+    const baseline = JSON.parse(fs.readFileSync(baselinePath, 'utf8'));
+    const baseDocs = baseline
+      .filter((b) => consoleMap[b.consoleSlug])
+      .map(({ consoleSlug, ...rest }) => ({
+        ...rest,
+        consoleId: consoleMap[consoleSlug],
+        accessories: [],
+      }));
+    await GameModel.insertMany(baseDocs);
+
+    const expDocs = cleanExpansion
+      .filter((hg) => consoleMap[hg.consoleSlug])
+      .map((hg) => {
+        const doc = {
+          ...hg,
+          slug: slugify(hg.consoleSlug + '-' + hg.title),
+          consoleId: consoleMap[hg.consoleSlug],
+        };
+        delete doc.consoleSlug;
+        return doc;
+      });
+    await GameModel.insertMany(expDocs);
+
+    for (const c of consuls) {
+      const count = await GameModel.countDocuments({ consoleId: c._id });
+      await Console.findByIdAndUpdate(c._id, { gamesCount: count });
+    }
+    console.log(`Seeded ${baseDocs.length} baseline games + ${expDocs.length} curated games.`);
+    return;
+  }
+
+  // Fallback legacy seed path
   const allPlayableGames = [...homebrewGames, ...additionalHomebrews, ...pdGames, ...cleanExpansion];
   for (const hg of allPlayableGames) {
     const consoleId = consoleMap[hg.consoleSlug];
