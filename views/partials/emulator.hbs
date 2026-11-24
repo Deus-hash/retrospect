@@ -22,28 +22,62 @@
       </div>
     </div>
 
+    <button type="button" id="emulator-landscape-exit" class="emulator__landscape-exit" title="Свернуть полноэкранный режим" aria-label="Свернуть экран" style="display: none;">✕</button>
+
     <!-- Сенсорный геймпад для мобильных устройств (внутри fullscreen-контейнера) -->
-    <div id="emulator-touch-gamepad" class="emulator__touch-gamepad" style="display: none;">
-      <div class="touch-dpad">
-        <button class="touch-btn touch-btn--up" data-btn="up" data-code="ArrowUp" data-key="ArrowUp" data-code-num="38">▲</button>
-        <div class="touch-dpad-middle">
-          <button class="touch-btn touch-btn--left" data-btn="left" data-code="ArrowLeft" data-key="ArrowLeft" data-code-num="37">◀</button>
-          <div class="touch-dpad-center">●</div>
-          <button class="touch-btn touch-btn--right" data-btn="right" data-code="ArrowRight" data-key="ArrowRight" data-code-num="39">▶</button>
+    <div id="emulator-touch-gamepad" class="emulator__touch-gamepad">
+      <div class="touch-side touch-side--left">
+        <div class="touch-shoulders touch-shoulders--left">
+          <button type="button" class="touch-btn touch-btn--shoulder touch-btn--l" data-slot="l" data-btn="l" data-code="KeyQ" data-key="q" data-code-num="81">L</button>
+          <button type="button" class="touch-btn touch-btn--trigger touch-btn--l2" data-slot="l2" data-btn="l2" data-code="KeyR" data-key="r" data-code-num="82">L2</button>
         </div>
-        <button class="touch-btn touch-btn--down" data-btn="down" data-code="ArrowDown" data-key="ArrowDown" data-code-num="40">▼</button>
+
+        <div class="touch-dpad">
+          <button type="button" class="touch-btn touch-btn--up" data-slot="up" data-btn="up" data-code="ArrowUp" data-key="ArrowUp" data-code-num="38">▲</button>
+          <div class="touch-dpad-middle">
+            <button type="button" class="touch-btn touch-btn--left" data-slot="left" data-btn="left" data-code="ArrowLeft" data-key="ArrowLeft" data-code-num="37">◀</button>
+            <div class="touch-dpad-center">●</div>
+            <button type="button" class="touch-btn touch-btn--right" data-slot="right" data-btn="right" data-code="ArrowRight" data-key="ArrowRight" data-code-num="39">▶</button>
+          </div>
+          <button type="button" class="touch-btn touch-btn--down" data-slot="down" data-btn="down" data-code="ArrowDown" data-key="ArrowDown" data-code-num="40">▼</button>
+        </div>
+
+        <div class="touch-meta touch-meta--left">
+          <button type="button" class="touch-btn touch-btn--meta touch-btn--select" data-slot="select" data-btn="select" data-code="ShiftLeft" data-key="Shift" data-code-num="16">SELECT</button>
+          <button type="button" class="touch-btn touch-btn--meta touch-btn--stick-toggle" id="touch-stick-mode-btn" style="display: none;" title="Переключить крестовину на левый стик">D-PAD</button>
+        </div>
       </div>
 
-      <div class="touch-center-controls">
-        <button class="touch-btn touch-btn--select" data-btn="select" data-code="ShiftRight" data-key="Shift" data-code-num="16">SELECT</button>
-        <button class="touch-btn touch-btn--start" data-btn="start" data-code="Enter" data-key="Enter" data-code-num="13">START</button>
-      </div>
+      <div class="touch-side touch-side--right">
+        <div class="touch-shoulders touch-shoulders--right">
+          <button type="button" class="touch-btn touch-btn--trigger touch-btn--r2" data-slot="r2" data-btn="r2" data-code="KeyF" data-key="f" data-code-num="70">R2</button>
+          <button type="button" class="touch-btn touch-btn--shoulder touch-btn--r" data-slot="r" data-btn="r" data-code="KeyE" data-key="e" data-code-num="69">R</button>
+        </div>
 
-      <div class="touch-actions">
-        <button class="touch-btn touch-btn--action touch-btn--y" data-btn="y" data-code="KeyA" data-key="a" data-code-num="65">Y</button>
-        <button class="touch-btn touch-btn--action touch-btn--x" data-btn="x" data-code="KeyS" data-key="s" data-code-num="83">X</button>
-        <button class="touch-btn touch-btn--action touch-btn--b" data-btn="b" data-code="KeyZ" data-key="z" data-code-num="90">B</button>
-        <button class="touch-btn touch-btn--action touch-btn--a" data-btn="a" data-code="KeyX" data-key="x" data-code-num="88">A</button>
+        <div class="touch-right-pads">
+          <div class="touch-subpad" style="display: none;">
+            <button type="button" class="touch-btn touch-btn--sub touch-btn--sub-up" data-slot="sub-up" data-btn="sub-up" data-code="KeyT" data-key="t" data-code-num="84">C▲</button>
+            <div class="touch-subpad-middle">
+              <button type="button" class="touch-btn touch-btn--sub touch-btn--sub-left" data-slot="sub-left" data-btn="sub-left" data-code="KeyF" data-key="f" data-code-num="70">C◀</button>
+              <span class="touch-subpad-center">C</span>
+              <button type="button" class="touch-btn touch-btn--sub touch-btn--sub-right" data-slot="sub-right" data-btn="sub-right" data-code="KeyH" data-key="h" data-code-num="72">C▶</button>
+            </div>
+            <button type="button" class="touch-btn touch-btn--sub touch-btn--sub-down" data-slot="sub-down" data-btn="sub-down" data-code="KeyG" data-key="g" data-code-num="71">C▼</button>
+          </div>
+
+          <div class="touch-actions">
+            <button type="button" class="touch-btn touch-btn--action touch-btn--y" data-slot="y" data-btn="y" data-code="KeyA" data-key="a" data-code-num="65">Y</button>
+            <button type="button" class="touch-btn touch-btn--action touch-btn--x" data-slot="x" data-btn="x" data-code="KeyS" data-key="s" data-code-num="83">X</button>
+            <button type="button" class="touch-btn touch-btn--action touch-btn--z6" data-slot="z6" data-btn="r" data-code="KeyD" data-key="d" data-code-num="68" style="display: none;">Z</button>
+            <button type="button" class="touch-btn touch-btn--action touch-btn--b" data-slot="b" data-btn="b" data-code="KeyZ" data-key="z" data-code-num="90">B</button>
+            <button type="button" class="touch-btn touch-btn--action touch-btn--a" data-slot="a" data-btn="a" data-code="KeyX" data-key="x" data-code-num="88">A</button>
+            <button type="button" class="touch-btn touch-btn--action touch-btn--c6" data-slot="c6" data-btn="a" data-code="KeyC" data-key="c" data-code-num="67" style="display: none;">C</button>
+          </div>
+        </div>
+
+        <div class="touch-meta touch-meta--right">
+          <button type="button" class="touch-btn touch-btn--meta touch-btn--start" data-slot="start" data-btn="start" data-code="Enter" data-key="Enter" data-code-num="13">START</button>
+        </div>
       </div>
     </div>
   </div>
@@ -60,7 +94,7 @@
 
   <div class="emulator__controls">
     <p class="emulator__controls-hint">
-      <strong>Управление:</strong> <strong>Стрелки / WASD</strong> — перемещение, <strong>Z / X</strong> (или <strong>J / K</strong>) — действие, <strong>Enter</strong> — Start, <strong>Shift</strong> — Select · <span id="gamepad-status-indicator" class="gamepad-status-indicator">🎮 Геймпад: ожидание ввода</span>
+      <strong>Управление:</strong> {{#if console.controlsHelp}}{{console.controlsHelp}}{{else}}<strong>Стрелки / WASD</strong> — перемещение, <strong>Z / X</strong> (или <strong>J / K</strong>) — действие, <strong>Enter</strong> — Start, <strong>Shift</strong> — Select{{/if}} · <span id="gamepad-status-indicator" class="gamepad-status-indicator">🎮 Геймпад: ожидание ввода</span>
     </p>
     <p class="emulator__controls-mobile-hint" style="display: none;">
       🎮 Сенсорный джойстик активен · Поддерживаются Bluetooth-геймпады
@@ -70,4 +104,4 @@
 
 <script src="/js/emulator/nostalgist.umd.js"></script>
 <script src="/js/emulator/jsnes.min.js"></script>
-<script src="/js/emulator/unified-emulator.js?v=3.4"></script>
+<script src="/js/emulator/unified-emulator.js?v=4.0"></script>

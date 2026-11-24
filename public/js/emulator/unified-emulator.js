@@ -116,6 +116,100 @@
 
       setStatus('Инициализация виртуальной консоли...', false);
 
+      var raConfig = {
+        video_allow_rotate: false,
+        audio_enable: true,
+      };
+      var raCoreConfig = {};
+      if (consoleSlug === 'nintendo-64') {
+        // N64: Control Stick + D-Pad via Arrows/WASD; Z/J=A, X/K/B=B, Space=Z-Trigger, Q/E=L/R, T/G/F/H=C-Buttons
+        raCoreConfig['parallel-n64-alt-map'] = 'disabled';
+        raConfig.input_player1_analog_dpad_mode = 0;
+        raConfig.input_player1_l_y_minus = 'up';
+        raConfig.input_player1_l_y_plus = 'down';
+        raConfig.input_player1_l_x_minus = 'left';
+        raConfig.input_player1_l_x_plus = 'right';
+        raConfig.input_player1_up = 'up';
+        raConfig.input_player1_down = 'down';
+        raConfig.input_player1_left = 'left';
+        raConfig.input_player1_right = 'right';
+        raConfig.input_player1_b = 'z';
+        raConfig.input_player1_y = 'x';
+        raConfig.input_player1_a = 'nul';
+        raConfig.input_player1_x = 'nul';
+        raConfig.input_player1_l = 'q';
+        raConfig.input_player1_r = 'e';
+        raConfig.input_player1_l2 = 'space';
+        raConfig.input_player1_r2 = 'nul';
+        raConfig.input_player1_start = 'enter';
+        raConfig.input_player1_select = 'shift';
+        raConfig.input_player1_r_y_minus = 't';
+        raConfig.input_player1_r_y_plus = 'g';
+        raConfig.input_player1_r_x_minus = 'f';
+        raConfig.input_player1_r_x_plus = 'h';
+      } else if (consoleSlug === 'playstation') {
+        // PS1 DualShock (517): Arrows=D-Pad, WASD=Left Stick, IJKL=Right Stick, Z/X/C/V=✕/○/□/△, Q/E=L1/R1, R/F=L2/R2
+        raConfig.input_libretro_device_p1 = 517;
+        raConfig.input_player1_analog_dpad_mode = 0;
+        raConfig.input_player1_up = 'up';
+        raConfig.input_player1_down = 'down';
+        raConfig.input_player1_left = 'left';
+        raConfig.input_player1_right = 'right';
+        raConfig.input_player1_l_y_minus = 'w';
+        raConfig.input_player1_l_y_plus = 's';
+        raConfig.input_player1_l_x_minus = 'a';
+        raConfig.input_player1_l_x_plus = 'd';
+        raConfig.input_player1_r_y_minus = 'i';
+        raConfig.input_player1_r_y_plus = 'k';
+        raConfig.input_player1_r_x_minus = 'j';
+        raConfig.input_player1_r_x_plus = 'l';
+        raConfig.input_player1_b = 'z';
+        raConfig.input_player1_a = 'x';
+        raConfig.input_player1_y = 'c';
+        raConfig.input_player1_x = 'v';
+        raConfig.input_player1_l = 'q';
+        raConfig.input_player1_r = 'e';
+        raConfig.input_player1_l2 = 'r';
+        raConfig.input_player1_r2 = 'f';
+        raConfig.input_player1_l3 = 'g';
+        raConfig.input_player1_r3 = 'h';
+        raConfig.input_player1_start = 'enter';
+        raConfig.input_player1_select = 'shift';
+      } else if (consoleSlug === 'sega-saturn') {
+        // Saturn 6-button + L/R: Z/X/C=A/B/C, A/S/D=X/Y/Z, Q/W=L/R, Enter=Start
+        raConfig.input_player1_analog_dpad_mode = 1;
+        raConfig.input_player1_b = 'z';
+        raConfig.input_player1_a = 'x';
+        raConfig.input_player1_r = 'c';
+        raConfig.input_player1_y = 'a';
+        raConfig.input_player1_x = 's';
+        raConfig.input_player1_l = 'd';
+        raConfig.input_player1_l2 = 'q';
+        raConfig.input_player1_r2 = 'w';
+        raConfig.input_player1_start = 'enter';
+        raConfig.input_player1_select = 'shift';
+      } else if (consoleSlug === 'sega-mega-drive') {
+        // Mega Drive 6-button: Z/X/C=A/B/C, A/S/D=X/Y/Z, Shift=Mode, Enter=Start
+        raConfig.input_player1_y = 'z';
+        raConfig.input_player1_b = 'x';
+        raConfig.input_player1_a = 'c';
+        raConfig.input_player1_l = 'a';
+        raConfig.input_player1_x = 's';
+        raConfig.input_player1_r = 'd';
+        raConfig.input_player1_start = 'enter';
+        raConfig.input_player1_select = 'shift';
+      } else if (consoleSlug === 'snes') {
+        // SNES: Z/X=B/A, A/S=Y/X, Q/W=L/R, Enter=Start, Shift=Select
+        raConfig.input_player1_b = 'z';
+        raConfig.input_player1_a = 'x';
+        raConfig.input_player1_y = 'a';
+        raConfig.input_player1_x = 's';
+        raConfig.input_player1_l = 'q';
+        raConfig.input_player1_r = 'w';
+        raConfig.input_player1_start = 'enter';
+        raConfig.input_player1_select = 'shift';
+      }
+
       var launchOptions = {
         core: core,
         rom: romParam,
@@ -130,10 +224,8 @@
         resolveCoreWasm: function(c) {
           return window.location.origin + '/cores/' + c + '_libretro.wasm';
         },
-        retroarchConfig: {
-          video_allow_rotate: false,
-          audio_enable: true,
-        },
+        retroarchConfig: raConfig,
+        retroarchCoreConfig: raCoreConfig,
       };
 
       currentInstance = await window.Nostalgist.launch(launchOptions);
@@ -384,11 +476,11 @@
       } else if (action === 'crt') {
         toggleCrt();
       } else if (action === 'fullscreen') {
-        var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.innerWidth <= 768;
+        var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) || window.innerWidth <= 768;
         // На ПК во весь экран разворачиваем чистую область холста (canvasWrap) без экранных сенсорных кнопок.
-        // На мобильных устройствах — контейнер viewport с сенсорным геймпадом, если он активен.
+        // На мобильных устройствах — контейнер viewport с сенсорным геймпадом.
         var elem;
-        if (isTouchDevice && touchGamepad && touchGamepad.style.display !== 'none') {
+        if (isTouchDevice && touchGamepad && touchGamepad.classList.contains('emulator__touch-gamepad--visible')) {
           elem = document.getElementById('emulator-viewport') || canvasWrap || canvas;
         } else {
           elem = canvasWrap || document.getElementById('emulator-viewport') || canvas;
@@ -411,9 +503,10 @@
         focusActiveCanvas();
       } else if (action === 'toggle-gamepad') {
         if (touchGamepad) {
-          var isHidden = touchGamepad.style.display === 'none' || !touchGamepad.style.display;
-          touchGamepad.style.display = isHidden ? 'flex' : 'none';
-          this.classList.toggle('pixel-btn--active', isHidden);
+          var nextVisible = !touchGamepad.classList.contains('emulator__touch-gamepad--visible');
+          touchUserOverride = nextVisible;
+          setTouchGamepadVisible(nextVisible);
+          syncMobileLayout();
         }
         focusActiveCanvas();
       }
@@ -429,40 +522,327 @@
     }
   }
 
-  // Виртуальный сенсорный геймпад для смартфонов
-  if (touchGamepad) {
-    // Автоматически показываем сенсорные кнопки на смартфонах/планшетах
-    if (window.innerWidth <= 768 || 'ontouchstart' in window) {
-      touchGamepad.style.display = 'flex';
-      var touchToggleBtn = emulatorEl.querySelector('[data-action="toggle-gamepad"]');
-      if (touchToggleBtn) touchToggleBtn.classList.add('pixel-btn--active');
+  // Профили раскладок сенсорного геймпада для каждой консоли (включая шифты, триггеры, C-кнопки и правый стик PS1)
+  var TOUCH_PROFILES = {
+    'dendy-nes': {
+      actionsMode: '2btn',
+      b: { label: 'B', code: 'KeyZ', key: 'z', codeNum: 90, jsnes: 'B' },
+      a: { label: 'A', code: 'KeyX', key: 'x', codeNum: 88, jsnes: 'A' },
+      select: { label: 'SELECT' },
+      start: { label: 'START' },
+    },
+    'sega-master-system': {
+      actionsMode: '2btn',
+      b: { label: '1', code: 'KeyZ', key: 'z', codeNum: 90 },
+      a: { label: '2', code: 'KeyX', key: 'x', codeNum: 88 },
+      select: null,
+      start: { label: 'PAUSE' },
+    },
+    'atari-2600': {
+      actionsMode: '1btn',
+      b: { label: 'FIRE', code: 'KeyZ', key: 'z', codeNum: 90 },
+      a: null,
+      select: { label: 'SELECT' },
+      start: { label: 'RESET' },
+    },
+    'pc-engine': {
+      actionsMode: '2btn',
+      b: { label: 'II', code: 'KeyZ', key: 'z', codeNum: 90 },
+      a: { label: 'I', code: 'KeyX', key: 'x', codeNum: 88 },
+      select: { label: 'SELECT' },
+      start: { label: 'RUN' },
+    },
+    'snes': {
+      actionsMode: '4btn',
+      shoulders: {
+        l: { label: 'L', code: 'KeyQ', key: 'q', codeNum: 81 },
+        r: { label: 'R', code: 'KeyW', key: 'w', codeNum: 87 },
+      },
+      y: { label: 'Y', code: 'KeyA', key: 'a', codeNum: 65 },
+      x: { label: 'X', code: 'KeyS', key: 's', codeNum: 83 },
+      b: { label: 'B', code: 'KeyZ', key: 'z', codeNum: 90 },
+      a: { label: 'A', code: 'KeyX', key: 'x', codeNum: 88 },
+      select: { label: 'SELECT' },
+      start: { label: 'START' },
+    },
+    'sega-mega-drive': {
+      actionsMode: '6btn',
+      y: { label: 'X', code: 'KeyA', key: 'a', codeNum: 65 },
+      x: { label: 'Y', code: 'KeyS', key: 's', codeNum: 83 },
+      z6: { label: 'Z', code: 'KeyD', key: 'd', codeNum: 68 },
+      b: { label: 'A', code: 'KeyZ', key: 'z', codeNum: 90 },
+      a: { label: 'B', code: 'KeyX', key: 'x', codeNum: 88 },
+      c6: { label: 'C', code: 'KeyC', key: 'c', codeNum: 67 },
+      select: { label: 'MODE' },
+      start: { label: 'START' },
+    },
+    'sega-saturn': {
+      actionsMode: '6btn',
+      shoulders: {
+        l: { label: 'L', code: 'KeyQ', key: 'q', codeNum: 81 },
+        r: { label: 'R', code: 'KeyW', key: 'w', codeNum: 87 },
+      },
+      y: { label: 'X', code: 'KeyA', key: 'a', codeNum: 65 },
+      x: { label: 'Y', code: 'KeyS', key: 's', codeNum: 83 },
+      z6: { label: 'Z', code: 'KeyD', key: 'd', codeNum: 68 },
+      b: { label: 'A', code: 'KeyZ', key: 'z', codeNum: 90 },
+      a: { label: 'B', code: 'KeyX', key: 'x', codeNum: 88 },
+      c6: { label: 'C', code: 'KeyC', key: 'c', codeNum: 67 },
+      select: null,
+      start: { label: 'START' },
+    },
+    'nintendo-64': {
+      actionsMode: '2btn',
+      shoulders: {
+        l: { label: 'L', code: 'KeyQ', key: 'q', codeNum: 81 },
+        l2: { label: 'Z', code: 'Space', key: ' ', codeNum: 32 },
+        r: { label: 'R', code: 'KeyE', key: 'e', codeNum: 69 },
+      },
+      subpad: {
+        center: 'C',
+        up: { label: 'C▲', code: 'KeyT', key: 't', codeNum: 84 },
+        left: { label: 'C◀', code: 'KeyF', key: 'f', codeNum: 70 },
+        right: { label: 'C▶', code: 'KeyH', key: 'h', codeNum: 72 },
+        down: { label: 'C▼', code: 'KeyG', key: 'g', codeNum: 71 },
+      },
+      b: { label: 'B', code: 'KeyX', key: 'x', codeNum: 88 },
+      a: { label: 'A', code: 'KeyZ', key: 'z', codeNum: 90 },
+      select: null,
+      start: { label: 'START' },
+    },
+    'playstation': {
+      actionsMode: '4btn',
+      stickToggle: true,
+      shoulders: {
+        l: { label: 'L1', code: 'KeyQ', key: 'q', codeNum: 81 },
+        l2: { label: 'L2', code: 'KeyR', key: 'r', codeNum: 82 },
+        r2: { label: 'R2', code: 'KeyF', key: 'f', codeNum: 70 },
+        r: { label: 'R1', code: 'KeyE', key: 'e', codeNum: 69 },
+      },
+      subpad: {
+        center: 'RS',
+        up: { label: '▲', code: 'KeyI', key: 'i', codeNum: 73 },
+        left: { label: '◀', code: 'KeyJ', key: 'j', codeNum: 74 },
+        right: { label: '▶', code: 'KeyL', key: 'l', codeNum: 76 },
+        down: { label: '▼', code: 'KeyK', key: 'k', codeNum: 75 },
+      },
+      y: { label: '□', code: 'KeyC', key: 'c', codeNum: 67 },
+      x: { label: '△', code: 'KeyV', key: 'v', codeNum: 86 },
+      b: { label: '✕', code: 'KeyZ', key: 'z', codeNum: 90 },
+      a: { label: '○', code: 'KeyX', key: 'x', codeNum: 88 },
+      select: { label: 'SELECT' },
+      start: { label: 'START' },
+    },
+  };
+
+  var viewportEl = document.getElementById('emulator-viewport');
+  var landscapeExitBtn = document.getElementById('emulator-landscape-exit');
+  var touchUserOverride = null;
+  var landscapeDismissed = false;
+  var psxStickMode = false;
+
+  function setTouchGamepadVisible(visible) {
+    if (!touchGamepad) return;
+    touchGamepad.classList.toggle('emulator__touch-gamepad--visible', !!visible);
+    if (viewportEl) viewportEl.classList.toggle('emulator__viewport--touch-visible', !!visible);
+    var touchToggleBtn = emulatorEl.querySelector('[data-action="toggle-gamepad"]');
+    if (touchToggleBtn) touchToggleBtn.classList.toggle('pixel-btn--active', !!visible);
+  }
+
+  function isTouchEnvironment() {
+    return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+  }
+
+  function isMobileLandscapeViewport() {
+    if (window.innerWidth <= window.innerHeight) return false;
+    var isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    if (isCoarse) return window.innerHeight <= 820;
+    return isTouchEnvironment() && window.innerHeight <= 540;
+  }
+
+  function syncMobileLayout() {
+    if (!viewportEl) return;
+    var mobileLandscape = isMobileLandscapeViewport();
+    if (!mobileLandscape) {
+      landscapeDismissed = false;
+    }
+    var activeSplit = mobileLandscape && !landscapeDismissed;
+    viewportEl.classList.toggle('emulator__viewport--mobile-landscape', activeSplit);
+    document.body.classList.toggle('emulator-landscape-active', activeSplit);
+    if (landscapeExitBtn) {
+      landscapeExitBtn.style.display = activeSplit ? 'inline-flex' : 'none';
+    }
+    if (touchGamepad) {
+      if (activeSplit && touchUserOverride !== false) {
+        setTouchGamepadVisible(true);
+      } else if (!activeSplit && touchUserOverride === null) {
+        setTouchGamepadVisible(window.innerWidth <= 768 || isTouchEnvironment());
+      }
+    }
+  }
+
+  if (landscapeExitBtn) {
+    landscapeExitBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      landscapeDismissed = true;
+      syncMobileLayout();
+    });
+  }
+
+  window.addEventListener('resize', syncMobileLayout);
+  window.addEventListener('orientationchange', function() {
+    setTimeout(syncMobileLayout, 80);
+    setTimeout(syncMobileLayout, 260);
+  });
+  if (window.screen && screen.orientation && screen.orientation.addEventListener) {
+    screen.orientation.addEventListener('change', syncMobileLayout);
+  }
+  if (window.matchMedia) {
+    var landscapeMq = window.matchMedia('(orientation: landscape)');
+    if (landscapeMq.addEventListener) landscapeMq.addEventListener('change', syncMobileLayout);
+  }
+
+  function configureSlotButton(slotName, spec) {
+    if (!touchGamepad) return;
+    var btn = touchGamepad.querySelector('[data-slot="' + slotName + '"]');
+    if (!btn) return;
+    if (!spec) {
+      btn.style.display = 'none';
+      return;
+    }
+    btn.style.display = '';
+    if (spec.label) btn.textContent = spec.label;
+    if (spec.code) btn.dataset.code = spec.code;
+    if (spec.key) btn.dataset.key = spec.key;
+    if (spec.codeNum) btn.dataset.codeNum = String(spec.codeNum);
+    if (spec.jsnes) btn.dataset.jsnes = spec.jsnes;
+    else delete btn.dataset.jsnes;
+  }
+
+  function applyTouchProfile() {
+    if (!touchGamepad) return;
+    var profile = TOUCH_PROFILES[consoleSlug] || TOUCH_PROFILES['snes'];
+
+    var leftShoulders = touchGamepad.querySelector('.touch-shoulders--left');
+    var rightShoulders = touchGamepad.querySelector('.touch-shoulders--right');
+    var sh = profile.shoulders || null;
+    configureSlotButton('l', sh && sh.l);
+    configureSlotButton('l2', sh && sh.l2);
+    configureSlotButton('r2', sh && sh.r2);
+    configureSlotButton('r', sh && sh.r);
+    if (leftShoulders) leftShoulders.style.display = (sh && (sh.l || sh.l2)) ? 'flex' : 'none';
+    if (rightShoulders) rightShoulders.style.display = (sh && (sh.r || sh.r2)) ? 'flex' : 'none';
+
+    var subpadEl = touchGamepad.querySelector('.touch-subpad');
+    if (profile.subpad) {
+      if (subpadEl) subpadEl.style.display = 'flex';
+      var centerLabel = subpadEl && subpadEl.querySelector('.touch-subpad-center');
+      if (centerLabel) centerLabel.textContent = profile.subpad.center || '';
+      configureSlotButton('sub-up', profile.subpad.up);
+      configureSlotButton('sub-left', profile.subpad.left);
+      configureSlotButton('sub-right', profile.subpad.right);
+      configureSlotButton('sub-down', profile.subpad.down);
+    } else if (subpadEl) {
+      subpadEl.style.display = 'none';
     }
 
-    touchGamepad.querySelectorAll('.touch-btn').forEach(function(padBtn) {
-      var btnName = padBtn.dataset.btn;
-      var code = padBtn.dataset.code || 'ArrowUp';
-      var key = padBtn.dataset.key || 'ArrowUp';
-      var keyCode = parseInt(padBtn.dataset.codeNum || padBtn.dataset.key, 10);
+    var actionsEl = touchGamepad.querySelector('.touch-actions');
+    if (actionsEl) {
+      actionsEl.classList.remove('touch-actions--1btn', 'touch-actions--2btn', 'touch-actions--4btn', 'touch-actions--6btn');
+      actionsEl.classList.add('touch-actions--' + (profile.actionsMode || '4btn'));
+    }
+    configureSlotButton('y', profile.y);
+    configureSlotButton('x', profile.x);
+    configureSlotButton('z6', profile.z6);
+    configureSlotButton('b', profile.b);
+    configureSlotButton('a', profile.a);
+    configureSlotButton('c6', profile.c6);
 
+    configureSlotButton('select', profile.select ? Object.assign({ code: 'ShiftLeft', key: 'Shift', codeNum: 16 }, profile.select) : null);
+    configureSlotButton('start', profile.start ? Object.assign({ code: 'Enter', key: 'Enter', codeNum: 13 }, profile.start) : null);
+
+    var stickModeBtn = document.getElementById('touch-stick-mode-btn');
+    if (stickModeBtn) {
+      stickModeBtn.style.display = profile.stickToggle ? 'inline-flex' : 'none';
+    }
+  }
+
+  function releaseTouchButtons(slots) {
+    if (!touchGamepad) return;
+    slots.forEach(function(slotName) {
+      var btn = touchGamepad.querySelector('[data-slot="' + slotName + '"]');
+      if (btn && btn._release) btn._release();
+    });
+  }
+
+  function updateDpadStickMapping() {
+    if (!touchGamepad) return;
+    releaseTouchButtons(['up', 'down', 'left', 'right']);
+    var dpadMap = psxStickMode ? {
+      up: { code: 'KeyW', key: 'w', codeNum: 87 },
+      down: { code: 'KeyS', key: 's', codeNum: 83 },
+      left: { code: 'KeyA', key: 'a', codeNum: 65 },
+      right: { code: 'KeyD', key: 'd', codeNum: 68 },
+    } : {
+      up: { code: 'ArrowUp', key: 'ArrowUp', codeNum: 38 },
+      down: { code: 'ArrowDown', key: 'ArrowDown', codeNum: 40 },
+      left: { code: 'ArrowLeft', key: 'ArrowLeft', codeNum: 37 },
+      right: { code: 'ArrowRight', key: 'ArrowRight', codeNum: 39 },
+    };
+    ['up', 'down', 'left', 'right'].forEach(function(dir) {
+      var btn = touchGamepad.querySelector('[data-slot="' + dir + '"]');
+      if (btn) {
+        btn.dataset.code = dpadMap[dir].code;
+        btn.dataset.key = dpadMap[dir].key;
+        btn.dataset.codeNum = String(dpadMap[dir].codeNum);
+      }
+    });
+  }
+
+  // Виртуальный сенсорный геймпад для смартфонов
+  if (touchGamepad) {
+    applyTouchProfile();
+    if (window.innerWidth <= 768 || isTouchEnvironment()) {
+      setTouchGamepadVisible(true);
+    }
+    syncMobileLayout();
+
+    var stickModeBtn = document.getElementById('touch-stick-mode-btn');
+    if (stickModeBtn) {
+      stickModeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        psxStickMode = !psxStickMode;
+        stickModeBtn.textContent = psxStickMode ? 'L-STICK' : 'D-PAD';
+        stickModeBtn.classList.toggle('touch-btn--stick-active', psxStickMode);
+        updateDpadStickMapping();
+        focusActiveCanvas();
+      });
+    }
+
+    touchGamepad.querySelectorAll('.touch-btn[data-slot]').forEach(function(padBtn) {
       function press(down) {
+        down = !!down;
+        if (!!padBtn._isDown === down) return;
+        padBtn._isDown = down;
+
+        var btnName = padBtn.dataset.btn;
+        var code = padBtn.dataset.code || 'ArrowUp';
+        var key = padBtn.dataset.key || 'ArrowUp';
+        var keyCode = parseInt(padBtn.dataset.codeNum || '38', 10);
+        var jsnesRole = padBtn.dataset.jsnes || btnName;
+
         padBtn.classList.toggle('touch-btn--pressed', down);
         focusActiveCanvas();
 
-        // 1. Direct Nostalgist Core API
-        if (currentInstance) {
+        // 1. Direct Nostalgist keyboard API (все кнопки/шифты/триггеры/аналог замаплены в raConfig)
+        if (currentInstance && currentInstance.keyboardDown && currentInstance.keyboardUp) {
           try {
-            if (btnName && currentInstance.pressDown && currentInstance.pressUp) {
-              if (down) {
-                currentInstance.pressDown(btnName, 1);
-              } else {
-                currentInstance.pressUp(btnName, 1);
-              }
-            } else if (currentInstance.keyboardDown && currentInstance.keyboardUp) {
-              if (down) {
-                currentInstance.keyboardDown(code);
-              } else {
-                currentInstance.keyboardUp(code);
-              }
+            if (down) {
+              currentInstance.keyboardDown(code);
+            } else {
+              currentInstance.keyboardUp(code);
             }
           } catch(e) {}
         }
@@ -474,8 +854,8 @@
           else if (btnName === 'down' || keyCode === 40) jBtn = jsnes.Controller.BUTTON_DOWN;
           else if (btnName === 'left' || keyCode === 37) jBtn = jsnes.Controller.BUTTON_LEFT;
           else if (btnName === 'right' || keyCode === 39) jBtn = jsnes.Controller.BUTTON_RIGHT;
-          else if (btnName === 'a' || keyCode === 88) jBtn = jsnes.Controller.BUTTON_A;
-          else if (btnName === 'b' || keyCode === 90) jBtn = jsnes.Controller.BUTTON_B;
+          else if (jsnesRole === 'A' || btnName === 'a' || keyCode === 88) jBtn = jsnes.Controller.BUTTON_A;
+          else if (jsnesRole === 'B' || btnName === 'b' || keyCode === 90) jBtn = jsnes.Controller.BUTTON_B;
           else if (btnName === 'start' || keyCode === 13) jBtn = jsnes.Controller.BUTTON_START;
           else if (btnName === 'select' || keyCode === 16) jBtn = jsnes.Controller.BUTTON_SELECT;
 
@@ -487,7 +867,7 @@
           }
         }
 
-        // 3. Dispatch genuine synthetic KeyboardEvents with code & key
+        // 3. Synthetic KeyboardEvent fallback
         var eventType = down ? 'keydown' : 'keyup';
         var ev = new KeyboardEvent(eventType, {
           key: key,
@@ -503,41 +883,78 @@
         window.dispatchEvent(ev);
       }
 
+      padBtn._release = function() { press(false); };
+
       padBtn.addEventListener('mousedown', function(e) { e.preventDefault(); press(true); });
       padBtn.addEventListener('mouseup', function(e) { e.preventDefault(); press(false); });
-      padBtn.addEventListener('mouseleave', function(e) { press(false); });
+      padBtn.addEventListener('mouseleave', function() { press(false); });
 
       padBtn.addEventListener('touchstart', function(e) { e.preventDefault(); e.stopPropagation(); press(true); }, { passive: false });
       padBtn.addEventListener('touchend', function(e) { e.preventDefault(); e.stopPropagation(); press(false); }, { passive: false });
-      padBtn.addEventListener('touchcancel', function(e) { press(false); });
+      padBtn.addEventListener('touchcancel', function() { press(false); });
     });
   }
 
-  // --- Поддержка управления WASD и альтернативных кнопок (JK) ---
-  var KEY_TRANSLATIONS = {
-    'KeyW': { key: 'ArrowUp', code: 'ArrowUp', keyCode: 38 },
-    'KeyS': { key: 'ArrowDown', code: 'ArrowDown', keyCode: 40 },
-    'KeyA': { key: 'ArrowLeft', code: 'ArrowLeft', keyCode: 37 },
-    'KeyD': { key: 'ArrowRight', code: 'ArrowRight', keyCode: 39 },
-    'KeyJ': { key: 'z', code: 'KeyZ', keyCode: 90 },
-    'KeyK': { key: 'x', code: 'KeyX', keyCode: 88 },
-  };
+  // --- Поддержка WASD и альтернативных клавиш без конфликта с 32-битными раскладками ---
+  function getKeyTranslationsForConsole(slug) {
+    if (slug === 'playstation') {
+      // WASD = Left Stick, IJKL = Right Stick нативно; Space = удобный дублёр Cross (✕)
+      return {
+        'Space': { key: 'z', code: 'KeyZ', keyCode: 90 },
+      };
+    }
+    if (slug === 'snes' || slug === 'sega-mega-drive' || slug === 'sega-saturn') {
+      // A/S/D/W используются для Y/X/Z/R; сохраняем только J/K как альтернативу Z/X
+      return {
+        'KeyJ': { key: 'z', code: 'KeyZ', keyCode: 90 },
+        'KeyK': { key: 'x', code: 'KeyX', keyCode: 88 },
+      };
+    }
+    var base = {
+      'KeyW': { key: 'ArrowUp', code: 'ArrowUp', keyCode: 38 },
+      'KeyS': { key: 'ArrowDown', code: 'ArrowDown', keyCode: 40 },
+      'KeyA': { key: 'ArrowLeft', code: 'ArrowLeft', keyCode: 37 },
+      'KeyD': { key: 'ArrowRight', code: 'ArrowRight', keyCode: 39 },
+      'KeyJ': { key: 'z', code: 'KeyZ', keyCode: 90 },
+      'KeyK': { key: 'x', code: 'KeyX', keyCode: 88 },
+    };
+    if (slug === 'nintendo-64') {
+      // Дублёр физической клавиши B на клавиатуре -> N64 B (KeyX -> input_player1_y)
+      base['KeyB'] = { key: 'x', code: 'KeyX', keyCode: 88 };
+    }
+    if (slug === 'atari-2600') {
+      base['Space'] = { key: 'z', code: 'KeyZ', keyCode: 90 };
+    }
+    return base;
+  }
+
+  var KEY_TRANSLATIONS = getKeyTranslationsForConsole(consoleSlug);
 
   function handleKeyTranslation(e, isDown) {
-    if (e._synthesized) return;
+    if (e._synthesized || !isRunning) return;
+    var active = document.activeElement;
+    var tag = (active && active.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (active && active.isContentEditable)) return;
+
+    if (e.code === 'ArrowUp' || e.code === 'ArrowDown' || e.code === 'ArrowLeft' || e.code === 'ArrowRight' || e.code === 'Space') {
+      e.preventDefault();
+    }
+
     var mapping = KEY_TRANSLATIONS[e.code];
     if (mapping) {
-      var ev = new KeyboardEvent(isDown ? 'keydown' : 'keyup', {
-        key: mapping.key,
-        code: mapping.code,
-        keyCode: mapping.keyCode,
-        which: mapping.keyCode,
-        bubbles: true,
-        cancelable: true,
-      });
-      ev._synthesized = true;
-      window.dispatchEvent(ev);
-      if (canvas) canvas.dispatchEvent(ev);
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+
+      if (currentInstance) {
+        try {
+          if (isDown && !e.repeat && currentInstance.keyboardDown) {
+            currentInstance.keyboardDown(mapping.code);
+          } else if (!isDown && currentInstance.keyboardUp) {
+            currentInstance.keyboardUp(mapping.code);
+          }
+        } catch(err) {}
+      }
 
       if (jsnesInstance) {
         var jCode = mapping.keyCode;
@@ -643,42 +1060,46 @@
         updateGamepadUI(padName, true);
       }
 
-      // 1. Опрос цифровых кнопок
-      for (var bIndex in PAD_BUTTON_MAP) {
-        var mapping = PAD_BUTTON_MAP[bIndex];
-        var isPressed = pad.buttons[bIndex] ? pad.buttons[bIndex].pressed : false;
-        var wasPressed = !!prevPadButtons[bIndex];
-        if (isPressed !== wasPressed) {
-          prevPadButtons[bIndex] = isPressed;
-          fireSyntheticKey(mapping.code, mapping.key, mapping.keyCode, isPressed);
+      // Nostalgist/RetroArch считывает физические геймпады нативно (с аналогом);
+      // синтетические события нужны только для JSNES фолбэка.
+      if (jsnesInstance) {
+        // 1. Опрос цифровых кнопок
+        for (var bIndex in PAD_BUTTON_MAP) {
+          var mapping = PAD_BUTTON_MAP[bIndex];
+          var isPressed = pad.buttons[bIndex] ? pad.buttons[bIndex].pressed : false;
+          var wasPressed = !!prevPadButtons[bIndex];
+          if (isPressed !== wasPressed) {
+            prevPadButtons[bIndex] = isPressed;
+            fireSyntheticKey(mapping.code, mapping.key, mapping.keyCode, isPressed);
+          }
         }
-      }
 
-      // 2. Опрос аналогового стика
-      var axisX = pad.axes[0] || 0;
-      var axisY = pad.axes[1] || 0;
-      var DEADZONE = 0.45;
+        // 2. Опрос аналогового стика
+        var axisX = pad.axes[0] || 0;
+        var axisY = pad.axes[1] || 0;
+        var DEADZONE = 0.45;
 
-      var leftActive = axisX < -DEADZONE;
-      var rightActive = axisX > DEADZONE;
-      var upActive = axisY < -DEADZONE;
-      var downActive = axisY > DEADZONE;
+        var leftActive = axisX < -DEADZONE;
+        var rightActive = axisX > DEADZONE;
+        var upActive = axisY < -DEADZONE;
+        var downActive = axisY > DEADZONE;
 
-      if (leftActive !== !!prevPadAxes['left']) {
-        prevPadAxes['left'] = leftActive;
-        fireSyntheticKey('ArrowLeft', 'ArrowLeft', 37, leftActive);
-      }
-      if (rightActive !== !!prevPadAxes['right']) {
-        prevPadAxes['right'] = rightActive;
-        fireSyntheticKey('ArrowRight', 'ArrowRight', 39, rightActive);
-      }
-      if (upActive !== !!prevPadAxes['up']) {
-        prevPadAxes['up'] = upActive;
-        fireSyntheticKey('ArrowUp', 'ArrowUp', 38, upActive);
-      }
-      if (downActive !== !!prevPadAxes['down']) {
-        prevPadAxes['down'] = downActive;
-        fireSyntheticKey('ArrowDown', 'ArrowDown', 40, downActive);
+        if (leftActive !== !!prevPadAxes['left']) {
+          prevPadAxes['left'] = leftActive;
+          fireSyntheticKey('ArrowLeft', 'ArrowLeft', 37, leftActive);
+        }
+        if (rightActive !== !!prevPadAxes['right']) {
+          prevPadAxes['right'] = rightActive;
+          fireSyntheticKey('ArrowRight', 'ArrowRight', 39, rightActive);
+        }
+        if (upActive !== !!prevPadAxes['up']) {
+          prevPadAxes['up'] = upActive;
+          fireSyntheticKey('ArrowUp', 'ArrowUp', 38, upActive);
+        }
+        if (downActive !== !!prevPadAxes['down']) {
+          prevPadAxes['down'] = downActive;
+          fireSyntheticKey('ArrowDown', 'ArrowDown', 40, downActive);
+        }
       }
     }
 

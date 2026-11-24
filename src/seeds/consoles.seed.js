@@ -101,7 +101,7 @@ const consoles = [
     emulatorType: 'nostalgist',
     emulatorCore: 'pcsx_rearmed',
     supportedExtensions: ['.psx', '.exe', '.iso', '.cue', '.bin', '.pbp'],
-    controlsHelp: 'Стрелки — D-Pad, Z — Квадрат, X — Крест, A — Треугольник, S — Круг, Q/W — L1/R1, Enter — Start, Shift — Select',
+    controlsHelp: 'WASD / Стрелки — стик и D-Pad, I/J/K/L — правый стик (камера), Z/X/C/V — ✕/○/□/△, Q/E — L1/R1, R/F — L2/R2, Space — ✕, Enter — Start, Shift — Select',
     color: '#4caf50',
   },
   {
@@ -131,7 +131,7 @@ const consoles = [
     emulatorType: 'nostalgist',
     emulatorCore: 'parallel_n64',
     supportedExtensions: ['.z64', '.n64', '.v64'],
-    controlsHelp: 'Стрелки — аналоговый стик, Z — A, X — B, Space — Z-триггер, Q/W — L/R, Enter — Start',
+    controlsHelp: 'Стрелки / WASD — стик и D-Pad, Z / J — A, X / K / B — B, Space — Z-триггер, Q / E — L / R, T/G/F/H — C-кнопки, Enter — Start',
     color: '#795548',
   },
 ];
