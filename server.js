@@ -121,21 +121,19 @@ app.use((err, req, res, next) => {
   res.status(500).render('pages/500', { title: 'Ошибка сервера' });
 });
 
-// Подключение к MongoDB и запуск
+// Запуск HTTP-сервера и подключение к MongoDB
 if (require.main === module) {
+  const server = app.listen(config.port, '0.0.0.0', () => {
+    console.log(`Retrospect успешно запущен на http://0.0.0.0:${config.port}`);
+  });
+
   mongoose.connect(config.mongodbUri, { serverSelectionTimeoutMS: 5000 })
     .then(async () => {
+      console.log('MongoDB подключена успешно!');
       await autoSeed();
-      app.listen(config.port, () => {
-        console.log(`Retrospect запущен на http://localhost:${config.port}`);
-      });
     })
     .catch((err) => {
-      console.warn('Внимание: Не удалось подключиться к MongoDB:', err.message);
-      console.warn('Сервер запускается для раздачи статических ассетов, эмуляторов и презентации...');
-      app.listen(config.port, () => {
-        console.log(`Retrospect запущен на http://localhost:${config.port} (автономный режим)`);
-      });
+      console.warn('MongoDB не доступна, используется автономный режим (db-snapshot):', err.message);
     });
 }
 
