@@ -11,14 +11,10 @@
     :root {
       --bg-void: #04050c;
       --bg-deep: #090b18;
-      --bg-card: rgba(13, 17, 36, 0.72);
-      --bg-card-solid: #0d1124;
+      --bg-card: rgba(13, 17, 36, 0.74);
       --cyan: #00f0ff;
-      --cyan-dim: rgba(0, 240, 255, 0.16);
       --purple: #a855f7;
-      --purple-dim: rgba(168, 85, 247, 0.18);
       --lime: #10b981;
-      --lime-dim: rgba(16, 185, 129, 0.16);
       --rose: #ff2a6d;
       --amber: #f59e0b;
       --text-main: #f3f6ff;
@@ -28,12 +24,15 @@
       --font-body: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
       --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-snap: cubic-bezier(0.22, 1, 0.36, 1);
     }
+
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
+
     html, body {
       width: 100%;
       height: 100%;
@@ -44,6 +43,31 @@
       -webkit-font-smoothing: antialiased;
       user-select: none;
     }
+
+    /* ================= VECTOR SVG ICONS ================= */
+    .svg-icon {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.85;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    .svg-sm {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    /* ================= BACKGROUND CANVAS ================= */
     #bg-canvas {
       position: fixed;
       inset: 0;
@@ -52,6 +76,7 @@
       z-index: 0;
       pointer-events: none;
     }
+
     .bg-vignette {
       position: fixed;
       inset: 0;
@@ -62,6 +87,8 @@
         radial-gradient(circle at 82% 78%, rgba(168, 85, 247, 0.14), transparent 50%),
         radial-gradient(circle at 50% 50%, transparent 45%, rgba(2, 3, 10, 0.85) 100%);
     }
+
+    /* ================= CRT SCANLINE OVERLAY ================= */
     .crt-overlay {
       position: fixed;
       inset: 0;
@@ -75,9 +102,11 @@
       background-size: 100% 3px, 4px 100%;
       box-shadow: inset 0 0 110px rgba(0, 0, 0, 0.78);
     }
+
     body.crt-enabled .crt-overlay {
       opacity: 1;
     }
+
     body.crt-enabled .crt-overlay::after {
       content: '';
       position: absolute;
@@ -86,10 +115,13 @@
       height: 18%;
       animation: crtRoll 7s linear infinite;
     }
+
     @keyframes crtRoll {
       0% { transform: translateY(-100%); }
       100% { transform: translateY(650%); }
     }
+
+    /* ================= CRT TRANSITION FLASH ================= */
     #crt-flash {
       position: fixed;
       left: 0;
@@ -101,17 +133,20 @@
       opacity: 0;
       background: linear-gradient(90deg, transparent, var(--cyan), #ffffff, var(--purple), transparent);
       box-shadow: 0 0 28px 6px rgba(0, 240, 255, 0.85), 0 0 60px 12px rgba(168, 85, 247, 0.45);
-      transform: translateY(-50%) scaleY(1);
     }
+
     #crt-flash.firing {
-      animation: crtScanFlash 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: crtScanFlash 0.42s var(--ease-snap) forwards;
     }
+
     @keyframes crtScanFlash {
-      0% { opacity: 0; top: 8%; height: 2px; }
+      0% { opacity: 0; top: 6%; height: 2px; }
       25% { opacity: 1; top: 48%; height: 5px; }
-      65% { opacity: 0.7; top: 82%; height: 2px; }
+      65% { opacity: 0.75; top: 84%; height: 2px; }
       100% { opacity: 0; top: 102%; height: 1px; }
     }
+
+    /* ================= HUD TOP & BOTTOM ================= */
     .progress-track {
       position: fixed;
       top: 0;
@@ -121,6 +156,7 @@
       background: rgba(255, 255, 255, 0.07);
       z-index: 80;
     }
+
     .progress-fill {
       height: 100%;
       width: 5.26%;
@@ -128,6 +164,7 @@
       box-shadow: 0 0 14px var(--cyan), 0 0 26px var(--purple);
       transition: width 0.55s var(--ease-spring);
     }
+
     .hud-top {
       position: fixed;
       top: 14px;
@@ -139,6 +176,7 @@
       justify-content: space-between;
       pointer-events: none;
     }
+
     .hud-brand {
       pointer-events: auto;
       display: inline-flex;
@@ -146,8 +184,8 @@
       gap: 10px;
       padding: 7px 14px;
       border-radius: 999px;
-      background: rgba(9, 12, 26, 0.72);
-      border: 1px solid rgba(0, 240, 255, 0.25);
+      background: rgba(9, 12, 26, 0.76);
+      border: 1px solid rgba(0, 240, 255, 0.28);
       backdrop-filter: blur(12px);
       font-family: var(--font-display);
       font-size: 12px;
@@ -157,10 +195,12 @@
       cursor: pointer;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
+
     .hud-brand:hover {
       border-color: var(--cyan);
       box-shadow: 0 0 16px rgba(0, 240, 255, 0.3);
     }
+
     .brand-dot {
       width: 8px;
       height: 8px;
@@ -169,10 +209,12 @@
       box-shadow: 0 0 10px var(--lime);
       animation: pulseDot 2s infinite;
     }
+
     @keyframes pulseDot {
       0%, 100% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.35); opacity: 0.6; }
     }
+
     .hud-controls {
       pointer-events: auto;
       display: flex;
@@ -181,6 +223,7 @@
       flex-wrap: wrap;
       justify-content: flex-end;
     }
+
     .hud-btn {
       display: inline-flex;
       align-items: center;
@@ -188,7 +231,7 @@
       padding: 7px 13px;
       border-radius: 8px;
       border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(10, 14, 30, 0.76);
+      background: rgba(10, 14, 30, 0.78);
       backdrop-filter: blur(12px);
       color: var(--text-main);
       font-family: var(--font-mono);
@@ -198,23 +241,21 @@
       cursor: pointer;
       transition: all 0.22s ease;
     }
+
     .hud-btn:hover {
       border-color: var(--cyan);
       color: var(--cyan);
       box-shadow: 0 0 16px rgba(0, 240, 255, 0.25);
       transform: translateY(-1px);
     }
+
     .hud-btn.active {
       border-color: var(--lime);
       color: var(--lime);
       background: rgba(16, 185, 129, 0.12);
       box-shadow: 0 0 14px rgba(16, 185, 129, 0.25);
     }
-    .btn-svg {
-      display: inline-block;
-      vertical-align: middle;
-      color: currentColor;
-    }
+
     .hud-bottom {
       position: fixed;
       bottom: 14px;
@@ -226,64 +267,80 @@
       justify-content: space-between;
       pointer-events: none;
     }
+
     .terminal-indicator {
       pointer-events: auto;
       display: inline-flex;
       align-items: center;
-      gap: 12px;
-      padding: 7px 15px;
+      gap: 10px;
+      padding: 7px 14px;
       border-radius: 8px;
-      background: rgba(8, 11, 24, 0.8);
+      background: rgba(8, 11, 24, 0.82);
       border: 1px solid rgba(0, 240, 255, 0.26);
       backdrop-filter: blur(12px);
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--cyan);
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       box-shadow: 0 0 18px rgba(0, 240, 255, 0.12);
     }
+
     .terminal-indicator .sep {
-      color: rgba(255, 255, 255, 0.25);
+      color: rgba(255, 255, 255, 0.22);
     }
+
+    .terminal-fx-badge {
+      color: #d8b4fe;
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      text-transform: uppercase;
+    }
+
     .terminal-topic {
       color: var(--text-muted);
-      max-width: 280px;
+      max-width: 240px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       font-size: 11px;
     }
+
     .nav-arrows {
       pointer-events: auto;
       display: flex;
       align-items: center;
       gap: 8px;
     }
+
     .nav-circle {
       width: 38px;
       height: 38px;
       border-radius: 10px;
       border: 1px solid rgba(255, 255, 255, 0.16);
-      background: rgba(10, 14, 30, 0.8);
+      background: rgba(10, 14, 30, 0.82);
       backdrop-filter: blur(10px);
       color: var(--text-main);
-      font-family: var(--font-mono);
-      font-size: 14px;
       cursor: pointer;
       display: grid;
       place-items: center;
       transition: all 0.2s ease;
     }
+
     .nav-circle:hover:not(:disabled) {
       border-color: var(--cyan);
       color: var(--cyan);
       box-shadow: 0 0 16px rgba(0, 240, 255, 0.3);
       transform: translateY(-1px);
     }
+
     .nav-circle:disabled {
       opacity: 0.3;
       cursor: not-allowed;
     }
+
     .kbd-hints {
       display: flex;
       align-items: center;
@@ -292,6 +349,7 @@
       font-size: 11px;
       color: var(--text-muted);
     }
+
     .kbd {
       padding: 2px 6px;
       border-radius: 4px;
@@ -300,15 +358,18 @@
       color: var(--text-main);
       font-size: 10px;
     }
+
+    /* ================= 3D STAGE & 19 UNIQUE SLIDE TRANSITIONS ================= */
     .stage {
       position: relative;
       z-index: 10;
       width: 100vw;
       height: 100vh;
-      perspective: 1400px;
+      perspective: 1500px;
       transform-style: preserve-3d;
       overflow: hidden;
     }
+
     .slide {
       position: absolute;
       inset: 0;
@@ -320,51 +381,262 @@
       pointer-events: none;
       visibility: hidden;
       transform-style: preserve-3d;
-      transform: scale(0.85) translateZ(-120px);
-      filter: blur(8px);
-      transition:
-        transform 0.72s var(--ease-spring),
-        opacity 0.52s ease,
-        filter 0.55s ease,
-        visibility 0.72s;
-      will-change: transform, opacity, filter;
+      will-change: transform, opacity, filter, clip-path;
     }
+
     .slide.active {
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
-      transform: scale(1) rotateY(0deg) translateZ(0);
-      filter: blur(0px);
       z-index: 5;
     }
-    .slide.exit-forward {
-      opacity: 0;
-      visibility: hidden;
+
+    .slide.leaving {
+      visibility: visible;
       pointer-events: none;
-      transform: scale(0.84) rotateY(-25deg) translateX(-8%) translateZ(-160px);
-      filter: blur(10px);
-      z-index: 2;
+      z-index: 3;
     }
-    .slide.exit-backward {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transform: scale(0.84) rotateY(25deg) translateX(8%) translateZ(-160px);
-      filter: blur(10px);
-      z-index: 2;
+
+    /* --- 1. WARP-ZOOM (Slide 01) --- */
+    .slide[data-fx="warp-zoom"].entering { animation: fxWarpIn 0.8s var(--ease-spring) forwards; }
+    .slide[data-fx="warp-zoom"].leaving  { animation: fxWarpOut 0.6s ease-in forwards; }
+    @keyframes fxWarpIn {
+      0%   { opacity: 0; transform: scale(0.35) translateZ(-700px); filter: blur(18px) brightness(2); }
+      70%  { opacity: 1; transform: scale(1.02) translateZ(15px); filter: blur(0px) brightness(1.1); }
+      100% { opacity: 1; transform: scale(1) translateZ(0); filter: blur(0px) brightness(1); }
     }
-    .slide.enter-from-right {
-      transition: none;
-      opacity: 0;
-      transform: scale(0.85) rotateY(12deg) translateX(6%) translateZ(-140px);
-      filter: blur(8px);
+    @keyframes fxWarpOut {
+      0%   { opacity: 1; transform: scale(1) translateZ(0); filter: blur(0); }
+      100% { opacity: 0; transform: scale(1.55) translateZ(350px); filter: blur(14px); }
     }
-    .slide.enter-from-left {
-      transition: none;
-      opacity: 0;
-      transform: scale(0.85) rotateY(-12deg) translateX(-6%) translateZ(-140px);
-      filter: blur(8px);
+
+    /* --- 2. GLITCH-FRACTURE (Slide 02) --- */
+    .slide[data-fx="glitch-fracture"].entering { animation: fxGlitchIn 0.72s steps(6, end) forwards; }
+    .slide[data-fx="glitch-fracture"].leaving  { animation: fxGlitchOut 0.55s steps(5, end) forwards; }
+    @keyframes fxGlitchIn {
+      0%   { opacity: 0; transform: translateX(-45px) skewX(16deg) scale(0.92); filter: hue-rotate(90deg) contrast(2); }
+      25%  { opacity: 0.7; transform: translateX(30px) skewX(-12deg) scale(0.97); filter: hue-rotate(-60deg); }
+      50%  { opacity: 0.9; transform: translateX(-14px) skewX(6deg); }
+      75%  { opacity: 1; transform: translateX(6px) skewX(-2deg); }
+      100% { opacity: 1; transform: translateX(0) skewX(0deg) scale(1); filter: none; }
     }
+    @keyframes fxGlitchOut {
+      0%   { opacity: 1; transform: translateX(0) skewX(0); }
+      40%  { opacity: 0.7; transform: translateX(-28px) skewX(-14deg); filter: hue-rotate(110deg); }
+      100% { opacity: 0; transform: translateX(55px) skewX(20deg) scale(0.88); filter: blur(10px); }
+    }
+
+    /* --- 3. PORTAL-IRIS (Slide 03) --- */
+    .slide[data-fx="portal-iris"].entering { animation: fxIrisIn 0.78s var(--ease-spring) forwards; }
+    .slide[data-fx="portal-iris"].leaving  { animation: fxIrisOut 0.55s ease-in forwards; }
+    @keyframes fxIrisIn {
+      0%   { opacity: 0.2; clip-path: circle(0% at 50% 50%); transform: scale(1.08); }
+      100% { opacity: 1; clip-path: circle(100% at 50% 50%); transform: scale(1); }
+    }
+    @keyframes fxIrisOut {
+      0%   { opacity: 1; clip-path: circle(100% at 50% 50%); }
+      100% { opacity: 0; clip-path: circle(0% at 50% 50%); transform: scale(0.9); }
+    }
+
+    /* --- 4. HOLO-FLIP-X (Slide 04) --- */
+    .slide[data-fx="holo-flip-x"].entering { animation: fxHoloFlipIn 0.8s var(--ease-spring) forwards; }
+    .slide[data-fx="holo-flip-x"].leaving  { animation: fxHoloFlipOut 0.58s ease-in forwards; }
+    @keyframes fxHoloFlipIn {
+      0%   { opacity: 0; transform: perspective(1400px) rotateX(62deg) translateY(90px) scale(0.86); filter: blur(8px); }
+      100% { opacity: 1; transform: perspective(1400px) rotateX(0deg) translateY(0) scale(1); filter: blur(0); }
+    }
+    @keyframes fxHoloFlipOut {
+      0%   { opacity: 1; transform: perspective(1400px) rotateX(0deg); }
+      100% { opacity: 0; transform: perspective(1400px) rotateX(-55deg) translateY(-90px) scale(0.86); filter: blur(10px); }
+    }
+
+    /* --- 5. MATRIX-CASCADE (Slide 05) --- */
+    .slide[data-fx="matrix-cascade"].entering { animation: fxIsoIn 0.82s var(--ease-spring) forwards; }
+    .slide[data-fx="matrix-cascade"].leaving  { animation: fxIsoOut 0.58s ease-in forwards; }
+    @keyframes fxIsoIn {
+      0%   { opacity: 0; transform: perspective(1500px) rotateX(28deg) rotateY(-28deg) translateZ(-220px); filter: blur(10px); }
+      100% { opacity: 1; transform: perspective(1500px) rotateX(0deg) rotateY(0deg) translateZ(0); filter: blur(0); }
+    }
+    @keyframes fxIsoOut {
+      0%   { opacity: 1; transform: perspective(1500px) rotateX(0) rotateY(0); }
+      100% { opacity: 0; transform: perspective(1500px) rotateX(-24deg) rotateY(28deg) translateZ(-220px); filter: blur(10px); }
+    }
+
+    /* --- 6. CAROUSEL-ORBIT (Slide 06) --- */
+    .slide[data-fx="carousel-orbit"].entering { animation: fxOrbitIn 0.82s var(--ease-spring) forwards; }
+    .slide[data-fx="carousel-orbit"].leaving  { animation: fxOrbitOut 0.58s ease-in forwards; }
+    @keyframes fxOrbitIn {
+      0%   { opacity: 0; transform: perspective(1400px) rotateY(70deg) translateX(22%) translateZ(-280px); filter: blur(8px); }
+      100% { opacity: 1; transform: perspective(1400px) rotateY(0deg) translateX(0) translateZ(0); filter: blur(0); }
+    }
+    @keyframes fxOrbitOut {
+      0%   { opacity: 1; transform: perspective(1400px) rotateY(0deg); }
+      100% { opacity: 0; transform: perspective(1400px) rotateY(-70deg) translateX(-22%) translateZ(-280px); filter: blur(10px); }
+    }
+
+    /* --- 7. HEX-SHUTTER (Slide 07) --- */
+    .slide[data-fx="hex-shutter"].entering { animation: fxHexIn 0.78s var(--ease-spring) forwards; }
+    .slide[data-fx="hex-shutter"].leaving  { animation: fxHexOut 0.55s ease-in forwards; }
+    @keyframes fxHexIn {
+      0%   { opacity: 0.2; clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%); transform: scale(0.92); }
+      100% { opacity: 1; clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); transform: scale(1); }
+    }
+    .slide[data-fx="hex-shutter"].active {
+      clip-path: none;
+    }
+    @keyframes fxHexOut {
+      0%   { opacity: 1; clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
+      100% { opacity: 0; clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%); }
+    }
+
+    /* --- 8. DEVICE-TILT-RISE (Slide 08) --- */
+    .slide[data-fx="device-tilt-rise"].entering { animation: fxDeviceIn 0.8s var(--ease-spring) forwards; }
+    .slide[data-fx="device-tilt-rise"].leaving  { animation: fxDeviceOut 0.55s ease-in forwards; }
+    @keyframes fxDeviceIn {
+      0%   { opacity: 0; transform: perspective(1400px) rotateX(-46deg) translateY(150px) scale(0.88); filter: blur(8px); }
+      100% { opacity: 1; transform: perspective(1400px) rotateX(0deg) translateY(0) scale(1); filter: blur(0); }
+    }
+    @keyframes fxDeviceOut {
+      0%   { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: perspective(1400px) rotateX(38deg) translateY(-140px) scale(0.88); filter: blur(10px); }
+    }
+
+    /* --- 9. PRISM-REFRACT (Slide 09) --- */
+    .slide[data-fx="prism-refract"].entering { animation: fxPrismIn 0.78s var(--ease-spring) forwards; }
+    .slide[data-fx="prism-refract"].leaving  { animation: fxPrismOut 0.55s ease-in forwards; }
+    @keyframes fxPrismIn {
+      0%   { opacity: 0; transform: translate(-70px, 50px) skew(-7deg, 4deg) scale(0.9); filter: blur(14px) saturate(2); }
+      100% { opacity: 1; transform: translate(0, 0) skew(0deg, 0deg) scale(1); filter: blur(0) saturate(1); }
+    }
+    @keyframes fxPrismOut {
+      0%   { opacity: 1; transform: translate(0, 0); }
+      100% { opacity: 0; transform: translate(70px, -50px) skew(7deg, -4deg) scale(0.9); filter: blur(12px); }
+    }
+
+    /* --- 10. DEPTH-PARALLAX-STACK (Slide 10) --- */
+    .slide[data-fx="depth-parallax-stack"].entering { animation: fxDepthIn 0.78s var(--ease-spring) forwards; }
+    .slide[data-fx="depth-parallax-stack"].leaving  { animation: fxDepthOut 0.55s ease-in forwards; }
+    @keyframes fxDepthIn {
+      0%   { opacity: 0; transform: scale(1.26) translateZ(180px); filter: blur(14px); }
+      100% { opacity: 1; transform: scale(1) translateZ(0); filter: blur(0); }
+    }
+    @keyframes fxDepthOut {
+      0%   { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.74) translateZ(-220px); filter: blur(12px); }
+    }
+
+    /* --- 11. CARD-DEAL-FAN (Slide 11) --- */
+    .slide[data-fx="card-deal-fan"].entering { animation: fxFanIn 0.8s var(--ease-spring) forwards; }
+    .slide[data-fx="card-deal-fan"].leaving  { animation: fxFanOut 0.55s ease-in forwards; }
+    @keyframes fxFanIn {
+      0%   { opacity: 0; transform: perspective(1400px) rotateZ(-9deg) rotateY(42deg) translateX(90px) scale(0.86); filter: blur(8px); }
+      100% { opacity: 1; transform: perspective(1400px) rotateZ(0deg) rotateY(0deg) translateX(0) scale(1); filter: blur(0); }
+    }
+    @keyframes fxFanOut {
+      0%   { opacity: 1; transform: rotateZ(0deg); }
+      100% { opacity: 0; transform: perspective(1400px) rotateZ(9deg) rotateY(-42deg) translateX(-90px) scale(0.86); filter: blur(10px); }
+    }
+
+    /* --- 12. CARTRIDGE-SLOT-DROP (Slide 12) --- */
+    .slide[data-fx="cartridge-slot-drop"].entering { animation: fxCartridgeIn 0.78s cubic-bezier(0.34, 1.45, 0.64, 1) forwards; }
+    .slide[data-fx="cartridge-slot-drop"].leaving  { animation: fxCartridgeOut 0.5s ease-in forwards; }
+    @keyframes fxCartridgeIn {
+      0%   { opacity: 0; transform: translateY(-95%) scale(0.94); filter: blur(6px); }
+      75%  { opacity: 1; transform: translateY(12px) scale(1.01); filter: blur(0); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes fxCartridgeOut {
+      0%   { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(90%) scale(0.92); filter: blur(8px); }
+    }
+
+    /* --- 13. ARCADE-CURTAIN-SPLIT (Slide 13) --- */
+    .slide[data-fx="arcade-curtain-split"].entering { animation: fxCurtainIn 0.76s var(--ease-spring) forwards; }
+    .slide[data-fx="arcade-curtain-split"].leaving  { animation: fxCurtainOut 0.52s ease-in forwards; }
+    @keyframes fxCurtainIn {
+      0%   { opacity: 0.2; clip-path: inset(0 50% 0 50%); transform: scale(1.04); }
+      100% { opacity: 1; clip-path: inset(0 0% 0 0%); transform: scale(1); }
+    }
+    @keyframes fxCurtainOut {
+      0%   { opacity: 1; clip-path: inset(0 0% 0 0%); }
+      100% { opacity: 0; clip-path: inset(50% 0 50% 0); }
+    }
+
+    /* --- 14. CYBER-WHIP-PAN (Slide 14) --- */
+    .slide[data-fx="cyber-whip-pan"].entering { animation: fxWhipIn 0.68s var(--ease-spring) forwards; }
+    .slide[data-fx="cyber-whip-pan"].leaving  { animation: fxWhipOut 0.48s ease-in forwards; }
+    @keyframes fxWhipIn {
+      0%   { opacity: 0; transform: translateX(85%) skewX(-22deg); filter: blur(16px); }
+      70%  { opacity: 1; transform: translateX(-10px) skewX(4deg); filter: blur(0); }
+      100% { opacity: 1; transform: translateX(0) skewX(0deg); }
+    }
+    @keyframes fxWhipOut {
+      0%   { opacity: 1; transform: translateX(0) skewX(0); }
+      100% { opacity: 0; transform: translateX(-85%) skewX(22deg); filter: blur(16px); }
+    }
+
+    /* --- 15. CUBE-FACE-TURN (Slide 15) --- */
+    .slide[data-fx="cube-face-turn"].entering { animation: fxCubeIn 0.84s var(--ease-spring) forwards; transform-origin: right center; }
+    .slide[data-fx="cube-face-turn"].leaving  { animation: fxCubeOut 0.6s ease-in forwards; transform-origin: left center; }
+    @keyframes fxCubeIn {
+      0%   { opacity: 0; transform: perspective(1500px) rotateY(82deg) scale(0.9); filter: blur(6px); }
+      100% { opacity: 1; transform: perspective(1500px) rotateY(0deg) scale(1); filter: blur(0); }
+    }
+    @keyframes fxCubeOut {
+      0%   { opacity: 1; transform: perspective(1500px) rotateY(0deg); }
+      100% { opacity: 0; transform: perspective(1500px) rotateY(-82deg) scale(0.9); filter: blur(8px); }
+    }
+
+    /* --- 16. LASER-GRID-WIPE (Slide 16) --- */
+    .slide[data-fx="laser-grid-wipe"].entering { animation: fxSlashIn 0.78s var(--ease-spring) forwards; }
+    .slide[data-fx="laser-grid-wipe"].leaving  { animation: fxSlashOut 0.54s ease-in forwards; }
+    @keyframes fxSlashIn {
+      0%   { opacity: 0.2; clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); transform: translateX(-24px); }
+      100% { opacity: 1; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translateX(0); }
+    }
+    @keyframes fxSlashOut {
+      0%   { opacity: 1; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+      100% { opacity: 0; clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); transform: translateX(24px); }
+    }
+
+    /* --- 17. VORTEX-SPIRAL-IN (Slide 17) --- */
+    .slide[data-fx="vortex-spiral-in"].entering { animation: fxVortexIn 0.82s var(--ease-spring) forwards; }
+    .slide[data-fx="vortex-spiral-in"].leaving  { animation: fxVortexOut 0.56s ease-in forwards; }
+    @keyframes fxVortexIn {
+      0%   { opacity: 0; transform: rotateZ(14deg) scale(0.68) translateZ(-240px); filter: blur(12px); }
+      100% { opacity: 1; transform: rotateZ(0deg) scale(1) translateZ(0); filter: blur(0); }
+    }
+    @keyframes fxVortexOut {
+      0%   { opacity: 1; transform: rotateZ(0deg) scale(1); }
+      100% { opacity: 0; transform: rotateZ(-14deg) scale(0.68) translateZ(-240px); filter: blur(12px); }
+    }
+
+    /* --- 18. TIMELINE-TRACK-GLIDE (Slide 18) --- */
+    .slide[data-fx="timeline-track-glide"].entering { animation: fxTrackIn 0.8s var(--ease-spring) forwards; }
+    .slide[data-fx="timeline-track-glide"].leaving  { animation: fxTrackOut 0.56s ease-in forwards; }
+    @keyframes fxTrackIn {
+      0%   { opacity: 0; transform: perspective(1400px) translateZ(-260px) translateX(42%) rotateY(-24deg); filter: blur(8px); }
+      100% { opacity: 1; transform: perspective(1400px) translateZ(0) translateX(0) rotateY(0deg); filter: blur(0); }
+    }
+    @keyframes fxTrackOut {
+      0%   { opacity: 1; transform: perspective(1400px) translateZ(0); }
+      100% { opacity: 0; transform: perspective(1400px) translateZ(-260px) translateX(-42%) rotateY(24deg); filter: blur(10px); }
+    }
+
+    /* --- 19. CRT-POWER-IGNITION (Slide 19) --- */
+    .slide[data-fx="crt-power-ignition"].entering { animation: fxCrtPowerIn 0.78s var(--ease-spring) forwards; }
+    .slide[data-fx="crt-power-ignition"].leaving  { animation: fxCrtPowerOut 0.5s ease-in forwards; }
+    @keyframes fxCrtPowerIn {
+      0%   { opacity: 0; transform: scaleX(0.08) scaleY(0.01); filter: brightness(3.5); }
+      38%  { opacity: 1; transform: scaleX(1.04) scaleY(0.025); filter: brightness(2.4); }
+      100% { opacity: 1; transform: scaleX(1) scaleY(1); filter: brightness(1); }
+    }
+    @keyframes fxCrtPowerOut {
+      0%   { opacity: 1; transform: scaleX(1) scaleY(1); }
+      55%  { opacity: 1; transform: scaleX(1.03) scaleY(0.02); filter: brightness(2.5); }
+      100% { opacity: 0; transform: scaleX(0.05) scaleY(0.005); }
+    }
+
     .slide-inner {
       width: 100%;
       max-width: 1260px;
@@ -375,18 +647,23 @@
       scrollbar-width: thin;
       scrollbar-color: rgba(0, 240, 255, 0.35) transparent;
     }
+
     .slide-inner::-webkit-scrollbar { width: 5px; }
     .slide-inner::-webkit-scrollbar-thumb {
       background: rgba(0, 240, 255, 0.35);
       border-radius: 99px;
     }
+
+    /* ================= STAGGERED ANIMATIONS ================= */
     .slide [data-stagger] {
       opacity: 0;
       transform: translateY(30px);
     }
+
     .slide.active [data-stagger] {
       animation: staggerUp 0.62s var(--ease-spring) forwards;
     }
+
     .slide.active [data-stagger="title"] { animation-delay: 0.05s; }
     .slide.active [data-stagger="subtitle"] { animation-delay: 0.15s; }
     .slide.active [data-stagger="card-1"] { animation-delay: 0.25s; }
@@ -396,10 +673,13 @@
     .slide.active [data-stagger="card-5"] { animation-delay: 0.57s; }
     .slide.active [data-stagger="card-6"] { animation-delay: 0.65s; }
     .slide.active [data-stagger="action"] { animation-delay: 0.50s; }
+
     @keyframes staggerUp {
       0% { opacity: 0; transform: translateY(30px); }
       100% { opacity: 1; transform: translateY(0); }
     }
+
+    /* ================= TYPOGRAPHY & CYBER GLITCH ================= */
     .slide-tag {
       display: inline-flex;
       align-items: center;
@@ -416,21 +696,25 @@
       color: var(--cyan);
       margin-bottom: 12px;
     }
+
     .slide-tag.purple {
       background: rgba(168, 85, 247, 0.12);
       border-color: rgba(168, 85, 247, 0.38);
       color: #d8b4fe;
     }
+
     .slide-tag.lime {
       background: rgba(16, 185, 129, 0.12);
       border-color: rgba(16, 185, 129, 0.38);
       color: #6ee7b7;
     }
+
     .slide-tag.rose {
       background: rgba(255, 42, 109, 0.12);
       border-color: rgba(255, 42, 109, 0.4);
       color: #ff7aa5;
     }
+
     .slide-title {
       position: relative;
       font-family: var(--font-display);
@@ -442,16 +726,20 @@
       margin-bottom: 10px;
       text-shadow: 0 0 28px rgba(0, 240, 255, 0.22);
     }
+
     .slide-title .accent { color: var(--cyan); }
     .slide-title .accent-purple { color: var(--purple); }
     .slide-title .accent-lime { color: var(--lime); }
+
     .glitch-heading {
       position: relative;
       display: inline-block;
     }
+
     .slide.active .glitch-heading.glitching {
       animation: cyberGlitchText 0.55s steps(2, end);
     }
+
     .slide.active .glitch-heading.glitching::before,
     .slide.active .glitch-heading.glitching::after {
       content: attr(data-text);
@@ -462,18 +750,21 @@
       height: 100%;
       pointer-events: none;
     }
+
     .slide.active .glitch-heading.glitching::before {
       color: #ff2a6d;
       text-shadow: -2px 0 #ff2a6d;
       clip-path: inset(12% 0 58% 0);
       animation: glitchSliceA 0.52s steps(3, end);
     }
+
     .slide.active .glitch-heading.glitching::after {
       color: var(--cyan);
       text-shadow: 2px 0 var(--cyan);
       clip-path: inset(56% 0 14% 0);
       animation: glitchSliceB 0.52s steps(3, end);
     }
+
     @keyframes cyberGlitchText {
       0% { transform: skewX(0deg); }
       20% { transform: skewX(-6deg) translateX(2px); }
@@ -481,25 +772,30 @@
       75% { transform: skewX(-2deg); }
       100% { transform: skewX(0deg); }
     }
+
     @keyframes glitchSliceA {
       0% { transform: translate(-4px, -2px); opacity: 0.9; }
       35% { transform: translate(4px, 1px); opacity: 0.8; }
       70% { transform: translate(-2px, 0); opacity: 0.5; }
       100% { transform: translate(0, 0); opacity: 0; }
     }
+
     @keyframes glitchSliceB {
       0% { transform: translate(4px, 2px); opacity: 0.9; }
       35% { transform: translate(-4px, -1px); opacity: 0.8; }
       70% { transform: translate(2px, 0); opacity: 0.5; }
       100% { transform: translate(0, 0); opacity: 0; }
     }
+
     .slide-subtitle {
       font-size: clamp(14px, 1.35vw, 18px);
       color: var(--text-muted);
       line-height: 1.5;
       max-width: 820px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
+
+    /* ================= HERO TITLE (SLIDE 1) ================= */
     .hero-wrap {
       display: flex;
       flex-direction: column;
@@ -508,6 +804,7 @@
       gap: 18px;
       padding: 14px 0;
     }
+
     .hero-logo {
       font-family: var(--font-display);
       font-size: clamp(46px, 7.6vw, 108px);
@@ -521,6 +818,7 @@
       position: relative;
       line-height: 1.05;
     }
+
     .hero-logo::before,
     .hero-logo::after {
       content: attr(data-text);
@@ -532,24 +830,28 @@
       pointer-events: none;
       opacity: 0.45;
     }
+
     .hero-logo::before {
       color: var(--cyan);
       transform: translate(-2px, 0);
       clip-path: inset(0 0 65% 0);
       animation: heroGlitchIdle 4.5s infinite linear alternate-reverse;
     }
+
     .hero-logo::after {
       color: var(--rose);
       transform: translate(2px, 0);
       clip-path: inset(68% 0 0 0);
       animation: heroGlitchIdle 3.7s infinite linear alternate;
     }
+
     @keyframes heroGlitchIdle {
       0%, 88%, 100% { transform: translate(0, 0); opacity: 0; }
       90% { transform: translate(-4px, 1px); opacity: 0.65; }
       93% { transform: translate(4px, -1px); opacity: 0.55; }
       96% { transform: translate(-2px, 0); opacity: 0.3; }
     }
+
     .hero-sub {
       font-size: clamp(16px, 1.8vw, 23px);
       font-weight: 600;
@@ -557,6 +859,7 @@
       max-width: 820px;
       line-height: 1.4;
     }
+
     .hero-slogan {
       font-size: clamp(14px, 1.3vw, 17px);
       color: var(--cyan);
@@ -567,6 +870,7 @@
       max-width: 780px;
       box-shadow: 0 0 30px rgba(0, 240, 255, 0.14);
     }
+
     .hero-badges {
       display: flex;
       flex-wrap: wrap;
@@ -574,6 +878,7 @@
       gap: 10px;
       margin-top: 4px;
     }
+
     .pill-badge {
       font-family: var(--font-mono);
       font-size: 12px;
@@ -583,12 +888,16 @@
       border: 1px solid rgba(255, 255, 255, 0.12);
       color: #dce4ff;
     }
+
     .pill-badge strong { color: var(--lime); }
+
+    /* ================= 3D TILT GLASS CARDS & NEON BORDERS ================= */
     .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
     .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
     .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
     .grid-5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
     .grid-asymmetric { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 20px; align-items: stretch; }
+
     .glass-card {
       position: relative;
       background: var(--bg-card);
@@ -600,6 +909,7 @@
       transition: transform 0.18s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
       overflow: hidden;
     }
+
     .glass-card::before {
       content: '';
       position: absolute;
@@ -616,6 +926,7 @@
       animation: neonBorderFlow 6s linear infinite;
       pointer-events: none;
     }
+
     .glass-card::after {
       content: '';
       position: absolute;
@@ -625,27 +936,34 @@
       transition: opacity 0.25s ease;
       pointer-events: none;
     }
+
     .glass-card:hover::before,
     .glass-card.featured::before {
       opacity: 0.95;
     }
+
     .glass-card:hover::after {
       opacity: 1;
     }
+
     .glass-card:hover {
       box-shadow: 0 18px 42px rgba(0, 0, 0, 0.55), 0 0 28px rgba(0, 240, 255, 0.16);
     }
+
     .glass-card.accent-purple:hover {
       box-shadow: 0 18px 42px rgba(0, 0, 0, 0.55), 0 0 28px rgba(168, 85, 247, 0.22);
     }
+
     .glass-card.accent-lime:hover {
       box-shadow: 0 18px 42px rgba(0, 0, 0, 0.55), 0 0 28px rgba(16, 185, 129, 0.22);
     }
+
     @keyframes neonBorderFlow {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+
     .card-icon {
       width: 42px;
       height: 42px;
@@ -658,24 +976,28 @@
       color: var(--cyan);
       box-shadow: 0 0 16px rgba(0, 240, 255, 0.18);
     }
+
     .card-icon.purple {
       background: rgba(168, 85, 247, 0.14);
       border-color: rgba(168, 85, 247, 0.36);
       color: #d8b4fe;
       box-shadow: 0 0 16px rgba(168, 85, 247, 0.2);
     }
+
     .card-icon.lime {
       background: rgba(16, 185, 129, 0.14);
       border-color: rgba(16, 185, 129, 0.36);
       color: #6ee7b7;
       box-shadow: 0 0 16px rgba(16, 185, 129, 0.2);
     }
+
     .card-icon.rose {
       background: rgba(255, 42, 109, 0.14);
       border-color: rgba(255, 42, 109, 0.38);
       color: #ff7aa5;
       box-shadow: 0 0 16px rgba(255, 42, 109, 0.2);
     }
+
     .card-title {
       font-family: var(--font-display);
       font-size: 15px;
@@ -685,17 +1007,20 @@
       margin-bottom: 8px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 9px;
     }
+
     .card-text {
       font-size: 14px;
       line-height: 1.55;
       color: var(--text-muted);
     }
+
     .card-text strong {
       color: #eef4ff;
       font-weight: 600;
     }
+
     .neon-list {
       list-style: none;
       display: flex;
@@ -703,6 +1028,7 @@
       gap: 9px;
       margin-top: 8px;
     }
+
     .neon-list li {
       position: relative;
       padding-left: 18px;
@@ -710,24 +1036,77 @@
       line-height: 1.48;
       color: #cad5f0;
     }
+
     .neon-list li::before {
-      content: '▸';
+      content: '>';
       position: absolute;
       left: 0;
+      font-family: var(--font-mono);
       color: var(--cyan);
       font-weight: 700;
     }
+
     .neon-list.lime li::before { color: var(--lime); }
     .neon-list.purple li::before { color: var(--purple); }
     .neon-list.rose li::before { color: var(--rose); }
+
+    /* ================= SLIDE 2: 87% SIGNAL DECAY MATRIX ================= */
+    .decay-panel {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+      padding: 16px 22px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, rgba(255, 42, 109, 0.14), rgba(168, 85, 247, 0.12));
+      border: 1px solid rgba(255, 42, 109, 0.35);
+      margin-bottom: 18px;
+    }
+
+    .decay-matrix {
+      display: grid;
+      grid-template-columns: repeat(20, 9px);
+      gap: 3px;
+      padding: 8px;
+      border-radius: 8px;
+      background: rgba(4, 5, 12, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .decay-cell {
+      width: 9px;
+      height: 9px;
+      border-radius: 2px;
+      background: var(--lime);
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+      transition: background 0.35s ease, box-shadow 0.35s ease, transform 0.25s ease;
+    }
+
+    .decay-cell.lost {
+      background: rgba(255, 42, 109, 0.22);
+      box-shadow: none;
+      transform: scale(0.84);
+    }
+
+    .big-stat-num {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 4.2vw, 56px);
+      font-weight: 900;
+      color: var(--rose);
+      text-shadow: 0 0 24px rgba(255, 42, 109, 0.5);
+      white-space: nowrap;
+    }
+
+    /* ================= METRICS / COUNTUP ================= */
     .metric-card {
       text-align: center;
-      padding: 26px 16px;
+      padding: 24px 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
     }
+
     .metric-value {
       font-family: var(--font-display);
       font-size: clamp(32px, 3.6vw, 52px);
@@ -740,42 +1119,49 @@
       color: transparent;
       filter: drop-shadow(0 0 18px rgba(0, 240, 255, 0.35));
     }
+
     .metric-value.purple {
       background: linear-gradient(180deg, #ffffff 10%, var(--purple) 100%);
       -webkit-background-clip: text;
       background-clip: text;
       filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.38));
     }
+
     .metric-value.lime {
       background: linear-gradient(180deg, #ffffff 10%, var(--lime) 100%);
       -webkit-background-clip: text;
       background-clip: text;
       filter: drop-shadow(0 0 18px rgba(16, 185, 129, 0.38));
     }
+
     .metric-label {
       font-size: 13px;
       color: var(--text-muted);
       line-height: 1.4;
     }
-    .big-stat-banner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 18px 24px;
-      border-radius: 14px;
-      background: linear-gradient(90deg, rgba(255, 42, 109, 0.14), rgba(168, 85, 247, 0.12));
-      border: 1px solid rgba(255, 42, 109, 0.35);
-      margin-bottom: 18px;
+
+    .metric-bar {
+      width: 100%;
+      height: 4px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.08);
+      margin-top: 14px;
+      overflow: hidden;
     }
-    .big-stat-num {
-      font-family: var(--font-display);
-      font-size: clamp(36px, 4.2vw, 58px);
-      font-weight: 900;
-      color: var(--rose);
-      text-shadow: 0 0 24px rgba(255, 42, 109, 0.5);
-      white-space: nowrap;
+
+    .metric-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple));
+      transition: width 1.3s var(--ease-spring);
     }
+
+    .slide.active .metric-bar-fill {
+      width: var(--target-w, 85%);
+    }
+
+    /* ================= INTERACTIVE CTA BUTTONS ================= */
     .cyber-btn {
       position: relative;
       display: inline-flex;
@@ -797,28 +1183,103 @@
       transition: all 0.24s var(--ease-spring);
       overflow: hidden;
     }
+
     .cyber-btn:hover {
       transform: translateY(-2px) scale(1.02);
       box-shadow: 0 0 36px rgba(0, 240, 255, 0.55), 0 0 60px rgba(168, 85, 247, 0.3);
       background: linear-gradient(135deg, rgba(0, 240, 255, 0.32), rgba(168, 85, 247, 0.35));
     }
+
     .cyber-btn:active {
       transform: translateY(0) scale(0.98);
     }
+
     .cyber-btn.lime {
       border-color: var(--lime);
       background: linear-gradient(135deg, rgba(16, 185, 129, 0.28), rgba(0, 240, 255, 0.2));
       box-shadow: 0 0 28px rgba(16, 185, 129, 0.36);
     }
+
     .cyber-btn.lime:hover {
       box-shadow: 0 0 42px rgba(16, 185, 129, 0.65);
     }
-    .era-tabs {
+
+    /* ================= SLIDE 5: ARCHITECTURE PACKET BUS ================= */
+    .arch-bus {
+      margin-top: 16px;
+      padding: 14px 18px;
+      border-radius: 14px;
+      background: rgba(7, 10, 24, 0.85);
+      border: 1px solid rgba(0, 240, 255, 0.28);
       display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .bus-node {
+      padding: 7px 13px;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      background: rgba(0, 240, 255, 0.08);
+      color: var(--cyan);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .bus-node:hover {
+      background: var(--cyan);
+      color: #04050c;
+      box-shadow: 0 0 18px var(--cyan);
+    }
+
+    .bus-wire {
+      flex: 1;
+      min-width: 36px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 99px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bus-wire::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -40%;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, var(--lime), var(--cyan));
+      box-shadow: 0 0 10px var(--cyan);
+      animation: packetFlow 1.8s linear infinite;
+    }
+
+    @keyframes packetFlow {
+      0% { left: -40%; }
+      100% { left: 100%; }
+    }
+
+    /* ================= ERA TIMELINE & OSCILLOSCOPE (SLIDE 6) ================= */
+    .era-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
       margin-bottom: 16px;
       flex-wrap: wrap;
     }
+
+    .era-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     .era-tab {
       padding: 8px 16px;
       border-radius: 999px;
@@ -831,12 +1292,30 @@
       cursor: pointer;
       transition: all 0.22s ease;
     }
+
     .era-tab.active, .era-tab:hover {
       border-color: var(--cyan);
       color: var(--cyan);
       background: rgba(0, 240, 255, 0.12);
       box-shadow: 0 0 14px rgba(0, 240, 255, 0.22);
     }
+
+    .oscilloscope-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 14px;
+      border-radius: 10px;
+      background: rgba(6, 9, 22, 0.85);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    #era-scope {
+      width: 140px;
+      height: 30px;
+      display: block;
+    }
+
     .console-row {
       display: flex;
       flex-direction: column;
@@ -847,7 +1326,9 @@
       border: 1px solid rgba(255, 255, 255, 0.07);
       margin-bottom: 10px;
     }
+
     .console-row:last-child { margin-bottom: 0; }
+
     .console-top {
       display: flex;
       justify-content: space-between;
@@ -855,6 +1336,7 @@
       font-size: 13.5px;
       font-weight: 600;
     }
+
     .console-year {
       font-family: var(--font-mono);
       font-size: 11px;
@@ -863,6 +1345,7 @@
       border-radius: 4px;
       background: rgba(0, 240, 255, 0.1);
     }
+
     .console-counts {
       display: flex;
       justify-content: space-between;
@@ -870,19 +1353,50 @@
       font-size: 11.5px;
       color: var(--text-muted);
     }
+
     .console-counts .online { color: var(--lime); font-weight: 600; }
+
     .mini-bar {
       height: 6px;
       border-radius: 99px;
       background: rgba(255, 255, 255, 0.09);
       overflow: hidden;
     }
+
     .mini-bar-fill {
       height: 100%;
       border-radius: 99px;
       background: linear-gradient(90deg, var(--cyan), var(--lime));
       box-shadow: 0 0 10px var(--cyan);
     }
+
+    /* ================= SLIDE 7: WASM VS CLOUD BENCHMARK ================= */
+    .bench-box {
+      margin-top: 16px;
+      padding: 16px 20px;
+      border-radius: 14px;
+      background: rgba(8, 12, 28, 0.85);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .bench-meter {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .bench-head {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+    }
+
+    /* ================= MOBILE GAMEPAD MOCKUP (SLIDE 8) ================= */
     .phone-frame {
       background: #070914;
       border: 2px solid rgba(0, 240, 255, 0.45);
@@ -895,26 +1409,38 @@
       height: 100%;
       justify-content: space-between;
     }
+
     .phone-screen {
       background: radial-gradient(circle at 50% 45%, #162147, #060812);
       border-radius: 14px;
       border: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 16px;
-      min-height: 135px;
+      padding: 10px;
+      min-height: 155px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       text-align: center;
       position: relative;
       overflow: hidden;
     }
+
+    #phone-mini-canvas {
+      width: 100%;
+      height: 106px;
+      border-radius: 8px;
+      background: rgba(2, 4, 12, 0.7);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      display: block;
+    }
+
     .phone-screen-status {
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11px;
       color: var(--lime);
       margin-top: 6px;
     }
+
     .virtual-pad {
       display: flex;
       align-items: center;
@@ -924,12 +1450,14 @@
       border-radius: 16px;
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
+
     .dpad {
       display: grid;
       grid-template-columns: repeat(3, 30px);
       grid-template-rows: repeat(3, 30px);
       gap: 3px;
     }
+
     .pad-btn {
       border-radius: 7px;
       border: 1px solid rgba(0, 240, 255, 0.35);
@@ -943,35 +1471,41 @@
       place-items: center;
       transition: all 0.12s ease;
     }
+
     .pad-btn:hover, .pad-btn:active {
       background: var(--cyan);
       color: #04050c;
       box-shadow: 0 0 14px var(--cyan);
       transform: scale(0.94);
     }
+
     .abxy-cluster {
       display: grid;
       grid-template-columns: repeat(3, 30px);
       grid-template-rows: repeat(3, 30px);
       gap: 3px;
     }
+
     .abxy-cluster .pad-btn {
       border-radius: 50%;
       border-color: rgba(168, 85, 247, 0.55);
       background: rgba(168, 85, 247, 0.18);
       color: #e9d5ff;
     }
+
     .abxy-cluster .pad-btn:hover, .abxy-cluster .pad-btn:active {
       background: var(--purple);
       color: #ffffff;
       box-shadow: 0 0 14px var(--purple);
     }
+
     .pad-center {
       display: flex;
       flex-direction: column;
       gap: 6px;
       align-items: center;
     }
+
     .pill-mini-btn {
       padding: 4px 10px;
       border-radius: 99px;
@@ -982,14 +1516,21 @@
       font-size: 9px;
       cursor: pointer;
     }
+
     .pill-mini-btn:hover { background: var(--lime); color: #04050c; }
+
+    /* ================= INTERACTIVE FILTER DEMO (SLIDE 9) ================= */
     .filter-chips {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       margin-top: 12px;
     }
+
     .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       padding: 6px 12px;
       border-radius: 8px;
       border: 1px solid rgba(0, 240, 255, 0.3);
@@ -1000,18 +1541,22 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
+
     .chip.selected, .chip:hover {
       background: var(--cyan);
       color: #04050c;
       font-weight: 700;
       box-shadow: 0 0 14px rgba(0, 240, 255, 0.45);
     }
+
+    /* ================= COMPETITOR MATRIX (SLIDE 16) ================= */
     .matrix-table {
       width: 100%;
       border-collapse: separate;
       border-spacing: 0 8px;
       font-size: 13.5px;
     }
+
     .matrix-table th {
       text-align: left;
       padding: 10px 14px;
@@ -1021,6 +1566,7 @@
       letter-spacing: 0.1em;
       color: var(--text-muted);
     }
+
     .matrix-table td {
       padding: 13px 14px;
       background: rgba(13, 17, 36, 0.78);
@@ -1028,36 +1574,44 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       color: #d6e0f8;
     }
+
     .matrix-table td:first-child {
       border-left: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 10px 0 0 10px;
       font-weight: 700;
       color: #fff;
     }
+
     .matrix-table td:last-child {
       border-right: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 0 10px 10px 0;
     }
+
     .matrix-table tr.winner td {
       background: linear-gradient(90deg, rgba(0, 240, 255, 0.14), rgba(16, 185, 129, 0.12));
       border-color: rgba(0, 240, 255, 0.45);
       color: #ffffff;
     }
+
     .tag-ok { color: var(--lime); font-weight: 700; }
     .tag-no { color: var(--rose); font-weight: 700; }
     .tag-mid { color: var(--amber); font-weight: 700; }
+
+    /* ================= UNIT ECONOMICS SVG CHART & SLIDER (SLIDE 17) ================= */
     .donut-wrap {
       display: flex;
       align-items: center;
       gap: 24px;
       flex-wrap: wrap;
     }
+
     .donut-svg {
-      width: 170px;
-      height: 170px;
+      width: 165px;
+      height: 165px;
       transform: rotate(-90deg);
       filter: drop-shadow(0 0 16px rgba(0, 240, 255, 0.25));
     }
+
     .legend-list {
       display: flex;
       flex-direction: column;
@@ -1065,18 +1619,29 @@
       flex: 1;
       min-width: 200px;
     }
+
     .legend-item {
       display: flex;
       align-items: center;
       gap: 10px;
       font-size: 13.5px;
     }
+
     .legend-swatch {
       width: 12px;
       height: 12px;
       border-radius: 3px;
       flex-shrink: 0;
     }
+
+    .sim-slider {
+      width: 100%;
+      accent-color: var(--cyan);
+      cursor: pointer;
+      margin: 8px 0;
+    }
+
+    /* ================= ROADMAP (SLIDE 18) ================= */
     .roadmap-phase {
       font-family: var(--font-mono);
       font-size: 11px;
@@ -1087,21 +1652,26 @@
       display: inline-block;
       margin-bottom: 10px;
     }
+
     .phase-done {
       background: rgba(16, 185, 129, 0.18);
       color: var(--lime);
       border: 1px solid rgba(16, 185, 129, 0.45);
     }
+
     .phase-next {
       background: rgba(0, 240, 255, 0.14);
       color: var(--cyan);
       border: 1px solid rgba(0, 240, 255, 0.4);
     }
+
     .phase-future {
       background: rgba(168, 85, 247, 0.16);
       color: #d8b4fe;
       border: 1px solid rgba(168, 85, 247, 0.42);
     }
+
+    /* ================= QR CODE & DEMO (SLIDE 19) ================= */
     .qr-box {
       background: #ffffff;
       padding: 16px;
@@ -1115,9 +1685,11 @@
       cursor: pointer;
       transition: transform 0.25s var(--ease-spring);
     }
+
     .qr-box:hover {
       transform: scale(1.04);
     }
+
     .qr-caption {
       font-family: var(--font-mono);
       font-size: 11px;
@@ -1125,6 +1697,8 @@
       color: #080b18;
       letter-spacing: 0.08em;
     }
+
+    /* ================= SLIDE MAP DRAWER ================= */
     .drawer-backdrop {
       position: fixed;
       inset: 0;
@@ -1135,16 +1709,18 @@
       pointer-events: none;
       transition: opacity 0.3s ease;
     }
+
     .drawer-backdrop.open {
       opacity: 1;
       pointer-events: auto;
     }
+
     .slide-drawer {
       position: fixed;
       top: 0;
       right: 0;
       bottom: 0;
-      width: min(400px, 92vw);
+      width: min(420px, 92vw);
       z-index: 120;
       background: rgba(8, 11, 24, 0.94);
       border-left: 1px solid rgba(0, 240, 255, 0.32);
@@ -1156,9 +1732,11 @@
       transition: transform 0.42s var(--ease-spring);
       box-shadow: -20px 0 60px rgba(0, 0, 0, 0.75);
     }
+
     .slide-drawer.open {
       transform: translateX(0);
     }
+
     .drawer-header {
       display: flex;
       align-items: center;
@@ -1167,12 +1745,17 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       margin-bottom: 14px;
     }
+
     .drawer-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       font-family: var(--font-display);
       font-size: 14px;
       letter-spacing: 0.12em;
       color: var(--cyan);
     }
+
     .drawer-list {
       overflow-y: auto;
       display: flex;
@@ -1180,38 +1763,53 @@
       gap: 7px;
       padding-right: 4px;
     }
+
     .drawer-item {
       display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: space-between;
+      gap: 10px;
       padding: 10px 12px;
       border-radius: 10px;
       border: 1px solid rgba(255, 255, 255, 0.07);
       background: rgba(255, 255, 255, 0.03);
       color: #d7e1fb;
-      font-size: 13px;
+      font-size: 12.5px;
       text-align: left;
       cursor: pointer;
       transition: all 0.2s ease;
     }
+
     .drawer-item:hover {
       border-color: rgba(0, 240, 255, 0.45);
       background: rgba(0, 240, 255, 0.1);
       transform: translateX(3px);
     }
+
     .drawer-item.active {
       border-color: var(--cyan);
       background: linear-gradient(90deg, rgba(0, 240, 255, 0.18), rgba(168, 85, 247, 0.16));
       color: #ffffff;
       box-shadow: 0 0 16px rgba(0, 240, 255, 0.2);
     }
+
     .drawer-num {
       font-family: var(--font-mono);
       font-size: 11px;
       font-weight: 700;
       color: var(--cyan);
-      min-width: 26px;
+      min-width: 24px;
     }
+
+    .drawer-fx {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      color: #d8b4fe;
+      opacity: 0.8;
+      white-space: nowrap;
+    }
+
+    /* ================= LIVE DEMO EMULATOR MODAL ================= */
     .demo-modal {
       position: fixed;
       inset: 0;
@@ -1226,10 +1824,12 @@
       pointer-events: none;
       transition: opacity 0.3s ease;
     }
+
     .demo-modal.open {
       opacity: 1;
       pointer-events: auto;
     }
+
     .demo-window {
       width: min(740px, 96vw);
       background: #080b18;
@@ -1241,6 +1841,7 @@
       flex-direction: column;
       gap: 12px;
     }
+
     .demo-bar {
       display: flex;
       align-items: center;
@@ -1249,6 +1850,7 @@
       font-size: 12px;
       color: var(--cyan);
     }
+
     #demo-canvas {
       width: 100%;
       aspect-ratio: 16 / 10;
@@ -1257,6 +1859,7 @@
       border: 1px solid rgba(255, 255, 255, 0.14);
       display: block;
     }
+
     .demo-footer {
       display: flex;
       align-items: center;
@@ -1267,33 +1870,43 @@
       font-size: 11.5px;
       color: var(--text-muted);
     }
+
+    /* ================= RESPONSIVE ================= */
     @media (max-width: 1024px) {
       .grid-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .grid-asymmetric { grid-template-columns: 1fr; }
+      .grid-asymmetric, .bench-box { grid-template-columns: 1fr; }
     }
+
     @media (max-width: 720px) {
       .slide { padding: 66px 16px 68px; }
       .hud-top { left: 12px; right: 12px; top: 10px; }
       .hud-bottom { left: 12px; right: 12px; bottom: 10px; }
       .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
-      .kbd-hints, .terminal-topic { display: none; }
+      .kbd-hints, .terminal-topic, .terminal-fx-badge { display: none; }
       .hud-btn span.hide-sm { display: none; }
-      .big-stat-banner { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .decay-panel { grid-template-columns: 1fr; }
+      .decay-matrix { grid-template-columns: repeat(20, 1fr); }
       .matrix-table { font-size: 12px; }
       .matrix-table th, .matrix-table td { padding: 9px 8px; }
     }
   </style>
 </head>
 <body class="crt-enabled">
+
+  <!-- Interactive Synthwave + Retro Pixels Canvas -->
   <canvas id="bg-canvas"></canvas>
   <div class="bg-vignette"></div>
   <div class="crt-overlay" aria-hidden="true"></div>
   <div id="crt-flash" aria-hidden="true"></div>
+
+  <!-- Top Neon Progress Bar -->
   <div class="progress-track">
     <div class="progress-fill" id="progress-fill"></div>
   </div>
+
+  <!-- Top HUD -->
   <header class="hud-top">
     <div class="hud-brand" id="brand-home" title="Перейти на титульный слайд">
       <span class="brand-dot"></span>
@@ -1301,25 +1914,35 @@
     </div>
     <div class="hud-controls">
       <button class="hud-btn active" id="btn-crt" title="Включить/выключить CRT Scanlines">
-        <span class="btn-svg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="3" rx="2"/><polyline points="17 21 12 18 7 21"/></svg></span> <span class="hide-sm">CRT</span> ON
+        <svg class="svg-sm" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg>
+        <span class="hide-sm">CRT</span> ON
       </button>
       <button class="hud-btn active" id="btn-sound" title="Включить/выключить 8-bit звук">
-        <span class="btn-svg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></span> SOUND ON
+        <svg class="svg-sm" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        SOUND ON
       </button>
       <button class="hud-btn" id="btn-map" title="Открыть карту всех 19 слайдов (M)">
-        <span class="btn-svg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></span> <span class="hide-sm">КАРТА СЛАЙДОВ</span>
+        <svg class="svg-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span class="hide-sm">КАРТА СЛАЙДОВ</span>
       </button>
       <button class="hud-btn" id="btn-fs" title="Полноэкранный режим (F)">
-        <span class="btn-svg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></span> <span class="hide-sm">FULL</span>
+        <svg class="svg-sm" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+        <span class="hide-sm">FULL</span>
       </button>
     </div>
   </header>
+
+  <!-- 3D PRESENTATION STAGE -->
   <main class="stage" id="stage">
-    <!-- SLIDE 01 -->
-    <section class="slide active" data-title="Титульный слайд — RETROSPECT">
+
+    <!-- ==================== SLIDE 01 (FX: WARP-ZOOM) ==================== -->
+    <section class="slide active" data-fx="warp-zoom" data-hue="cyan" data-title="Титульный слайд — RETROSPECT">
       <div class="slide-inner">
         <div class="hero-wrap">
-          <div class="slide-tag" data-stagger="title">// PITCH DECK 2026 · WEBASSEMBLY RETRO GAMING</div>
+          <div class="slide-tag" data-stagger="title">
+            <svg class="svg-sm" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            PITCH DECK 2026 // WEBASSEMBLY RETRO GAMING
+          </div>
           <h1 class="hero-logo" data-text="RETROSPECT" data-stagger="title">RETROSPECT</h1>
           <p class="hero-sub" data-stagger="subtitle">
             WebAssembly-платформа интерактивного ретро-гейминга и сохранения цифрового наследия
@@ -1335,14 +1958,16 @@
           </div>
           <div style="margin-top: 10px;" data-stagger="action">
             <button class="cyber-btn" data-next-slide>
-              НАЧАТЬ ПРЕЗЕНТАЦИЮ >
+              <svg class="svg-sm" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              НАЧАТЬ ПРЕЗЕНТАЦИЮ
             </button>
           </div>
         </div>
       </div>
     </section>
-    <!-- SLIDE 02 -->
-    <section class="slide" data-title="Проблема рынка (The Pain)">
+
+    <!-- ==================== SLIDE 02 (FX: GLITCH-FRACTURE + SIGNAL DECAY MATRIX) ==================== -->
+    <section class="slide" data-fx="glitch-fracture" data-hue="rose" data-title="Проблема рынка (The Pain)">
       <div class="slide-inner">
         <div class="slide-tag rose" data-stagger="title">02 // THE PAIN — ПРОБЛЕМА РЫНКА</div>
         <h2 class="slide-title glitch-heading" data-text="Цифровое наследие исчезает за барьером сложности" data-stagger="title">
@@ -1351,16 +1976,26 @@
         <p class="slide-subtitle" data-stagger="subtitle">
           Классические видеоигры — огромный пласт мировой культуры, но путь игрока к ним сегодня превращен в технический квест.
         </p>
-        <div class="big-stat-banner" data-stagger="card-1">
-          <div class="big-stat-num">87%</div>
-          <div class="card-text" style="font-size: 15.5px; color: #eef3ff;">
-            <strong>классических видеоигр недоступны на современных легальных платформах.</strong><br />
-            По данным исследований Video Game History Foundation, почти 9 из 10 игр прошлого века находятся в зоне риска цифрового забвения.
+
+        <div class="decay-panel" data-stagger="card-1">
+          <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap;">
+            <div class="big-stat-num">87%</div>
+            <div class="card-text" style="font-size: 14.5px; color: #eef3ff; max-width:540px;">
+              <strong>классических видеоигр недоступны на современных легальных платформах.</strong><br />
+              Визуализация 100 архивных тайтлов: лишь 13% доступны легально (лайм), 87% утрачены для массового игрока.
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+            <div class="decay-matrix" id="decay-matrix" aria-label="Визуализация 87 процентов недоступных игр"></div>
+            <button class="hud-btn" id="btn-replay-decay" style="padding:4px 10px; font-size:10px;">ПОВТОРИТЬ СКАН</button>
           </div>
         </div>
+
         <div class="grid-2">
           <div class="glass-card tilt-card" data-stagger="card-2">
-            <div class="card-icon rose"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <div class="card-icon rose">
+              <svg class="svg-icon" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
             <div class="card-title">Высокий технический порог входа</div>
             <ul class="neon-list rose">
               <li>Поиск файлов <strong>BIOS</strong>, подбор ревизий и настройка сложных эмуляторов.</li>
@@ -1369,7 +2004,9 @@
             </ul>
           </div>
           <div class="glass-card tilt-card accent-purple" data-stagger="card-3">
-            <div class="card-icon purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.439 7.85c0-1.571-1.274-2.85-2.846-2.85h-1.233A3.766 3.766 0 0 0 11.6 2c-1.878 0-3.42 1.378-3.716 3H6.593C5.02 5 3.747 6.279 3.747 7.85v1.233c1.622.296 3 1.838 3 3.717 0 1.878-1.378 3.42-3 3.716v1.234c0 1.571 1.273 2.85 2.846 2.85h1.29c.297-1.622 1.839-3 3.717-3 1.879 0 3.42 1.378 3.717 3h1.233c1.572 0 2.846-1.279 2.846-2.85v-1.29c-1.622-.297-3-1.839-3-3.717 0-1.879 1.378-3.421 3-3.717V7.85Z"/></svg></div>
+            <div class="card-icon purple">
+              <svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><path d="M10 6.5h4M17.5 10v4M6.5 10v7.5H14"/></svg>
+            </div>
             <div class="card-title">Нет витрины для Homebrew-авторов</div>
             <ul class="neon-list purple">
               <li>Отсутствие единого хаба для независимых создателей современных игр под ретро-архитектуры (NES, SMD, PS1).</li>
@@ -1380,8 +2017,9 @@
         </div>
       </div>
     </section>
-    <!-- SLIDE 03 -->
-    <section class="slide" data-title="Наше решение (The Solution)">
+
+    <!-- ==================== SLIDE 03 (FX: PORTAL-IRIS) ==================== -->
+    <section class="slide" data-fx="portal-iris" data-hue="lime" data-title="Наше решение (The Solution)">
       <div class="slide-inner">
         <div class="slide-tag lime" data-stagger="title">03 // THE SOLUTION — НАШЕ РЕШЕНИЕ</div>
         <h2 class="slide-title glitch-heading" data-text="Zero-Install ретро-гейминг нового поколения" data-stagger="title">
@@ -1390,30 +2028,39 @@
         <p class="slide-subtitle" data-stagger="subtitle">
           Retrospect объединяет мощь WebAssembly-эмуляции, открытую игровую энциклопедию и безупречный UX для десктопа и смартфонов.
         </p>
+
         <div class="grid-2">
           <div class="glass-card tilt-card" data-stagger="card-1">
-            <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+            <div class="card-icon">
+              <svg class="svg-icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
             <div class="card-title">Zero-Install эмуляция через WASM</div>
             <p class="card-text">
               Полноценное исполнение консольных ядер прямо внутри браузера через <strong>WebAssembly</strong>. Никаких скачиваний, инсталляторов, драйверов и вирусов — только ссылка.
             </p>
           </div>
           <div class="glass-card tilt-card accent-purple" data-stagger="card-2">
-            <div class="card-icon purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+            <div class="card-icon purple">
+              <svg class="svg-icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </div>
             <div class="card-title">Открытая энциклопедия консолей и игр</div>
             <p class="card-text">
               Структурированная база знаний с <strong>подлинными скриншотами реального геймплея</strong>, метаданными, историей платформ и многопараметрическим поиском.
             </p>
           </div>
           <div class="glass-card tilt-card accent-lime" data-stagger="card-3">
-            <div class="card-icon lime"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg></div>
+            <div class="card-icon lime">
+              <svg class="svg-icon" viewBox="0 0 24 24"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="4"/></svg>
+            </div>
             <div class="card-title">Авторские и Public Domain тайтлы в 1 клик</div>
             <p class="card-text">
               Легальная библиотека из <strong>116 мгновенно играбельных игр</strong> (Homebrew &amp; Public Domain), готовых к запуску менее чем за 1.5 секунды.
             </p>
           </div>
           <div class="glass-card tilt-card" data-stagger="card-4">
-            <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg></div>
+            <div class="card-icon">
+              <svg class="svg-icon" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            </div>
             <div class="card-title">Мобильный виртуальный геймпад + Fullscreen</div>
             <p class="card-text">
               Эргономичное сенсорное управление (D-Pad, A/B/X/Y, Start/Select), жестко закрепленное во вьюпорте даже при переходе смартфона в полноэкранный режим.
@@ -1422,8 +2069,9 @@
         </div>
       </div>
     </section>
-    <!-- SLIDE 04 -->
-    <section class="slide" data-title="Метрики проекта (CountUp)">
+
+    <!-- ==================== SLIDE 04 (FX: HOLO-FLIP-X + COUNTUP BARS) ==================== -->
+    <section class="slide" data-fx="holo-flip-x" data-hue="cyan" data-title="Метрики проекта (CountUp)">
       <div class="slide-inner">
         <div class="slide-tag" data-stagger="title">04 // TRACTION &amp; METRICS — ФАКТИЧЕСКИЕ ДАННЫЕ</div>
         <h2 class="slide-title glitch-heading" data-text="Работающий продукт в цифрах" data-stagger="title">
@@ -1432,28 +2080,35 @@
         <p class="slide-subtitle" data-stagger="subtitle">
           Платформа уже наполнена проверенным контентом, реальными игровыми скриншотами и протестирована на скоростном запуске.
         </p>
+
         <div class="grid-5" style="margin-bottom: 18px;">
           <div class="glass-card tilt-card metric-card" data-stagger="card-1">
             <div class="metric-value" data-count="569">0</div>
             <div class="metric-label">Игр в структурированном каталоге (100% реальные скриншоты)</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="--target-w: 100%;"></div></div>
           </div>
           <div class="glass-card tilt-card metric-card accent-lime" data-stagger="card-2">
             <div class="metric-value lime" data-count="116">0</div>
             <div class="metric-label">Мгновенно играбельных онлайн-игр без скачивания</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="--target-w: 78%; background:var(--lime);"></div></div>
           </div>
           <div class="glass-card tilt-card metric-card accent-purple" data-stagger="card-3">
             <div class="metric-value purple" data-count="9">0</div>
             <div class="metric-label">Легендарных платформ от 8-bit до 64-bit</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="--target-w: 90%; background:var(--purple);"></div></div>
           </div>
           <div class="glass-card tilt-card metric-card" data-stagger="card-4">
             <div class="metric-value" data-count="91">0</div>
             <div class="metric-label">Уникальный жанр в многопараметрическом рубрикаторе</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="--target-w: 92%;"></div></div>
           </div>
           <div class="glass-card tilt-card metric-card accent-lime" data-stagger="card-5">
             <div class="metric-value lime" data-count="1.5" data-prefix="< " data-suffix=" сек" data-decimals="1">&lt; 0 сек</div>
             <div class="metric-label">Скорость холодного запуска игры прямо в окне браузера</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="--target-w: 96%; background:var(--lime);"></div></div>
           </div>
         </div>
+
         <div class="glass-card" data-stagger="action" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
           <div class="card-text">
             <strong style="color:var(--cyan);">100% подлинность медиа:</strong> каждый тайтл снабжен реальными кадрами геймплея, верифицированными тегами и привязкой к аппаратному поколению.
@@ -1462,8 +2117,9 @@
         </div>
       </div>
     </section>
-    <!-- SLIDE 05 -->
-    <section class="slide" data-title="Архитектура и технологии (Tech Stack)">
+
+    <!-- ==================== SLIDE 05 (FX: MATRIX-CASCADE + LIVE PACKET BUS) ==================== -->
+    <section class="slide" data-fx="matrix-cascade" data-hue="purple" data-title="Архитектура и технологии (Tech Stack)">
       <div class="slide-inner">
         <div class="slide-tag purple" data-stagger="title">05 // TECH STACK — АРХИТЕКТУРА ПЛАТФОРМЫ</div>
         <h2 class="slide-title glitch-heading" data-text="Инженерный фундамент Retrospect" data-stagger="title">
@@ -1472,9 +2128,12 @@
         <p class="slide-subtitle" data-stagger="subtitle">
           Современный гибридный стек: быстрый серверный рендеринг каталога + тяжелые вычисления эмуляции на стороне клиента.
         </p>
+
         <div class="grid-2">
           <div class="glass-card tilt-card" data-stagger="card-1">
-            <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2Z"/></svg></div>
+            <div class="card-icon">
+              <svg class="svg-icon" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            </div>
             <div class="card-title">Frontend &amp; Browser APIs</div>
             <ul class="neon-list">
               <li><strong>Handlebars SSR</strong> — мгновенная отрисовка страниц и SEO-индексация каталога.</li>
@@ -1483,16 +2142,20 @@
             </ul>
           </div>
           <div class="glass-card tilt-card accent-purple" data-stagger="card-2">
-            <div class="card-icon purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></div>
+            <div class="card-icon purple">
+              <svg class="svg-icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>
+            </div>
             <div class="card-title">Core Emulation (WASM Engine)</div>
             <ul class="neon-list purple">
               <li><strong>WebAssembly (WASM)</strong> порты ядер <strong>Libretro / RetroArch</strong> на базе <strong>Nostalgist.js</strong>.</li>
               <li>Ультралегкий специализированный движок <strong>JSNES</strong> для мгновенного 8-bit старта.</li>
-              <li>Исполнение в песочнице браузера со стабильной кадровой частотой.</li>
+              <li>Исполнение в песочнице браузера с частотой стабильных 60 FPS.</li>
             </ul>
           </div>
           <div class="glass-card tilt-card accent-lime" data-stagger="card-3">
-            <div class="card-icon lime"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></div>
+            <div class="card-icon lime">
+              <svg class="svg-icon" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            </div>
             <div class="card-title">Backend &amp; Automation</div>
             <ul class="neon-list lime">
               <li><strong>Node.js + Express REST API</strong> для управления каталогом и раздачи ассетов.</li>
@@ -1501,7 +2164,9 @@
             </ul>
           </div>
           <div class="glass-card tilt-card" data-stagger="card-4">
-            <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg></div>
+            <div class="card-icon">
+              <svg class="svg-icon" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            </div>
             <div class="card-title">База данных MongoDB</div>
             <ul class="neon-list">
               <li><strong>MongoDB</strong> со схемой денормализации для сложных мультифильтров.</li>
@@ -1510,10 +2175,24 @@
             </ul>
           </div>
         </div>
+
+        <div class="arch-bus" data-stagger="action">
+          <button class="bus-node" data-bus-msg="Handlebars SSR + Canvas + Gamepad API (Client UI)">CLIENT UI</button>
+          <div class="bus-wire"></div>
+          <button class="bus-node" style="border-color:var(--purple); color:#d8b4fe;" data-bus-msg="Nostalgist.js (Libretro WASM) + JSNES (60 FPS Sandbox)">WASM CORES</button>
+          <div class="bus-wire"></div>
+          <button class="bus-node" style="border-color:var(--lime); color:var(--lime);" data-bus-msg="Node.js + Express REST API + AutoSeeding">NODE / EXPRESS</button>
+          <div class="bus-wire"></div>
+          <button class="bus-node" data-bus-msg="MongoDB Denormalized Catalog (< 15 ms query latency)">MONGODB &lt;15ms</button>
+          <span id="bus-telemetry" style="font-family:var(--font-mono); font-size:11px; color:var(--lime); width:100%; margin-top:4px;">
+            [ TELEMETRY: Нажмите на любой узел архитектуры для инспекции ]
+          </span>
+        </div>
       </div>
     </section>
-    <!-- SLIDE 06 -->
-    <section class="slide" data-title="Покрытие эпох и платформ (Хронология)">
+
+    <!-- ==================== SLIDE 06 (FX: CAROUSEL-ORBIT + CHIPTUNE OSCILLOSCOPE) ==================== -->
+    <section class="slide" data-fx="carousel-orbit" data-hue="cyan" data-title="Покрытие эпох и платформ (Хронология)">
       <div class="slide-inner">
         <div class="slide-tag" data-stagger="title">06 // HARDWARE CHRONOLOGY — 1977–1996</div>
         <h2 class="slide-title glitch-heading" data-text="9 культовых платформ — 3 золотые эпохи" data-stagger="title">
@@ -1522,12 +2201,20 @@
         <p class="slide-subtitle" data-stagger="subtitle">
           Охват почти 20 лет эволюции игровых систем: от первых картриджей 8-bit до зарождения 3D-графики 32/64-bit.
         </p>
-        <div class="era-tabs" data-stagger="card-1">
-          <button class="era-tab active" data-era-filter="all">ВСЕ ЭПОХИ (9)</button>
-          <button class="era-tab" data-era-filter="8bit">8-BIT (1977–1985)</button>
-          <button class="era-tab" data-era-filter="16bit">16-BIT (1987–1990)</button>
-          <button class="era-tab" data-era-filter="3d">32/64-BIT 3D (1994–1996)</button>
+
+        <div class="era-toolbar" data-stagger="card-1">
+          <div class="era-tabs">
+            <button class="era-tab active" data-era-filter="all">ВСЕ ЭПОХИ (9)</button>
+            <button class="era-tab" data-era-filter="8bit">8-BIT (1977–1985)</button>
+            <button class="era-tab" data-era-filter="16bit">16-BIT (1987–1990)</button>
+            <button class="era-tab" data-era-filter="3d">32/64-BIT 3D (1994–1996)</button>
+          </div>
+          <div class="oscilloscope-box" title="Аудио-осциллограф выбранного поколения консолей">
+            <span style="font-family:var(--font-mono); font-size:10.5px; color:var(--lime);" id="scope-label">SYNTH // ALL ERAS</span>
+            <canvas id="era-scope" width="140" height="30"></canvas>
+          </div>
         </div>
+
         <div class="grid-3" id="era-grid">
           <div class="glass-card tilt-card" data-era="8bit" data-stagger="card-2">
             <div class="card-title" style="color:var(--cyan);">8-BIT ПОКОЛЕНИЕ</div>
@@ -1547,6 +2234,7 @@
               <div class="mini-bar"><div class="mini-bar-fill" style="width: 32%"></div></div>
             </div>
           </div>
+
           <div class="glass-card tilt-card accent-purple" data-era="16bit" data-stagger="card-3">
             <div class="card-title" style="color:#d8b4fe;">16-BIT ПОКОЛЕНИЕ</div>
             <div class="console-row">
@@ -1565,6 +2253,7 @@
               <div class="mini-bar"><div class="mini-bar-fill" style="width: 22%"></div></div>
             </div>
           </div>
+
           <div class="glass-card tilt-card accent-lime" data-era="3d" data-stagger="card-4">
             <div class="card-title" style="color:#6ee7b7;">32/64-BIT 3D-ЭРА</div>
             <div class="console-row">
@@ -1586,8 +2275,9 @@
         </div>
       </div>
     </section>
-    <!-- SLIDE 07 -->
-    <section class="slide" data-title="Лаборатория Web-эмуляции (WASM Core Lab)">
+
+    <!-- ==================== SLIDE 07 (FX: HEX-SHUTTER + LIVE WASM BENCHMARK) ==================== -->
+    <section class="slide" data-fx="hex-shutter" data-hue="purple" data-title="Лаборатория Web-эмуляции (WASM Core Lab)">
       <div class="slide-inner">
         <div class="slide-tag purple" data-stagger="title">07 // WASM CORE LAB — КЛИЕНТСКОЕ ЯДРО</div>
         <h2 class="slide-title glitch-heading" data-text="Лаборатория Web-эмуляции" data-stagger="title">
@@ -1596,81 +2286,106 @@
         <p class="slide-subtitle" data-stagger="subtitle">
           Вся магия декодирования и рендера происходит на устройстве пользователя — безопасно, мгновенно и с нулевой нагрузкой на бэкенд.
         </p>
-        <div class="grid-4" style="margin-bottom: 18px;">
+
+        <div class="grid-4">
           <div class="glass-card tilt-card" data-stagger="card-1">
-            <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div class="card-icon">
+              <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
             <div class="card-title">Изоляция в браузере</div>
             <p class="card-text">Декодирование ROM выполняется в изолированной песочнице памяти клиента (WASM Memory Sandbox).</p>
           </div>
           <div class="glass-card tilt-card accent-lime" data-stagger="card-2">
-            <div class="card-icon lime"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg></div>
+            <div class="card-icon lime">
+              <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+            </div>
             <div class="card-title">0% нагрузки на сервер</div>
             <p class="card-text">Сервер отдает лишь статические ассеты. Себестоимость масштабирования стремится к нулю.</p>
           </div>
           <div class="glass-card tilt-card accent-purple" data-stagger="card-3">
-            <div class="card-icon purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="4" rx="2"/><line x1="6" y1="8" x2="6.01" y2="8"/><line x1="10" y1="8" x2="10.01" y2="8"/><line x1="14" y1="8" x2="14.01" y2="8"/><line x1="18" y1="8" x2="18.01" y2="8"/><line x1="6" y1="12" x2="6.01" y2="12"/><line x1="18" y1="12" x2="18.01" y2="12"/><line x1="10" y1="12" x2="14" y2="12"/></svg></div>
+            <div class="card-icon purple">
+              <svg class="svg-icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/></svg>
+            </div>
             <div class="card-title">Instant Auto-Focus</div>
             <p class="card-text">Клавиатура на ПК подхватывается мгновенно при старте — без лишних кликов по канвасу.</p>
           </div>
           <div class="glass-card tilt-card" data-stagger="card-4">
-            <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg></div>
+            <div class="card-icon">
+              <svg class="svg-icon" viewBox="0 0 24 24"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="4"/></svg>
+            </div>
             <div class="card-title">Физические геймпады</div>
             <p class="card-text">Нативный Gamepad API: Plug &amp; Play для Xbox, DualSense и USB/Bluetooth ретро-контроллеров.</p>
           </div>
         </div>
-        <div class="glass-card" data-stagger="action" style="display:flex; align-items:center; justify-content:space-around; flex-wrap:wrap; gap:12px; font-family:var(--font-mono); font-size:12.5px;">
-          <span style="color:var(--cyan);">[1] CDN Static ROM</span>
-          <span style="color:var(--text-muted);">━━▶</span>
-          <span style="color:#d8b4fe;">[2] WASM Libretro / JSNES</span>
-          <span style="color:var(--text-muted);">━━▶</span>
-          <span style="color:var(--lime);">[3] Canvas + WebAudio</span>
-          <span style="color:var(--text-muted);">━━▶</span>
-          <span style="color:#fff;">[4] Keyboard / Gamepad / Touch</span>
+
+        <div class="bench-box" data-stagger="action">
+          <div class="bench-meter">
+            <div class="bench-head">
+              <span style="color:var(--lime);">RETROSPECT WASM (Client Execution)</span>
+              <span id="bench-wasm-val" style="color:var(--lime);">Boot: 1.18s // Server CPU: 0%</span>
+            </div>
+            <div class="mini-bar"><div id="bench-wasm-bar" class="mini-bar-fill" style="width:94%; background:var(--lime);"></div></div>
+          </div>
+          <div class="bench-meter">
+            <div class="bench-head">
+              <span style="color:var(--rose);">CLOUD VIDEO STREAMING (Competitors)</span>
+              <span id="bench-cloud-val" style="color:var(--rose);">Boot: 6.40s // Server GPU: 84%</span>
+            </div>
+            <div class="mini-bar"><div id="bench-cloud-bar" class="mini-bar-fill" style="width:32%; background:var(--rose); box-shadow:none;"></div></div>
+          </div>
+          <button class="hud-btn active" id="btn-run-bench">ЗАПУСТИТЬ ТЕСТ</button>
         </div>
       </div>
     </section>
-    <!-- SLIDE 08 -->
-    <section class="slide" data-title="Мобильный опыт (Mobile-First UX)">
+
+    <!-- ==================== SLIDE 08 (FX: DEVICE-TILT-RISE + LIVE PLAYABLE PHONE) ==================== -->
+    <section class="slide" data-fx="device-tilt-rise" data-hue="lime" data-title="Мобильный опыт (Mobile-First UX)">
       <div class="slide-inner">
         <div class="slide-tag lime" data-stagger="title">08 // MOBILE-FIRST UX — ИГРА В КАРМАНЕ</div>
         <h2 class="slide-title glitch-heading" data-text="Безупречный мобильный геймплей" data-stagger="title">
           Безупречный <span class="accent-lime">мобильный геймплей</span>
         </h2>
         <p class="slide-subtitle" data-stagger="subtitle">
-          Большинство веб-эмуляторов ломаются на смартфонах. Retrospect изначально спроектирован под сенсорный опыт — попробуйте нажать кнопки справа!
+          Большинство веб-эмуляторов ломаются на смартфонах. Управляйте кораблем на мини-экране справа с помощью сенсорного D-Pad и кнопок A/B.
         </p>
+
         <div class="grid-asymmetric">
           <div class="grid-2" style="gap: 14px;">
             <div class="glass-card tilt-card" data-stagger="card-1">
-              <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
+              <div class="card-icon">
+                <svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              </div>
               <div class="card-title">Чистая адаптивность</div>
               <p class="card-text">Интерфейс подстраивается под любую диагональ без горизонтальной прокрутки и случайных зумов.</p>
             </div>
             <div class="glass-card tilt-card accent-purple" data-stagger="card-2">
-              <div class="card-icon purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg></div>
+              <div class="card-icon purple">
+                <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+              </div>
               <div class="card-title">Сенсорный геймпад</div>
               <p class="card-text">Отзывчивая крестовина D-Pad, блок A/B/X/Y, Start и Select с поддержкой мультитача (Touch Events).</p>
             </div>
             <div class="glass-card tilt-card accent-lime" data-stagger="card-3">
-              <div class="card-icon lime"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></div>
+              <div class="card-icon lime">
+                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+              </div>
               <div class="card-title">Непрерывность Fullscreen</div>
               <p class="card-text">Виртуальный геймпад закреплен внутри вьюпорта и не исчезает при переходе смартфона в полноэкранный режим.</p>
             </div>
             <div class="glass-card tilt-card" data-stagger="card-4">
-              <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg></div>
+              <div class="card-icon">
+                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>
+              </div>
               <div class="card-title">Умный сенсорный UI</div>
               <p class="card-text">Автоматическое скрытие десктопных подсказок клавиш на тач-устройствах — максимум экрана под игру.</p>
             </div>
           </div>
+
+          <!-- Interactive Playable Virtual Gamepad Demo -->
           <div class="phone-frame" data-stagger="card-5">
             <div class="phone-screen">
-              <div style="font-family:var(--font-display); font-size:13px; letter-spacing:0.14em; color:var(--cyan);">
-                RETROSPECT MOBILE VIEWPORT
-              </div>
-              <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">
-                Нажмите кнопки ниже для теста отклика
-              </div>
-              <div class="phone-screen-status" id="pad-output">[ READY // FULLSCREEN LOCKED ]</div>
+              <canvas id="phone-mini-canvas" width="280" height="106"></canvas>
+              <div class="phone-screen-status" id="pad-output">[ TOUCH READY // FULLSCREEN LOCKED ]</div>
             </div>
             <div class="virtual-pad">
               <div class="dpad">
@@ -1704,8 +2419,9 @@
         </div>
       </div>
     </section>
-    <!-- SLIDE 09 -->
-    <section class="slide" data-title="Умный поиск и движок рубрикатора">
+
+    <!-- ==================== SLIDE 09 (FX: PRISM-REFRACT + LIVE FILTER ENGINE) ==================== -->
+    <section class="slide" data-fx="prism-refract" data-hue="cyan" data-title="Умный поиск и движок рубрикатора">
       <div class="slide-inner">
         <div class="slide-tag" data-stagger="title">09 // SMART DISCOVERY ENGINE</div>
         <h2 class="slide-title glitch-heading" data-text="Умный поиск и рубрикатор на 91 жанр" data-stagger="title">
@@ -1714,23 +2430,31 @@
         <p class="slide-subtitle" data-stagger="subtitle">
           Найти нужную игру за секунды среди 569 тайтлов — от мейнстримовой классики до редчайших культовых поджанров.
         </p>
+
         <div class="grid-3" style="margin-bottom: 18px;">
           <div class="glass-card tilt-card" data-stagger="card-1">
-            <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></div>
+            <div class="card-icon">
+              <svg class="svg-icon" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+            </div>
             <div class="card-title">Мульти-фильтрация</div>
             <p class="card-text">Комбинация параметров в реальном времени: <strong>Платформа + Жанр + Временной диапазон + «Доступно онлайн»</strong>.</p>
           </div>
           <div class="glass-card tilt-card accent-purple" data-stagger="card-2">
-            <div class="card-icon purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+            <div class="card-icon purple">
+              <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
             <div class="card-title">Безопасный быстрый поиск</div>
             <p class="card-text">Индексированный поиск по названиям, издателям и тегам с автоматическим экранированием спецсимволов (Regex-safe).</p>
           </div>
           <div class="glass-card tilt-card accent-lime" data-stagger="card-3">
-            <div class="card-icon lime"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+            <div class="card-icon lime">
+              <svg class="svg-icon" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            </div>
             <div class="card-title">Глубина каталогизации</div>
             <p class="card-text"><strong>91 уникальный жанр</strong>: от платформеров и JRPG до Арканоидов, Dungeon Crawler и Rail Shooter.</p>
           </div>
         </div>
+
         <div class="glass-card" data-stagger="card-4">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
             <div style="font-family:var(--font-mono); font-size:12px; color:var(--cyan);">
@@ -1741,7 +2465,7 @@
             </div>
           </div>
           <div class="filter-chips" id="demo-chips">
-            <button class="chip selected" data-count-val="116" data-ms="9">Доступно онлайн</button>
+            <button class="chip selected" data-count-val="116" data-ms="9">Доступно онлайн (116)</button>
             <button class="chip" data-count-val="31" data-ms="7">Dendy / NES</button>
             <button class="chip" data-count-val="24" data-ms="8">Sega Mega Drive</button>
             <button class="chip" data-count-val="14" data-ms="6">SNES (16-bit)</button>
@@ -1752,8 +2476,9 @@
         </div>
       </div>
     </section>
-    <!-- SLIDE 10 -->
-    <section class="slide" data-title="B2C Целевая аудитория">
+
+    <!-- ==================== SLIDE 10 (FX: DEPTH-PARALLAX-STACK) ==================== -->
+    <section class="slide" data-fx="depth-parallax-stack" data-hue="purple" data-title="B2C Целевая аудитория">
       <div class="slide-inner">
         <div class="slide-tag purple" data-stagger="title">10 // TARGET AUDIENCE &amp; MARKET SIZE</div>
         <h2 class="slide-title glitch-heading" data-text="Аудитория на стыке поколений" data-stagger="title">
@@ -1762,23 +2487,31 @@
         <p class="slide-subtitle" data-stagger="subtitle">
           Ретро-гейминг перестал быть нишей — это глобальный культурный тренд, объединяющий миллениалов и поколение Z.
         </p>
+
         <div class="grid-3" style="margin-bottom: 18px;">
           <div class="glass-card tilt-card" data-stagger="card-1">
-            <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg></div>
+            <div class="card-icon">
+              <svg class="svg-icon" viewBox="0 0 24 24"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="4"/></svg>
+            </div>
             <div class="card-title">Ностальгирующие (25–45 лет)</div>
             <p class="card-text">Платежеспособная аудитория, выросшая на Dendy, Sega и PS1. Ищут мгновенный запуск классики в обеденный перерыв или в дороге со смартфона.</p>
           </div>
           <div class="glass-card tilt-card accent-purple" data-stagger="card-2">
-            <div class="card-icon purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+            <div class="card-icon purple">
+              <svg class="svg-icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
             <div class="card-title">Зумеры и ретро-фаны (14–24)</div>
             <p class="card-text">Высокий интерес к эстетике пиксель-арта, synthwave, чиптюну и истокам современных игровых франшиз.</p>
           </div>
           <div class="glass-card tilt-card accent-lime" data-stagger="card-3">
-            <div class="card-icon lime"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+            <div class="card-icon lime">
+              <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
             <div class="card-title">Геймдев и исследователи</div>
             <p class="card-text">Студенты геймдизайна, разработчики и историки IT, изучающие эволюцию механик, ограничений железа и UX.</p>
           </div>
         </div>
+
         <div class="glass-card featured" data-stagger="card-4" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
           <div>
             <div style="font-family:var(--font-mono); font-size:11px; color:var(--cyan); letter-spacing:0.12em;">GLOBAL MARKET VOLUME</div>
@@ -1788,8 +2521,9 @@
         </div>
       </div>
     </section>
-    <!-- SLIDE 11 -->
-    <section class="slide" data-title="B2C Монетизация (Freemium & PRO)">
+
+    <!-- ==================== SLIDE 11 (FX: CARD-DEAL-FAN + CURRENCY SWITCHER) ==================== -->
+    <section class="slide" data-fx="card-deal-fan" data-hue="lime" data-title="B2C Монетизация (Freemium & PRO)">
       <div class="slide-inner">
         <div class="slide-tag lime" data-stagger="title">11 // B2C MONETIZATION — FREEMIUM &amp; PRO</div>
         <h2 class="slide-title glitch-heading" data-text="Прозрачная модель монетизации B2C" data-stagger="title">
@@ -1798,6 +2532,7 @@
         <p class="slide-subtitle" data-stagger="subtitle">
           Максимально широкий бесплатный вход для органического вирального роста + ценные облачные функции в PRO-подписке.
         </p>
+
         <div class="grid-2">
           <div class="glass-card tilt-card" data-stagger="card-1">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
@@ -1812,12 +2547,13 @@
               <li>Мобильный сенсорный геймпад и поддержка USB/BT-контроллеров.</li>
             </ul>
           </div>
+
           <div class="glass-card tilt-card featured accent-purple" data-stagger="card-2">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; gap:8px; flex-wrap:wrap;">
               <div class="card-title" style="margin:0; font-size:20px; color:var(--cyan);">RETROSPECT PRO</div>
-              <span class="pill-badge" style="background:rgba(168,85,247,0.22); border-color:var(--purple); color:#fff;">
-                <strong>299 ₽</strong> / $3.99 мес
-              </span>
+              <button class="pill-badge" id="btn-currency" style="background:rgba(168,85,247,0.22); border-color:var(--purple); color:#fff; cursor:pointer;" title="Переключить валюту">
+                <strong id="pro-price">299 ₽ / мес</strong> (сменить)
+              </button>
             </div>
             <p class="card-text" style="margin-bottom:14px;">Премиальный опыт для увлеченных игроков и коллекционеров:</p>
             <ul class="neon-list lime">
@@ -1830,8 +2566,9 @@
         </div>
       </div>
     </section>
-    <!-- SLIDE 12 -->
-    <section class="slide" data-title="B2B 1: Издательство Homebrew Publishing">
+
+    <!-- ==================== SLIDE 12 (FX: CARTRIDGE-SLOT-DROP) ==================== -->
+    <section class="slide" data-fx="cartridge-slot-drop" data-hue="purple" data-title="B2B 1: Издательство Homebrew Publishing">
       <div class="slide-inner">
         <div class="slide-tag purple" data-stagger="title">12 // B2B STREAM #1 — HOMEBREW PUBLISHING</div>
         <h2 class="slide-title glitch-heading" data-text="Издательство для инди-авторов ретро-игр" data-stagger="title">
@@ -1840,16 +2577,21 @@
         <p class="slide-subtitle" data-stagger="subtitle">
           Превращаем Retrospect в главный цифровой Steam/itch.io для разработчиков новых игр под классические консоли.
         </p>
+
         <div class="grid-3">
           <div class="glass-card tilt-card" data-stagger="card-1">
-            <div class="card-icon rose"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
+            <div class="card-icon rose">
+              <svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
             <div class="card-title">Проблема авторов</div>
             <p class="card-text">
               Современные разработчики игр под NES, Sega Mega Drive и GameBoy не имеют удобной витрины для интерактивной демонстрации и прямой монетизации.
             </p>
           </div>
           <div class="glass-card tilt-card accent-purple" data-stagger="card-2">
-            <div class="card-icon purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></div>
+            <div class="card-icon purple">
+              <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
             <div class="card-title">Решение: DevPortal</div>
             <ul class="neon-list purple">
               <li>Загрузка ROM-файлов за 2 минуты и мгновенный веб-тест в браузере.</li>
@@ -1858,7 +2600,9 @@
             </ul>
           </div>
           <div class="glass-card tilt-card accent-lime" data-stagger="card-3">
-            <div class="card-icon lime"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9Z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg></div>
+            <div class="card-icon lime">
+              <svg class="svg-icon" viewBox="0 0 24 24"><polygon points="12 2 22 9 12 22 2 9 12 2"/><line x1="2" y1="9" x2="22" y2="9"/></svg>
+            </div>
             <div class="card-title">Модель RevShare</div>
             <div class="metric-value lime" style="font-size:38px; text-align:left; margin:8px 0;">15–20%</div>
             <p class="card-text">
@@ -1868,8 +2612,9 @@
         </div>
       </div>
     </section>
-    <!-- SLIDE 13 -->
-    <section class="slide" data-title="B2B 2: Event & Kiosk Solutions">
+
+    <!-- ==================== SLIDE 13 (FX: ARCADE-CURTAIN-SPLIT) ==================== -->
+    <section class="slide" data-fx="arcade-curtain-split" data-hue="cyan" data-title="B2B 2: Event & Kiosk Solutions">
       <div class="slide-inner">
         <div class="slide-tag" data-stagger="title">13 // B2B STREAM #2 — EVENT &amp; KIOSK SOLUTIONS</div>
         <h2 class="slide-title glitch-heading" data-text="Решения для фестивалей и оффлайн-площадок" data-stagger="title">
@@ -1878,9 +2623,12 @@
         <p class="slide-subtitle" data-stagger="subtitle">
           Готовый программно-аппаратный стек для брендированных игровых зон, который разворачивается за 10 минут на любом ПК или мини-сервере.
         </p>
+
         <div class="grid-asymmetric">
           <div class="glass-card tilt-card" data-stagger="card-1">
-            <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+            <div class="card-icon">
+              <svg class="svg-icon" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><rect x="7" y="5" width="10" height="7" rx="1"/><circle cx="9" cy="16" r="1"/><line x1="14" y1="16" x2="17" y2="16"/></svg>
+            </div>
             <div class="card-title">Где востребован Kiosk Mode</div>
             <ul class="neon-list">
               <li>Крупные фестивали: <strong>Comic-Con, Geek Picnic, киберспортивные ивенты</strong>.</li>
@@ -1892,6 +2640,7 @@
               <p class="card-text">Полноэкранный защищенный запуск, блокировка выхода в ОС, мгновенная интеграция с физическими аркадными автоматами и файтинг-стиками.</p>
             </div>
           </div>
+
           <div class="glass-card tilt-card featured accent-lime" data-stagger="card-2" style="display:flex; flex-direction:column; justify-content:center;">
             <div class="slide-tag lime" style="align-self:flex-start;">КОММЕРЧЕСКИЙ ЧЕК B2B</div>
             <div class="metric-value lime" style="text-align:left; font-size:clamp(32px, 3.6vw, 48px);">от 45 000 ₽</div>
@@ -1903,8 +2652,9 @@
         </div>
       </div>
     </section>
-    <!-- SLIDE 14 -->
-    <section class="slide" data-title="Турнирный модуль и кибер-ретро">
+
+    <!-- ==================== SLIDE 14 (FX: CYBER-WHIP-PAN + LIVE SPEEDRUN TIMER) ==================== -->
+    <section class="slide" data-fx="cyber-whip-pan" data-hue="rose" data-title="Турнирный модуль и кибер-ретро">
       <div class="slide-inner">
         <div class="slide-tag rose" data-stagger="title">14 // TOURNAMENTS &amp; SPEEDRUNNING</div>
         <h2 class="slide-title glitch-heading" data-text="Турнирный модуль и кибер-ретро" data-stagger="title">
@@ -1913,47 +2663,64 @@
         <p class="slide-subtitle" data-stagger="subtitle">
           Превращаем классические файтинги, аркады и спидраны в зрелищный соревновательный формат для онлайна и сцен.
         </p>
+
         <div class="grid-asymmetric">
           <div style="display:flex; flex-direction:column; gap:14px;">
             <div class="glass-card tilt-card" data-stagger="card-1">
-              <div class="card-title"><span class="btn-svg" style="color:var(--amber);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7"/><path d="M14 14.66V17c0 .55.45 1 1 1h2"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span> Локальные и онлайн-турниры</div>
+              <div class="card-title">
+                <svg class="svg-sm" style="color:var(--cyan);" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                Локальные и онлайн-турниры
+              </div>
               <p class="card-text">Автоматические сетки плей-офф по классическим файтингам, шмапам и аркадам — прямо в браузере участников.</p>
             </div>
             <div class="glass-card tilt-card accent-lime" data-stagger="card-2">
-              <div class="card-title"><span class="btn-svg" style="color:var(--lime);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span> Верификация рекордов (Speedrun)</div>
+              <div class="card-title">
+                <svg class="svg-sm" style="color:var(--lime);" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/><path d="M12 2v3"/></svg>
+                Верификация рекордов (Speedrun)
+              </div>
               <p class="card-text">Автоматическая фиксация времени прохождения и очков внутри WASM-ядра с защитой от подмены и мгновенным попаданием в Leaderboards.</p>
             </div>
             <div class="glass-card tilt-card accent-purple" data-stagger="card-3">
-              <div class="card-title"><span class="btn-svg" style="color:#d8b4fe;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.93 4.93a10 10 0 0 1 14.14 0"/><path d="M7.76 7.76a6 6 0 0 1 8.48 0"/><circle cx="12" cy="12" r="2"/></svg></span> Интеграция со стримами и сценами</div>
+              <div class="card-title">
+                <svg class="svg-sm" style="color:#d8b4fe;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>
+                Интеграция со стримами и сценами
+              </div>
               <p class="card-text">Готовые OBS-оверлеи с живыми таблицами лидеров для Twitch/YouTube-трансляций и больших экранов фестивалей.</p>
             </div>
           </div>
+
           <div class="glass-card tilt-card" data-stagger="card-4" style="font-family:var(--font-mono);">
-            <div style="color:var(--cyan); font-size:12px; letter-spacing:0.12em; margin-bottom:14px;">
-              ● LIVE LEADERBOARD // SPEEDRUN CUP
+            <div style="display:flex; justify-content:space-between; align-items:center; color:var(--cyan); font-size:11.5px; letter-spacing:0.1em; margin-bottom:12px;">
+              <span>LIVE SPEEDRUN CUP</span>
+              <span id="live-chrono" style="color:var(--lime); font-weight:700;">RUN: 04:18.420</span>
             </div>
             <div class="console-row" style="border-color:rgba(0,240,255,0.35);">
               <div class="console-top"><span>#01 NEO_ALEX</span><span style="color:var(--lime);">04:18.42</span></div>
               <div class="console-counts"><span>NES // Any% Verified</span><span>98,400 PTS</span></div>
+              <div class="mini-bar"><div class="mini-bar-fill" style="width:98%;"></div></div>
             </div>
             <div class="console-row">
               <div class="console-top"><span>#02 CYBER_KIRA</span><span style="color:var(--cyan);">04:22.09</span></div>
               <div class="console-counts"><span>SMD // No-Hit Run</span><span>94,120 PTS</span></div>
+              <div class="mini-bar"><div class="mini-bar-fill" style="width:92%;"></div></div>
             </div>
             <div class="console-row">
               <div class="console-top"><span>#03 PIXEL_WOLF</span><span style="color:#d8b4fe;">04:29.85</span></div>
               <div class="console-counts"><span>SNES // Arcade Mode</span><span>91,850 PTS</span></div>
+              <div class="mini-bar"><div class="mini-bar-fill" style="width:86%;"></div></div>
             </div>
             <div class="console-row">
               <div class="console-top"><span>#04 RETRO_MAX</span><span style="color:var(--text-muted);">04:41.10</span></div>
               <div class="console-counts"><span>PS1 // Time Attack</span><span>87,300 PTS</span></div>
+              <div class="mini-bar"><div class="mini-bar-fill" style="width:79%;"></div></div>
             </div>
           </div>
         </div>
       </div>
     </section>
-    <!-- SLIDE 15 -->
-    <section class="slide" data-title="Сохранение цифрового наследия и сообщество">
+
+    <!-- ==================== SLIDE 15 (FX: CUBE-FACE-TURN) ==================== -->
+    <section class="slide" data-fx="cube-face-turn" data-hue="lime" data-title="Сохранение цифрового наследия и сообщество">
       <div class="slide-inner">
         <div class="slide-tag lime" data-stagger="title">15 // DIGITAL PRESERVATION &amp; COMMUNITY</div>
         <h2 class="slide-title glitch-heading" data-text="Миссия: сохранение цифрового наследия" data-stagger="title">
@@ -1962,23 +2729,30 @@
         <p class="slide-subtitle" data-stagger="subtitle">
           Retrospect — это не просто сервис запуска игр, а живой цифровой музей и точка притяжения для комьюнити.
         </p>
+
         <div class="grid-3">
           <div class="glass-card tilt-card" data-stagger="card-1">
-            <div class="card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></div>
+            <div class="card-icon">
+              <svg class="svg-icon" viewBox="0 0 24 24"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+            </div>
             <div class="card-title">Культурная миссия</div>
             <p class="card-text">
               Сохранение уникальной культуры раннего геймдева в открытом, структурированном и доступном каждому формате без привязки к устаревшему железу.
             </p>
           </div>
           <div class="glass-card tilt-card accent-purple" data-stagger="card-2">
-            <div class="card-icon purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1 1 0 0 0 1.4 0l4.3-4.3a1 1 0 0 0 0-1.4l-2-2"/><path d="m14 14 2.5 2.5a1 1 0 0 0 1.4 0l2.8-2.8a1 1 0 0 0 0-1.4L18 9.5"/><path d="M3 13.5v-3a2 2 0 0 1 2-2h4l4 4-2 2-2-2H5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h2.5l2 2-2 2H5a2 2 0 0 1-2-2Z"/></svg></div>
+            <div class="card-icon purple">
+              <svg class="svg-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
             <div class="card-title">Фанатское сообщество</div>
             <p class="card-text">
               Экосистема пользовательского контента (UGC): рецензии, исторические справки о студиях, каталогизация фанатских модов, мануалов и переводов.
             </p>
           </div>
           <div class="glass-card tilt-card accent-lime" data-stagger="card-3">
-            <div class="card-icon lime"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+            <div class="card-icon lime">
+              <svg class="svg-icon" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
             <div class="card-title">Образовательная ценность</div>
             <p class="card-text">
               Интерактивное учебное пособие для вузов и школ геймдева: живая иллюстрация эволюции пользовательских интерфейсов, левел-дизайна и инженерии.
@@ -1987,8 +2761,9 @@
         </div>
       </div>
     </section>
-    <!-- SLIDE 16 -->
-    <section class="slide" data-title="Анализ конкурентов и УТП">
+
+    <!-- ==================== SLIDE 16 (FX: LASER-GRID-WIPE) ==================== -->
+    <section class="slide" data-fx="laser-grid-wipe" data-hue="cyan" data-title="Анализ конкурентов и УТП">
       <div class="slide-inner">
         <div class="slide-tag" data-stagger="title">16 // COMPETITIVE LANDSCAPE &amp; USP</div>
         <h2 class="slide-title glitch-heading" data-text="Почему выигрывает Retrospect" data-stagger="title">
@@ -1997,6 +2772,7 @@
         <p class="slide-subtitle" data-stagger="subtitle">
           Мы объединили доступность веба, скорость нативных приложений, мобильный UX и легальную экосистему.
         </p>
+
         <div data-stagger="card-1" style="overflow-x:auto;">
           <table class="matrix-table">
             <thead>
@@ -2012,29 +2788,29 @@
               <tr>
                 <td>Internet Archive</td>
                 <td><span class="tag-mid">Медленный</span></td>
-                <td><span class="tag-no">&times; Нет</span></td>
+                <td><span class="tag-no">Нет</span></td>
                 <td><span class="tag-ok">Бесплатно</span></td>
                 <td>Гигантский архив, но перегруженный UI и слабый отклик</td>
               </tr>
               <tr>
                 <td>Antstream Arcade</td>
-                <td><span class="tag-no">&times; Клиент / Стрим</span></td>
+                <td><span class="tag-no">Клиент / Стрим</span></td>
                 <td><span class="tag-mid">Ограничен</span></td>
                 <td><span class="tag-no">Платно с 1 дня</span></td>
                 <td>Тяжелый софт, видео-стриминг (лаги), нет энциклопедии</td>
               </tr>
               <tr>
                 <td>Десктоп-эмуляторы</td>
-                <td><span class="tag-no">&times; Установка</span></td>
+                <td><span class="tag-no">Установка</span></td>
                 <td><span class="tag-mid">Ручная настройка</span></td>
                 <td><span class="tag-ok">Бесплатно</span></td>
                 <td>Сложный порог входа, поиск BIOS/ROM, риск вирусов</td>
               </tr>
               <tr class="winner">
                 <td>RETROSPECT</td>
-                <td><span class="tag-ok">✓ 100% Web (&lt;1.5с)</span></td>
-                <td><span class="tag-ok">✓ Идеальный Fullscreen</span></td>
-                <td><span class="tag-ok">✓ Freemium + PRO</span></td>
+                <td><span class="tag-ok">100% Web (&lt;1.5с)</span></td>
+                <td><span class="tag-ok">Идеальный Fullscreen</span></td>
+                <td><span class="tag-ok">Freemium + PRO</span></td>
                 <td><strong>Мгновенный старт, легальная библиотека, комьюнити и B2B</strong></td>
               </tr>
             </tbody>
@@ -2042,19 +2818,21 @@
         </div>
       </div>
     </section>
-    <!-- SLIDE 17 -->
-    <section class="slide" data-title="Юнит-экономика и выручка">
+
+    <!-- ==================== SLIDE 17 (FX: VORTEX-SPIRAL-IN + OPEX SCALE SIMULATOR) ==================== -->
+    <section class="slide" data-fx="vortex-spiral-in" data-hue="lime" data-title="Юнит-экономика и выручка">
       <div class="slide-inner">
         <div class="slide-tag lime" data-stagger="title">17 // UNIT ECONOMICS &amp; REVENUE MIX</div>
         <h2 class="slide-title glitch-heading" data-text="Диверсифицированная выручка и маржа 76%+" data-stagger="title">
           Диверсифицированная выручка и <span class="accent-lime">маржа 76%+</span>
         </h2>
         <p class="slide-subtitle" data-stagger="subtitle">
-          Клиентская WebAssembly-архитектура радикально снижает серверные расходы — в отличие от дорогого облачного видео-стриминга игр.
+          Клиентская WebAssembly-архитектура радикально снижает серверные расходы — протестируйте масштабирование ползунком ниже.
         </p>
+
         <div class="grid-asymmetric">
           <div class="glass-card tilt-card" data-stagger="card-1">
-            <div class="card-title" style="margin-bottom:16px;">Структура доходов платформы</div>
+            <div class="card-title" style="margin-bottom:14px;">Структура доходов платформы</div>
             <div class="donut-wrap">
               <svg class="donut-svg" viewBox="0 0 120 120" aria-label="Структура доходов">
                 <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="16"></circle>
@@ -2080,7 +2858,19 @@
                 </div>
               </div>
             </div>
+            <div style="margin-top:16px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.09); font-family:var(--font-mono); font-size:12px;">
+              <div style="display:flex; justify-content:space-between; color:var(--cyan);">
+                <span>СИМУЛЯТОР НАГРУЗКИ (СЕССИЙ / МЕС):</span>
+                <span id="sim-sessions-label" style="color:var(--lime);">100 000 сессий</span>
+              </div>
+              <input type="range" class="sim-slider" id="sim-sessions" min="10000" max="1000000" step="10000" value="100000" />
+              <div style="display:flex; justify-content:space-between; color:var(--text-muted); font-size:11.5px;">
+                <span>Серверный OPEX: <strong id="sim-opex" style="color:#fff;">1 800 ₽</strong></span>
+                <span>Вал. прибыль: <strong id="sim-profit" style="color:var(--lime);">~1 140 000 ₽</strong></span>
+              </div>
+            </div>
           </div>
+
           <div style="display:flex; flex-direction:column; gap:14px;">
             <div class="glass-card tilt-card accent-lime" data-stagger="card-2">
               <div style="font-family:var(--font-mono); font-size:11px; color:var(--lime);">ЭКСТРЕМАЛЬНО НИЗКИЙ OPEX</div>
@@ -2096,8 +2886,9 @@
         </div>
       </div>
     </section>
-    <!-- SLIDE 18 -->
-    <section class="slide" data-title="Дорожная карта развития (Roadmap 2026–2027)">
+
+    <!-- ==================== SLIDE 18 (FX: TIMELINE-TRACK-GLIDE) ==================== -->
+    <section class="slide" data-fx="timeline-track-glide" data-hue="purple" data-title="Дорожная карта развития (Roadmap 2026–2027)">
       <div class="slide-inner">
         <div class="slide-tag purple" data-stagger="title">18 // ROADMAP 2026–2027</div>
         <h2 class="slide-title glitch-heading" data-text="Дорожная карта развития" data-stagger="title">
@@ -2106,9 +2897,10 @@
         <p class="slide-subtitle" data-stagger="subtitle">
           Четкий поэтапный план масштабирования от готового технологического ядра к полноценной B2C + B2B экосистеме.
         </p>
+
         <div class="grid-4">
           <div class="glass-card tilt-card accent-lime" data-stagger="card-1">
-            <span class="roadmap-phase phase-done">✓ ФАЗА 1 · РЕАЛИЗОВАНО</span>
+            <span class="roadmap-phase phase-done">ФАЗА 1 · РЕАЛИЗОВАНО</span>
             <div class="card-title">Фундамент и MVP</div>
             <ul class="neon-list lime">
               <li>9 консолей, 569 игр, 116 онлайн-тайтлов.</li>
@@ -2117,7 +2909,7 @@
             </ul>
           </div>
           <div class="glass-card tilt-card" data-stagger="card-2">
-            <span class="roadmap-phase phase-next">▶ ФАЗА 2 · Q1–Q2 2026</span>
+            <span class="roadmap-phase phase-next">ФАЗА 2 · Q1–Q2 2026</span>
             <div class="card-title">Облако и Мультиплеер</div>
             <ul class="neon-list">
               <li>Личный кабинет игрока и система достижений.</li>
@@ -2126,7 +2918,7 @@
             </ul>
           </div>
           <div class="glass-card tilt-card accent-purple" data-stagger="card-3">
-            <span class="roadmap-phase phase-future">◆ ФАЗА 3 · Q3–Q4 2026</span>
+            <span class="roadmap-phase phase-future">ФАЗА 3 · Q3–Q4 2026</span>
             <div class="card-title">B2B и Кибер-ретро</div>
             <ul class="neon-list purple">
               <li>Запуск <strong>B2B DevPortal</strong> для инди-разработчиков.</li>
@@ -2135,7 +2927,7 @@
             </ul>
           </div>
           <div class="glass-card tilt-card accent-purple" data-stagger="card-4">
-            <span class="roadmap-phase phase-future">◆ ФАЗА 4 · 2027</span>
+            <span class="roadmap-phase phase-future">ФАЗА 4 · 2027</span>
             <div class="card-title">Физический мерч</div>
             <ul class="neon-list purple">
               <li>Маркетплейс фанатского мерча.</li>
@@ -2146,30 +2938,37 @@
         </div>
       </div>
     </section>
-    <!-- SLIDE 19 -->
-    <section class="slide" data-title="Заключение и Live Demo">
+
+    <!-- ==================== SLIDE 19 (FX: CRT-POWER-IGNITION + PLAYABLE DEMO) ==================== -->
+    <section class="slide" data-fx="crt-power-ignition" data-hue="lime" data-title="Заключение и Live Demo">
       <div class="slide-inner">
         <div class="slide-tag lime" data-stagger="title">19 // FINAL &amp; LIVE DEMO</div>
-        <h2 class="slide-title glitch-heading" data-text="Retrospect — будущее цифрового наследия" data-stagger="title">
+        <h2 class="slide-title glitch-heading" data-text="Retrospect — живая экосистема" data-stagger="title">
           Retrospect — <span class="accent">живая экосистема</span>
         </h2>
+
         <div class="grid-asymmetric" style="align-items:center;">
           <div style="display:flex; flex-direction:column; gap:18px;">
             <p class="slide-subtitle" style="margin-bottom:0; color:#e6edff;" data-stagger="subtitle">
               <strong>Retrospect</strong> — работающая, масштабируемая платформа на стыке мировой игровой культуры, WebAssembly-технологий и развлечений с маржинальностью 76%+ и готовой базой из 569 игр.
             </p>
             <div class="glass-card tilt-card" data-stagger="card-1">
-              <div class="card-title" style="color:var(--lime);">Протестируйте платформу прямо сейчас со своих устройств!</div>
+              <div class="card-title" style="color:var(--lime);">
+                <svg class="svg-sm" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                Протестируйте платформу прямо сейчас со своих устройств!
+              </div>
               <p class="card-text">
                 Наведите камеру смартфона на QR-код справа для мгновенного входа из зала — или запустите встроенный интерактивный WASM-стенд кнопкой ниже.
               </p>
             </div>
             <div data-stagger="action" style="display:flex; flex-wrap:wrap; gap:12px;">
               <button class="cyber-btn lime" id="btn-launch-demo">
-                ПЕРЕЙТИ К ЖИВОЙ ДЕМОНСТРАЦИИ ИГРЫ >
+                <svg class="svg-sm" viewBox="0 0 24 24"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="4"/></svg>
+                ПЕРЕЙТИ К ЖИВОЙ ДЕМОНСТРАЦИИ ИГРЫ
               </button>
             </div>
           </div>
+
           <div style="display:flex; flex-direction:column; align-items:center; gap:12px;" data-stagger="card-2">
             <div class="qr-box" id="qr-card" title="Кликните для запуска демо">
               <svg width="210" height="210" viewBox="0 0 29 29" shape-rendering="crispEdges" aria-label="QR код Retrospect">
@@ -2201,57 +3000,76 @@
               <div class="qr-caption">SCAN TO PLAY // RETROSPECT</div>
             </div>
             <div style="font-family:var(--font-mono); font-size:12px; color:var(--cyan);">
-              WASMsandbox · Zero-Install
+              WASMsandbox · 60 FPS · Zero-Install
             </div>
           </div>
         </div>
       </div>
     </section>
+
   </main>
+
+  <!-- Bottom HUD -->
   <footer class="hud-bottom">
     <div class="terminal-indicator">
       <span id="slide-counter">[ SLIDE 01 / 19 ]</span>
       <span class="sep">|</span>
+      <span class="terminal-fx-badge" id="slide-fx-name">FX: WARP-ZOOM</span>
+      <span class="sep">|</span>
       <span class="terminal-topic" id="slide-topic">Титульный слайд — RETROSPECT</span>
     </div>
+
     <div class="kbd-hints">
       <span><span class="kbd">←</span> <span class="kbd">→</span> / <span class="kbd">SPACE</span> навигация</span>
       <span><span class="kbd">F</span> экран</span>
       <span><span class="kbd">M</span> карта</span>
     </div>
+
     <div class="nav-arrows">
       <button class="nav-circle" id="btn-prev" title="Предыдущий слайд (← / Backspace)">◀</button>
       <button class="nav-circle" id="btn-next" title="Следующий слайд (→ / Пробел)">▶</button>
     </div>
   </footer>
+
+  <!-- Slide Map Drawer -->
   <div class="drawer-backdrop" id="drawer-backdrop"></div>
   <aside class="slide-drawer" id="slide-drawer" aria-label="Карта слайдов">
     <div class="drawer-header">
-      <div class="drawer-title">КАРТА СЛАЙДОВ (19)</div>
-      <button class="hud-btn" id="btn-close-drawer">&times;</button>
+      <div class="drawer-title">
+        <svg class="svg-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        КАРТА СЛАЙДОВ (19)
+      </div>
+      <button class="hud-btn" id="btn-close-drawer">X</button>
     </div>
     <div class="drawer-list" id="drawer-list"></div>
   </aside>
+
+  <!-- Interactive Playable Retro Demo Modal (Slide 19) -->
   <div class="demo-modal" id="demo-modal" aria-hidden="true">
     <div class="demo-window">
       <div class="demo-bar">
-        <span>RETROSPECT WASM LIVE DEMO // NEON ARKANOID</span>
+        <span>RETROSPECT WASM LIVE DEMO // NEON ARKANOID (60 FPS)</span>
         <div style="display:flex; gap:10px; align-items:center;">
           <span id="demo-score" style="color:var(--lime);">SCORE: 0000</span>
-          <button class="hud-btn" id="btn-close-demo">&times; ЗАКРЫТЬ</button>
+          <button class="hud-btn" id="btn-close-demo">ЗАКРЫТЬ</button>
         </div>
       </div>
       <canvas id="demo-canvas" width="640" height="400"></canvas>
       <div class="demo-footer">
         <span>Управление: Мышь / Стрелки ← → / Свайп пальцем</span>
-        <button class="hud-btn active" id="btn-restart-demo">↻ РЕСТАРТ</button>
+        <button class="hud-btn active" id="btn-restart-demo">РЕСТАРТ</button>
       </div>
     </div>
   </div>
+
   <script>
+    /* =====================================================================
+       1. WEB AUDIO API 8-BIT SYNTHESIZER (ZERO EXTERNAL FILES)
+    ===================================================================== */
     const SoundFX = (() => {
       let ctx = null;
       let enabled = true;
+
       function ensureCtx() {
         if (!enabled) return null;
         if (!ctx) {
@@ -2264,60 +3082,90 @@
         }
         return ctx;
       }
-      function playTransition() {
+
+      function playTransition(fxType = 'default') {
         const c = ensureCtx();
         if (!c) return;
         const now = c.currentTime;
+
         const osc = c.createOscillator();
         const gain = c.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(190, now);
-        osc.frequency.exponentialRampToValueAtTime(620, now + 0.09);
-        osc.frequency.exponentialRampToValueAtTime(140, now + 0.22);
+
+        if (fxType === 'glitch-fracture') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(140, now);
+          osc.frequency.setValueAtTime(490, now + 0.05);
+          osc.frequency.setValueAtTime(110, now + 0.11);
+        } else if (fxType === 'crt-power-ignition' || fxType === 'warp-zoom') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(75, now);
+          osc.frequency.exponentialRampToValueAtTime(760, now + 0.18);
+        } else if (fxType === 'cartridge-slot-drop') {
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(520, now);
+          osc.frequency.exponentialRampToValueAtTime(160, now + 0.14);
+        } else {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(195, now);
+          osc.frequency.exponentialRampToValueAtTime(640, now + 0.09);
+          osc.frequency.exponentialRampToValueAtTime(150, now + 0.22);
+        }
+
         gain.gain.setValueAtTime(0.001, now);
-        gain.gain.linearRampToValueAtTime(0.085, now + 0.03);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.23);
+        gain.gain.linearRampToValueAtTime(0.08, now + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+
         osc.connect(gain);
         gain.connect(c.destination);
         osc.start(now);
-        osc.stop(now + 0.24);
+        osc.stop(now + 0.25);
       }
+
       let lastHoverTime = 0;
       function playHover() {
         const t = performance.now();
         if (t - lastHoverTime < 85) return;
         lastHoverTime = t;
+
         const c = ensureCtx();
         if (!c) return;
         const now = c.currentTime;
+
         const osc = c.createOscillator();
         const gain = c.createGain();
         osc.type = 'sine';
         osc.frequency.setValueAtTime(440, now);
         osc.frequency.exponentialRampToValueAtTime(520, now + 0.03);
+
         gain.gain.setValueAtTime(0.032, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+
         osc.connect(gain);
         gain.connect(c.destination);
         osc.start(now);
         osc.stop(now + 0.045);
       }
+
       function playCoin() {
         const c = ensureCtx();
         if (!c) return;
         const now = c.currentTime;
+
         const osc = c.createOscillator();
         const gain = c.createGain();
         osc.type = 'square';
         osc.frequency.setValueAtTime(987.77, now);
         osc.frequency.setValueAtTime(1318.51, now + 0.07);
+
         gain.gain.setValueAtTime(0.065, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+
         osc.connect(gain);
         gain.connect(c.destination);
         osc.start(now);
         osc.stop(now + 0.29);
       }
+
       function playBlip(freq = 660) {
         const c = ensureCtx();
         if (!c) return;
@@ -2333,20 +3181,44 @@
         osc.start(now);
         osc.stop(now + 0.085);
       }
+
       function toggle() {
         enabled = !enabled;
         if (enabled) playCoin();
         return enabled;
       }
+
       return { playTransition, playHover, playCoin, playBlip, toggle, isEnabled: () => enabled };
     })();
-    (() => {
+
+    /* =====================================================================
+       2. LIVE SYNTHWAVE 3D GRID + DYNAMIC SLIDE PALETTE CANVAS
+    ===================================================================== */
+    const BgWorld = (() => {
       const canvas = document.getElementById('bg-canvas');
       const ctx = canvas.getContext('2d');
       let w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
       let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
       let offset = 0;
-      const pixels = Array.from({ length: 46 }, () => ({
+      let gridSpeed = 0.008;
+      let primaryColor = '0, 240, 255';
+      let secondaryColor = '168, 85, 247';
+
+      const palettes = {
+        cyan:   { p: '0, 240, 255',   s: '168, 85, 247', speed: 0.008 },
+        purple: { p: '168, 85, 247',  s: '0, 240, 255',  speed: 0.010 },
+        lime:   { p: '16, 185, 129',  s: '0, 240, 255',  speed: 0.009 },
+        rose:   { p: '255, 42, 109',  s: '168, 85, 247', speed: 0.013 }
+      };
+
+      function setHue(hue) {
+        const pal = palettes[hue] || palettes.cyan;
+        primaryColor = pal.p;
+        secondaryColor = pal.s;
+        gridSpeed = pal.speed;
+      }
+
+      const pixels = Array.from({ length: 48 }, () => ({
         x: Math.random(),
         y: Math.random(),
         size: 2 + Math.random() * 4,
@@ -2355,6 +3227,7 @@
         color: Math.random() > 0.55 ? '#00f0ff' : (Math.random() > 0.4 ? '#a855f7' : '#10b981'),
         alpha: 0.25 + Math.random() * 0.55
       }));
+
       function resize() {
         w = window.innerWidth;
         h = window.innerHeight;
@@ -2362,36 +3235,45 @@
         canvas.height = h * dpr;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
+
       window.addEventListener('resize', resize);
       window.addEventListener('mousemove', (e) => {
         targetX = (e.clientX / w - 0.5) * 2;
         targetY = (e.clientY / h - 0.5) * 2;
       });
       resize();
+
       function render() {
         mouseX += (targetX - mouseX) * 0.05;
         mouseY += (targetY - mouseY) * 0.05;
+
         ctx.clearRect(0, 0, w, h);
+
         const sky = ctx.createLinearGradient(0, 0, 0, h);
         sky.addColorStop(0, '#04050c');
         sky.addColorStop(0.55, '#080b1c');
         sky.addColorStop(1, '#100822');
         ctx.fillStyle = sky;
         ctx.fillRect(0, 0, w, h);
+
         const horizonY = h * 0.58 + mouseY * 18;
         const vanishX = w * 0.5 - mouseX * 48;
+
         const glow = ctx.createRadialGradient(vanishX, horizonY, 10, vanishX, horizonY, w * 0.45);
-        glow.addColorStop(0, 'rgba(168, 85, 247, 0.22)');
-        glow.addColorStop(0.45, 'rgba(0, 240, 255, 0.08)');
+        glow.addColorStop(0, `rgba(${secondaryColor}, 0.22)`);
+        glow.addColorStop(0.45, `rgba(${primaryColor}, 0.09)`);
         glow.addColorStop(1, 'transparent');
         ctx.fillStyle = glow;
         ctx.fillRect(0, 0, w, h);
+
         ctx.save();
         ctx.beginPath();
         ctx.rect(0, horizonY, w, h - horizonY);
         ctx.clip();
-        ctx.strokeStyle = 'rgba(0, 240, 255, 0.16)';
+
+        ctx.strokeStyle = `rgba(${primaryColor}, 0.17)`;
         ctx.lineWidth = 1;
+
         const numV = 22;
         for (let i = -numV; i <= numV; i++) {
           const bottomX = vanishX + i * (w / 10);
@@ -2400,24 +3282,27 @@
           ctx.lineTo(bottomX, h + 40);
           ctx.stroke();
         }
-        offset = (offset + 0.008) % 1;
+
+        offset = (offset + gridSpeed) % 1;
         const numH = 14;
         for (let i = 0; i < numH; i++) {
           const t = (i + offset) / numH;
           const y = horizonY + Math.pow(t, 2.35) * (h - horizonY + 20);
-          ctx.strokeStyle = `rgba(168, 85, 247, ${0.06 + t * 0.28})`;
+          ctx.strokeStyle = `rgba(${secondaryColor}, ${0.06 + t * 0.28})`;
           ctx.beginPath();
           ctx.moveTo(0, y);
           ctx.lineTo(w, y);
           ctx.stroke();
         }
         ctx.restore();
-        ctx.strokeStyle = 'rgba(0, 240, 255, 0.38)';
+
+        ctx.strokeStyle = `rgba(${primaryColor}, 0.4)`;
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(0, horizonY);
         ctx.lineTo(w, horizonY);
         ctx.stroke();
+
         for (const p of pixels) {
           p.y -= p.speed;
           if (p.y < -0.05) {
@@ -2431,26 +3316,37 @@
           ctx.fillRect(px, py, p.size, p.size);
         }
         ctx.globalAlpha = 1;
+
         requestAnimationFrame(render);
       }
+
       requestAnimationFrame(render);
+      return { setHue };
     })();
+
+    /* =====================================================================
+       3. PRESENTATION ENGINE (19 UNIQUE TRANSITIONS, HUD, COUNTUP, GLITCH)
+    ===================================================================== */
     const slides = Array.from(document.querySelectorAll('.slide'));
     const totalSlides = slides.length;
     let current = 0;
     let isAnimating = false;
+
     const progressFill = document.getElementById('progress-fill');
     const slideCounter = document.getElementById('slide-counter');
     const slideTopic = document.getElementById('slide-topic');
+    const slideFxName = document.getElementById('slide-fx-name');
     const crtFlash = document.getElementById('crt-flash');
     const btnPrev = document.getElementById('btn-prev');
     const btnNext = document.getElementById('btn-next');
     const drawerList = document.getElementById('drawer-list');
+
     slides.forEach((s, i) => {
       const btn = document.createElement('button');
       btn.className = 'drawer-item' + (i === 0 ? ' active' : '');
       const num = String(i + 1).padStart(2, '0');
-      btn.innerHTML = `<span class="drawer-num">${num}</span><span>${s.dataset.title}</span>`;
+      const fx = (s.dataset.fx || '3d').toUpperCase();
+      btn.innerHTML = `<div style="display:flex;align-items:center;gap:10px;"><span class="drawer-num">${num}</span><span>${s.dataset.title}</span></div><span class="drawer-fx">${fx}</span>`;
       btn.addEventListener('click', () => {
         SoundFX.playCoin();
         goToSlide(i);
@@ -2458,11 +3354,13 @@
       });
       drawerList.appendChild(btn);
     });
+
     function triggerCRTFlash() {
       crtFlash.classList.remove('firing');
       void crtFlash.offsetWidth;
       crtFlash.classList.add('firing');
     }
+
     function triggerGlitch(slideEl) {
       const heading = slideEl.querySelector('.glitch-heading');
       if (!heading) return;
@@ -2470,6 +3368,7 @@
       void heading.offsetWidth;
       heading.classList.add('glitching');
     }
+
     function runCountUps(slideEl) {
       const counters = slideEl.querySelectorAll('[data-count]');
       counters.forEach((el) => {
@@ -2479,6 +3378,7 @@
         const suffix = el.dataset.suffix || '';
         const duration = 1250;
         const startTime = performance.now() + 350;
+
         function tick(now) {
           if (now < startTime) {
             requestAnimationFrame(tick);
@@ -2494,68 +3394,173 @@
         requestAnimationFrame(tick);
       });
     }
+
     function updateHUD() {
       const pct = ((current + 1) / totalSlides) * 100;
       progressFill.style.width = pct + '%';
       const numStr = String(current + 1).padStart(2, '0');
+      const activeSlide = slides[current];
       slideCounter.textContent = `[ SLIDE ${numStr} / ${totalSlides} ]`;
-      slideTopic.textContent = slides[current].dataset.title;
+      slideFxName.textContent = `FX: ${(activeSlide.dataset.fx || '3D').toUpperCase()}`;
+      slideTopic.textContent = activeSlide.dataset.title;
       btnPrev.disabled = current === 0;
       btnNext.disabled = current === totalSlides - 1;
+
+      BgWorld.setHue(activeSlide.dataset.hue || 'cyan');
+
       drawerList.querySelectorAll('.drawer-item').forEach((item, idx) => {
         item.classList.toggle('active', idx === current);
       });
     }
+
+    function onSlideEntered(idx) {
+      if (idx === 1) runDecayMatrix();
+      if (idx === 13) startSpeedrunChrono();
+    }
+
     function goToSlide(targetIdx) {
       if (targetIdx < 0 || targetIdx >= totalSlides || targetIdx === current || isAnimating) return;
       isAnimating = true;
-      const direction = targetIdx > current ? 1 : -1;
+
       const prevSlide = slides[current];
       const nextSlide = slides[targetIdx];
-      SoundFX.playTransition();
+      const incomingFx = nextSlide.dataset.fx || 'warp-zoom';
+
+      SoundFX.playTransition(incomingFx);
       triggerCRTFlash();
-      nextSlide.classList.remove('exit-forward', 'exit-backward', 'active');
-      nextSlide.classList.add(direction > 0 ? 'enter-from-right' : 'enter-from-left');
+
+      prevSlide.classList.remove('active', 'entering');
+      prevSlide.classList.add('leaving');
+
+      nextSlide.classList.remove('leaving', 'active');
       void nextSlide.offsetWidth;
-      prevSlide.classList.remove('active');
-      prevSlide.classList.add(direction > 0 ? 'exit-forward' : 'exit-backward');
-      nextSlide.classList.remove('enter-from-right', 'enter-from-left');
-      nextSlide.classList.add('active');
+      nextSlide.classList.add('active', 'entering');
+
       current = targetIdx;
       updateHUD();
       triggerGlitch(nextSlide);
       runCountUps(nextSlide);
+      onSlideEntered(current);
+
       const inner = nextSlide.querySelector('.slide-inner');
       if (inner) inner.scrollTop = 0;
+
       setTimeout(() => {
-        prevSlide.classList.remove('exit-forward', 'exit-backward');
+        prevSlide.classList.remove('leaving');
+        nextSlide.classList.remove('entering');
         isAnimating = false;
-      }, 620);
+      }, 780);
     }
+
+    /* =====================================================================
+       4. 3D CARD TILT & HOVER MICRO-INTERACTIONS
+    ===================================================================== */
     document.querySelectorAll('.tilt-card').forEach((card) => {
       card.addEventListener('mouseenter', () => {
         SoundFX.playHover();
       });
+
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         const rx = ((y / rect.height) - 0.5) * -10;
         const ry = ((x / rect.width) - 0.5) * 10;
+
         card.style.setProperty('--mx', `${x}px`);
         card.style.setProperty('--my', `${y}px`);
         card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(6px)`;
       });
+
       card.addEventListener('mouseleave', () => {
         card.style.transform = '';
       });
     });
+
+    /* =====================================================================
+       5. SPECIALIZED INTERACTIVE SLIDE ANIMATIONS & EFFECTS
+    ===================================================================== */
+    // --- Slide 02: 87% Signal Decay Matrix ---
+    const decayMatrix = document.getElementById('decay-matrix');
+    const decayCells = [];
+    const safeIndices = new Set([3, 11, 18, 24, 33, 41, 49, 57, 62, 74, 81, 88, 95]); // 13% surviving
+    for (let i = 0; i < 100; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'decay-cell';
+      decayMatrix.appendChild(cell);
+      decayCells.push(cell);
+    }
+
+    function runDecayMatrix() {
+      decayCells.forEach(c => c.classList.remove('lost'));
+      decayCells.forEach((cell, idx) => {
+        if (!safeIndices.has(idx)) {
+          setTimeout(() => {
+            cell.classList.add('lost');
+          }, 220 + (idx % 20) * 35 + Math.floor(idx / 20) * 60);
+        }
+      });
+    }
+    runDecayMatrix();
+
+    document.getElementById('btn-replay-decay').addEventListener('click', () => {
+      SoundFX.playBlip(340);
+      runDecayMatrix();
+    });
+
+    // --- Slide 05: Architecture Bus Telemetry ---
+    const busTelemetry = document.getElementById('bus-telemetry');
+    document.querySelectorAll('.bus-node').forEach((node) => {
+      node.addEventListener('click', () => {
+        SoundFX.playBlip(720);
+        busTelemetry.textContent = `[ ACTIVE NODE: ${node.dataset.busMsg} ]`;
+      });
+    });
+
+    // --- Slide 06: Era Filter + Live Chiptune Oscilloscope ---
+    const scopeCanvas = document.getElementById('era-scope');
+    const sctx = scopeCanvas.getContext('2d');
+    const scopeLabel = document.getElementById('scope-label');
+    let scopeMode = 'all';
+    let scopePhase = 0;
+
+    function drawScope() {
+      sctx.clearRect(0, 0, 140, 30);
+      sctx.strokeStyle = scopeMode === '16bit' ? '#a855f7' : (scopeMode === '3d' ? '#10b981' : '#00f0ff');
+      sctx.lineWidth = 1.8;
+      sctx.beginPath();
+
+      for (let x = 0; x < 140; x++) {
+        let y = 15;
+        const t = x * 0.14 + scopePhase;
+        if (scopeMode === '8bit') {
+          y = 15 + (Math.sin(t) >= 0 ? -8 : 8); // Square wave
+        } else if (scopeMode === '16bit') {
+          y = 15 + Math.sin(t) * 6 + Math.sin(t * 2.5) * 3.5; // FM synthesis
+        } else if (scopeMode === '3d') {
+          y = 15 + Math.sin(t * 0.8) * 9; // Smooth PCM
+        } else {
+          y = 15 + Math.sin(t) * 7 * Math.cos(t * 0.35);
+        }
+        if (x === 0) sctx.moveTo(x, y);
+        else sctx.lineTo(x, y);
+      }
+      sctx.stroke();
+      scopePhase += 0.14;
+      requestAnimationFrame(drawScope);
+    }
+    requestAnimationFrame(drawScope);
+
     document.querySelectorAll('.era-tab').forEach((tab) => {
       tab.addEventListener('click', () => {
         SoundFX.playCoin();
         document.querySelectorAll('.era-tab').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
         const filter = tab.dataset.eraFilter;
+        scopeMode = filter;
+        const labels = { all: 'SYNTH // ALL ERAS', '8bit': 'PULSE // 8-BIT PSG', '16bit': 'FM // 16-BIT YAMAHA', '3d': 'PCM // 32/64-BIT DSP' };
+        scopeLabel.textContent = labels[filter] || 'SYNTH // ALL ERAS';
+
         document.querySelectorAll('#era-grid > [data-era]').forEach((card) => {
           const match = filter === 'all' || card.dataset.era === filter;
           card.style.opacity = match ? '1' : '0.24';
@@ -2563,15 +3568,91 @@
         });
       });
     });
+
+    // --- Slide 07: Live WASM vs Cloud Benchmark ---
+    document.getElementById('btn-run-bench').addEventListener('click', () => {
+      SoundFX.playCoin();
+      const wasmVal = document.getElementById('bench-wasm-val');
+      const cloudVal = document.getElementById('bench-cloud-val');
+      const wasmBar = document.getElementById('bench-wasm-bar');
+      const cloudBar = document.getElementById('bench-cloud-bar');
+
+      wasmBar.style.width = '10%';
+      cloudBar.style.width = '10%';
+      wasmVal.textContent = 'Booting WASM...';
+      cloudVal.textContent = 'Allocating Cloud GPU...';
+
+      setTimeout(() => {
+        const boot = (1.05 + Math.random() * 0.35).toFixed(2);
+        wasmBar.style.width = '96%';
+        wasmVal.textContent = `Boot: ${boot}s // Server CPU: 0%`;
+        SoundFX.playBlip(880);
+      }, 320);
+
+      setTimeout(() => {
+        const cBoot = (5.8 + Math.random() * 1.4).toFixed(2);
+        const gpu = Math.floor(78 + Math.random() * 14);
+        cloudBar.style.width = '34%';
+        cloudVal.textContent = `Boot: ${cBoot}s // Server GPU: ${gpu}%`;
+      }, 750);
+    });
+
+    // --- Slide 08: Playable Mini Starfighter inside Phone Mockup ---
+    const phoneCanvas = document.getElementById('phone-mini-canvas');
+    const pctx = phoneCanvas.getContext('2d');
     const padOutput = document.getElementById('pad-output');
+    const ship = { x: 140, y: 55, shots: [] };
+
+    function renderPhoneMini() {
+      pctx.fillStyle = '#030612';
+      pctx.fillRect(0, 0, 280, 106);
+
+      // Grid lines
+      pctx.strokeStyle = 'rgba(0,240,255,0.09)';
+      for (let x = 0; x < 280; x += 20) {
+        pctx.beginPath(); pctx.moveTo(x, 0); pctx.lineTo(x, 106); pctx.stroke();
+      }
+
+      // Update & draw laser bolts
+      for (let i = ship.shots.length - 1; i >= 0; i--) {
+        const s = ship.shots[i];
+        s.y -= 4.5;
+        if (s.y < -6) { ship.shots.splice(i, 1); continue; }
+        pctx.fillStyle = '#10b981';
+        pctx.fillRect(s.x - 1.5, s.y, 3, 9);
+      }
+
+      // Draw retro triangle ship
+      pctx.fillStyle = '#00f0ff';
+      pctx.beginPath();
+      pctx.moveTo(ship.x, ship.y - 10);
+      pctx.lineTo(ship.x - 10, ship.y + 9);
+      pctx.lineTo(ship.x + 10, ship.y + 9);
+      pctx.closePath();
+      pctx.fill();
+
+      requestAnimationFrame(renderPhoneMini);
+    }
+    requestAnimationFrame(renderPhoneMini);
+
     document.querySelectorAll('[data-pad]').forEach((btn) => {
       btn.addEventListener('click', () => {
         const key = btn.dataset.pad;
         const freqMap = { UP: 520, DOWN: 380, LEFT: 420, RIGHT: 480, A: 880, B: 740, X: 960, Y: 660, START: 1040, SELECT: 600 };
         SoundFX.playBlip(freqMap[key] || 660);
-        padOutput.textContent = `[ INPUT DETECTED: ${key} · 0ms LATENCY ]`;
+
+        if (key === 'UP') ship.y = Math.max(16, ship.y - 12);
+        if (key === 'DOWN') ship.y = Math.min(90, ship.y + 12);
+        if (key === 'LEFT') ship.x = Math.max(18, ship.x - 16);
+        if (key === 'RIGHT') ship.x = Math.min(262, ship.x + 16);
+        if (key === 'A' || key === 'B' || key === 'X' || key === 'Y') {
+          ship.shots.push({ x: ship.x, y: ship.y - 12 });
+        }
+        padOutput.textContent = `[ INPUT: ${key} · 0ms LATENCY ]`;
       });
     });
+
+    // --- Slide 09: Filter Chips Preview ---
     const filterResult = document.getElementById('filter-result');
     document.querySelectorAll('#demo-chips .chip').forEach((chip) => {
       chip.addEventListener('click', () => {
@@ -2581,30 +3662,88 @@
         filterResult.textContent = `Найдено: ${chip.dataset.countVal} игр // Отклик MongoDB: ${chip.dataset.ms} мс`;
       });
     });
+
+    // --- Slide 11: Currency Toggle ---
+    let isRub = true;
+    const proPriceEl = document.getElementById('pro-price');
+    document.getElementById('btn-currency').addEventListener('click', () => {
+      SoundFX.playCoin();
+      isRub = !isRub;
+      proPriceEl.textContent = isRub ? '299 ₽ / мес' : '$3.99 / mo';
+    });
+
+    // --- Slide 14: Live Speedrun Chronometer ---
+    let chronoTimer = null;
+    function startSpeedrunChrono() {
+      const chronoEl = document.getElementById('live-chrono');
+      if (!chronoEl) return;
+      clearInterval(chronoTimer);
+      const baseMs = (4 * 60 + 18) * 1000 + 420;
+      const start = performance.now();
+      chronoTimer = setInterval(() => {
+        if (current !== 13) { clearInterval(chronoTimer); return; }
+        const elapsed = baseMs + (performance.now() - start);
+        const mins = String(Math.floor(elapsed / 60000)).padStart(2, '0');
+        const secs = String(Math.floor((elapsed % 60000) / 1000)).padStart(2, '0');
+        const ms = String(Math.floor(elapsed % 1000)).padStart(3, '0');
+        chronoEl.textContent = `RUN: ${mins}:${secs}.${ms}`;
+      }, 47);
+    }
+
+    // --- Slide 17: Interactive Scale Calculator ---
+    const simSlider = document.getElementById('sim-sessions');
+    const simLabel = document.getElementById('sim-sessions-label');
+    const simOpex = document.getElementById('sim-opex');
+    const simProfit = document.getElementById('sim-profit');
+
+    simSlider.addEventListener('input', () => {
+      const sessions = parseInt(simSlider.value, 10);
+      const opex = Math.round(sessions * 0.018);
+      const grossRev = Math.round(sessions * 15);
+      const profit = Math.round(grossRev * 0.76);
+      simLabel.textContent = sessions.toLocaleString('ru-RU') + ' сессий';
+      simOpex.textContent = opex.toLocaleString('ru-RU') + ' ₽';
+      simProfit.textContent = '~' + profit.toLocaleString('ru-RU') + ' ₽';
+    });
+
+    /* =====================================================================
+       6. HUD CONTROLS, KEYBOARD & TOUCH SWIPES
+    ===================================================================== */
     const drawer = document.getElementById('slide-drawer');
     const backdrop = document.getElementById('drawer-backdrop');
+
     function toggleDrawer(force) {
       const open = typeof force === 'boolean' ? force : !drawer.classList.contains('open');
       drawer.classList.toggle('open', open);
       backdrop.classList.toggle('open', open);
     }
+
     document.getElementById('btn-map').addEventListener('click', () => {
       SoundFX.playCoin();
       toggleDrawer();
     });
     document.getElementById('btn-close-drawer').addEventListener('click', () => toggleDrawer(false));
     backdrop.addEventListener('click', () => toggleDrawer(false));
+
+    const svgSoundOn = `<svg class="svg-sm" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg> SOUND ON`;
+    const svgSoundOff = `<svg class="svg-sm" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg> SOUND OFF`;
+    const svgCrtIcon = `<svg class="svg-sm" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg>`;
+
     document.getElementById('btn-sound').addEventListener('click', (e) => {
       const on = SoundFX.toggle();
       e.currentTarget.classList.toggle('active', on);
-      e.currentTarget.innerHTML = on ? '<span class="btn-svg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></span> SOUND ON' : '<span class="btn-svg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></span> SOUND OFF';
+      e.currentTarget.innerHTML = on ? svgSoundOn : svgSoundOff;
     });
+
     document.getElementById('btn-crt').addEventListener('click', (e) => {
       SoundFX.playCoin();
       const on = document.body.classList.toggle('crt-enabled');
       e.currentTarget.classList.toggle('active', on);
-      e.currentTarget.innerHTML = on ? '<span class="btn-svg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="3" rx="2"/><polyline points="17 21 12 18 7 21"/></svg></span> <span class="hide-sm">CRT</span> ON' : '<span class="btn-svg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="3" rx="2"/><polyline points="17 21 12 18 7 21"/></svg></span> <span class="hide-sm">CRT</span> OFF';
+      e.currentTarget.innerHTML = on
+        ? `${svgCrtIcon} <span class="hide-sm">CRT</span> ON`
+        : `${svgCrtIcon} <span class="hide-sm">CRT</span> OFF`;
     });
+
     function toggleFullscreen() {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen?.().catch(() => {});
@@ -2612,22 +3751,27 @@
         document.exitFullscreen?.().catch(() => {});
       }
     }
+
     document.getElementById('btn-fs').addEventListener('click', () => {
       SoundFX.playCoin();
       toggleFullscreen();
     });
+
     document.getElementById('brand-home').addEventListener('click', () => {
       SoundFX.playCoin();
       goToSlide(0);
     });
+
     btnPrev.addEventListener('click', () => goToSlide(current - 1));
     btnNext.addEventListener('click', () => goToSlide(current + 1));
+
     document.querySelectorAll('[data-next-slide]').forEach((b) => {
       b.addEventListener('click', () => {
         SoundFX.playCoin();
         goToSlide(current + 1);
       });
     });
+
     window.addEventListener('keydown', (e) => {
       if (demoModal.classList.contains('open')) {
         if (e.key === 'Escape') closeDemo();
@@ -2649,12 +3793,14 @@
         toggleDrawer();
       }
     });
+
     let touchStartX = 0, touchStartY = 0;
     const stageEl = document.getElementById('stage');
     stageEl.addEventListener('touchstart', (e) => {
       touchStartX = e.changedTouches[0].clientX;
       touchStartY = e.changedTouches[0].clientY;
     }, { passive: true });
+
     stageEl.addEventListener('touchend', (e) => {
       const dx = e.changedTouches[0].clientX - touchStartX;
       const dy = e.changedTouches[0].clientY - touchStartY;
@@ -2663,13 +3809,19 @@
         else goToSlide(current - 1);
       }
     }, { passive: true });
+
+    /* =====================================================================
+       7. PLAYABLE RETRO LIVE DEMO (NEON ARKANOID) ON SLIDE 19
+    ===================================================================== */
     const demoModal = document.getElementById('demo-modal');
     const demoCanvas = document.getElementById('demo-canvas');
     const dctx = demoCanvas.getContext('2d');
     const demoScoreEl = document.getElementById('demo-score');
+
     let demoRAF = null;
     let game = null;
     const keys = { left: false, right: false };
+
     function resetDemoGame() {
       const bricks = [];
       const colors = ['#00f0ff', '#a855f7', '#10b981', '#ff2a6d', '#f59e0b'];
@@ -2688,10 +3840,12 @@
       };
       demoScoreEl.textContent = 'SCORE: 0000';
     }
+
     function stepDemo() {
       if (!game) return;
       dctx.fillStyle = '#03050c';
       dctx.fillRect(0, 0, 640, 400);
+
       dctx.strokeStyle = 'rgba(0,240,255,0.06)';
       for (let x = 0; x < 640; x += 32) {
         dctx.beginPath(); dctx.moveTo(x, 0); dctx.lineTo(x, 400); dctx.stroke();
@@ -2699,15 +3853,19 @@
       for (let y = 0; y < 400; y += 32) {
         dctx.beginPath(); dctx.moveTo(0, y); dctx.lineTo(640, y); dctx.stroke();
       }
+
       if (!game.over && !game.won) {
         if (keys.left) game.paddle.x -= 6.5;
         if (keys.right) game.paddle.x += 6.5;
         game.paddle.x = Math.max(8, Math.min(640 - game.paddle.w - 8, game.paddle.x));
+
         const b = game.ball;
         b.x += b.vx;
         b.y += b.vy;
+
         if (b.x - b.r < 0 || b.x + b.r > 640) { b.vx *= -1; SoundFX.playBlip(440); }
         if (b.y - b.r < 0) { b.vy *= -1; SoundFX.playBlip(520); }
+
         const p = game.paddle;
         if (b.vy > 0 && b.y + b.r >= p.y && b.y - b.r <= p.y + p.h && b.x >= p.x && b.x <= p.x + p.w) {
           const hit = (b.x - (p.x + p.w / 2)) / (p.w / 2);
@@ -2715,6 +3873,7 @@
           b.vy = -Math.abs(b.vy) * 1.015;
           SoundFX.playBlip(680);
         }
+
         let remaining = 0;
         for (const br of game.bricks) {
           if (!br.alive) continue;
@@ -2731,6 +3890,7 @@
         if (remaining === 0) { game.won = true; SoundFX.playCoin(); }
         if (b.y > 410) { game.over = true; SoundFX.playBlip(190); }
       }
+
       for (const br of game.bricks) {
         if (!br.alive) continue;
         dctx.fillStyle = br.color;
@@ -2738,10 +3898,12 @@
         dctx.shadowBlur = 10;
         dctx.fillRect(br.x, br.y, br.w, br.h);
       }
+
       dctx.fillStyle = '#00f0ff';
       dctx.shadowColor = '#00f0ff';
       dctx.shadowBlur = 16;
       dctx.fillRect(game.paddle.x, game.paddle.y, game.paddle.w, game.paddle.h);
+
       dctx.beginPath();
       dctx.arc(game.ball.x, game.ball.y, game.ball.r, 0, Math.PI * 2);
       dctx.fillStyle = '#ffffff';
@@ -2749,6 +3911,7 @@
       dctx.shadowBlur = 14;
       dctx.fill();
       dctx.shadowBlur = 0;
+
       if (game.over || game.won) {
         dctx.fillStyle = 'rgba(4,5,12,0.72)';
         dctx.fillRect(0, 0, 640, 400);
@@ -2760,8 +3923,10 @@
         dctx.font = '15px JetBrains Mono, monospace';
         dctx.fillText('Нажмите РЕСТАРТ для новой попытки', 320, 228);
       }
+
       demoRAF = requestAnimationFrame(stepDemo);
     }
+
     function openDemo() {
       SoundFX.playCoin();
       demoModal.classList.add('open');
@@ -2770,11 +3935,13 @@
       cancelAnimationFrame(demoRAF);
       demoRAF = requestAnimationFrame(stepDemo);
     }
+
     function closeDemo() {
       demoModal.classList.remove('open');
       demoModal.setAttribute('aria-hidden', 'true');
       cancelAnimationFrame(demoRAF);
     }
+
     document.getElementById('btn-launch-demo').addEventListener('click', openDemo);
     document.getElementById('qr-card').addEventListener('click', openDemo);
     document.getElementById('btn-close-demo').addEventListener('click', closeDemo);
@@ -2782,18 +3949,21 @@
       SoundFX.playCoin();
       resetDemoGame();
     });
+
     demoCanvas.addEventListener('mousemove', (e) => {
       if (!game) return;
       const rect = demoCanvas.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 640;
       game.paddle.x = Math.max(8, Math.min(640 - game.paddle.w - 8, x - game.paddle.w / 2));
     });
+
     demoCanvas.addEventListener('touchmove', (e) => {
       if (!game) return;
       const rect = demoCanvas.getBoundingClientRect();
       const x = ((e.touches[0].clientX - rect.left) / rect.width) * 640;
       game.paddle.x = Math.max(8, Math.min(640 - game.paddle.w - 8, x - game.paddle.w / 2));
     }, { passive: true });
+
     window.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowLeft') keys.left = true;
       if (e.key === 'ArrowRight') keys.right = true;
@@ -2802,6 +3972,7 @@
       if (e.key === 'ArrowLeft') keys.left = false;
       if (e.key === 'ArrowRight') keys.right = false;
     });
+
     updateHUD();
   </script>
 </body>
