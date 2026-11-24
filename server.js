@@ -87,7 +87,7 @@ app.use(express.static(path.join(__dirname, 'public'), {
     }
     if (filePath.endsWith('.wasm')) {
       res.setHeader('Content-Type', 'application/wasm');
-    } else if (/\.(nes|bin|sms|sfc|smc|pce|z64|a26|cue|psx|exe|zip)$/i.test(filePath)) {
+    } else if (/\.(nes|bin|sms|sfc|smc|pce|z64|n64|v64|gen|md|smd|a26|cue|iso|chd|pbp|psx|exe|zip)$/i.test(filePath)) {
       res.setHeader('Content-Type', 'application/octet-stream');
     }
   }

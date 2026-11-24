@@ -47,6 +47,7 @@ async function testRoutes() {
     { path: '/emulators?console=pc-engine', expectStatus: 200, checkBody: 'beetle_pce_fast' },
     { path: '/emulators?console=nintendo-64', expectStatus: 200, checkBody: 'parallel_n64' },
     { path: '/emulators?console=playstation', expectStatus: 200, checkBody: 'pcsx_rearmed' },
+    { path: '/emulators?console=sega-saturn', expectStatus: 200, checkBody: 'yabause' },
     { path: '/legal', expectStatus: 200, checkBody: 'Используемые технологии' },
     { path: '/about', expectStatus: 200, checkBody: 'Retrospect' },
     { path: '/accessories', expectStatus: 200, checkBody: 'Аксессуары' },
@@ -81,6 +82,9 @@ async function testRoutes() {
     { path: '/games/nintendo-64-twintris-64', expectStatus: 200, checkBody: 'Twintris 64' },
     { path: '/games/playstation-takatron-2084', expectStatus: 200, checkBody: 'Takatron 2084' },
     { path: '/games/playstation-tetrade', expectStatus: 200, checkBody: 'Tetrade' },
+    { path: '/games/dendy-nes-action-53-volume-1-function-16', expectStatus: 200, checkBody: 'Action 53' },
+    { path: '/games/sega-mega-drive-tanglewood-demo', expectStatus: 200, checkBody: 'Tanglewood' },
+    { path: '/games/sega-saturn-celeste-classic-saturn-port', expectStatus: 200, checkBody: 'Celeste Classic' },
     { path: '/games/dendy-nes-super-mario-bros', expectStatus: 200, checkBody: 'Энциклопедическая запись' },
 
     // 5. Search queries & Sanitization
@@ -114,6 +118,9 @@ async function testRoutes() {
     { path: '/roms/n64/twintris.z64', expectStatus: 200, checkMime: 'application/octet-stream' },
     { path: '/roms/playstation/takatron.exe', expectStatus: 200, checkMime: 'application/octet-stream' },
     { path: '/roms/playstation/tetrade.cue', expectStatus: 200, checkMime: 'application/octet-stream' },
+    { path: '/roms/playstation/rocksngems.exe', expectStatus: 200, checkMime: 'application/octet-stream' },
+    { path: '/roms/saturn/celeste.cue', expectStatus: 200, checkMime: 'application/octet-stream' },
+    { path: '/roms/snes/pushstart.sfc', expectStatus: 200, checkMime: 'application/octet-stream' },
 
     // 8. 404 Error handling
     { path: '/non-existent-page-test-404', expectStatus: 404, checkBody: 'не найдена' },

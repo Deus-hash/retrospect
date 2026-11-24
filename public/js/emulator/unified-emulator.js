@@ -89,25 +89,28 @@
         romParam = window.location.origin + romDataOrUrl;
       }
 
-      // Handling for PlayStation games (ISO / CUE+BIN / PS-EXE)
-      if (core === 'pcsx_rearmed') {
-        if (typeof romDataOrUrl === 'string' && (romDataOrUrl.indexOf('demo') !== -1 || romDataOrUrl.indexOf('adventure') !== -1)) {
-          romParam = [
-            window.location.origin + '/roms/playstation/demo.cue',
-            window.location.origin + '/roms/playstation/demo.bin'
-          ];
-        } else if (typeof romDataOrUrl === 'string' && romDataOrUrl.indexOf('cavestory') !== -1) {
-          romParam = window.location.origin + '/roms/playstation/cavestory.iso';
-        } else if (typeof romDataOrUrl === 'string' && romDataOrUrl.indexOf('240p') !== -1) {
-          romParam = [
-            window.location.origin + '/roms/playstation/240pTestSuitePS1-EMU.cue',
-            window.location.origin + '/roms/playstation/240pTestSuitePS1-EMU.bin'
-          ];
-        } else {
-          romParam = [
-            window.location.origin + '/roms/playstation/demo.cue',
-            window.location.origin + '/roms/playstation/demo.bin'
-          ];
+      // Универсальная поддержка образов дисков (.cue + .bin tracks) для PlayStation, Sega Saturn и PC Engine CD
+      if (typeof romParam === 'string' && /\.cue(\?.*)?$/i.test(romParam)) {
+        try {
+          var cueResp = await fetch(romParam);
+          if (cueResp.ok) {
+            var cueText = await cueResp.text();
+            var baseDir = romParam.substring(0, romParam.lastIndexOf('/') + 1);
+            var files = [romParam];
+            var fileRe = /FILE\s+"([^"]+)"/gi;
+            var match;
+            while ((match = fileRe.exec(cueText)) !== null) {
+              var binUrl = baseDir + encodeURIComponent(match[1]).replace(/%2F/gi, '/');
+              if (files.indexOf(binUrl) === -1) {
+                files.push(binUrl);
+              }
+            }
+            if (files.length > 1) {
+              romParam = files;
+            }
+          }
+        } catch (cueErr) {
+          console.warn('CUE parse error:', cueErr);
         }
       }
 

@@ -112,7 +112,7 @@ const consoles = [
     year: 1994,
     description: '32-битная консоль Sega с двухпроцессорной архитектурой, непревзойдёнными 2D-файтингами, аркадными портами и культовыми эксклюзивами.',
     image: '/images/consoles/sega-saturn.png',
-    hasEmulator: false,
+    hasEmulator: true,
     emulatorType: 'nostalgist',
     emulatorCore: 'yabause',
     supportedExtensions: ['.iso', '.cue', '.bin'],

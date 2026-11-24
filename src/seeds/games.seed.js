@@ -1133,6 +1133,8 @@ const homebrewGames = [
   },
 ];
 
+const { curatedExpansion } = require('./curated-expansion');
+
 async function seedGames(Console) {
   const consuls = await Console.find({});
   const consoleMap = {};
@@ -1143,7 +1145,8 @@ async function seedGames(Console) {
   const GameModel = Console.db.model('Game');
 
   // 1. Seed legal playable games (homebrew, public domain, open source)
-  const allPlayableGames = [...homebrewGames, ...additionalHomebrews, ...pdGames];
+  const cleanExpansion = curatedExpansion.map(({ _candKey, ...rest }) => rest);
+  const allPlayableGames = [...homebrewGames, ...additionalHomebrews, ...pdGames, ...cleanExpansion];
   for (const hg of allPlayableGames) {
     const consoleId = consoleMap[hg.consoleSlug];
     if (!consoleId) {
