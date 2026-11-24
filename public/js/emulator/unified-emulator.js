@@ -381,7 +381,16 @@
       } else if (action === 'crt') {
         toggleCrt();
       } else if (action === 'fullscreen') {
-        var elem = document.getElementById('emulator-viewport') || canvasWrap || canvas;
+        var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.innerWidth <= 768;
+        // На ПК во весь экран разворачиваем чистую область холста (canvasWrap) без экранных сенсорных кнопок.
+        // На мобильных устройствах — контейнер viewport с сенсорным геймпадом, если он активен.
+        var elem;
+        if (isTouchDevice && touchGamepad && touchGamepad.style.display !== 'none') {
+          elem = document.getElementById('emulator-viewport') || canvasWrap || canvas;
+        } else {
+          elem = canvasWrap || document.getElementById('emulator-viewport') || canvas;
+        }
+
         var isFull = document.fullscreenElement || document.webkitFullscreenElement;
         if (!isFull) {
           if (elem && elem.requestFullscreen) {
