@@ -123,9 +123,23 @@ app.use((err, req, res, next) => {
 
 // Запуск HTTP-сервера и подключение к MongoDB
 if (require.main === module) {
-  const server = app.listen(config.port, '0.0.0.0', () => {
-    console.log(`Retrospect успешно запущен на http://0.0.0.0:${config.port}`);
+  const primaryPort = config.port;
+  const server = app.listen(primaryPort, '0.0.0.0', () => {
+    console.log(`Retrospect успешно запущен на http://0.0.0.0:${primaryPort}`);
   });
+
+  // Дополнительно слушаем резервный порт (8080 или 3000), чтобы прокси Railway и облачные балансировщики всегда получали ответ
+  const fallbackPort = primaryPort === 8080 ? 3000 : 8080;
+  try {
+    const extraServer = app.listen(fallbackPort, '0.0.0.0', () => {
+      console.log(`Retrospect дополнительно слушает порт http://0.0.0.0:${fallbackPort}`);
+    });
+    extraServer.on('error', (err) => {
+      // Игнорируем ошибку, если порт уже занят
+    });
+  } catch (e) {
+    // Игнорируем
+  }
 
   mongoose.connect(config.mongodbUri, { serverSelectionTimeoutMS: 5000 })
     .then(async () => {
