@@ -3,11 +3,24 @@ const path = require('path');
 const Console = require('../models/Console');
 const Game = require('../models/Game');
 const Accessory = require('../models/Accessory');
+const consolesSeed = require('../seeds/consoles.seed');
+
+async function syncConsoleControlsHelp() {
+  for (const c of consolesSeed) {
+    if (c && c.slug && c.controlsHelp) {
+      await Console.updateOne(
+        { slug: c.slug, controlsHelp: { $ne: c.controlsHelp } },
+        { $set: { controlsHelp: c.controlsHelp } }
+      );
+    }
+  }
+}
 
 async function autoSeed() {
   try {
     const gameCount = await Game.countDocuments();
     if (gameCount > 0) {
+      await syncConsoleControlsHelp();
       return; // Already seeded
     }
 
