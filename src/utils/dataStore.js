@@ -321,5 +321,114 @@ module.exports = {
     ).slice(0, 10);
 
     return { games, consoles, query: cleanQ };
+  },
+
+  async getEmulatorsData(consoleSlug, gameSlug) {
+    if (isDbConnected()) {
+      try {
+        const consoles = await Console.find({ hasEmulator: true }).sort({ bitness: 1, year: 1 }).lean();
+        let activeConsole = null;
+        if (consoleSlug) {
+          activeConsole = consoles.find(c => c.slug === consoleSlug);
+        }
+        if (!activeConsole && consoles.length > 0) {
+          activeConsole = consoles[0];
+        }
+
+        const [gamesForConsole, allPlayableGames, totalGamesForConsole] = await Promise.all([
+          Game.find({ consoleId: activeConsole ? activeConsole._id : null, isPlayableOnline: true }).sort({ rating: -1, year: -1, title: 1 }).lean(),
+          Game.find({ isPlayableOnline: true }).populate('consoleId').lean(),
+          Game.countDocuments({ consoleId: activeConsole ? activeConsole._id : null }),
+        ]);
+
+        let featuredGame = null;
+        if (gameSlug) {
+          featuredGame = gamesForConsole.find(g => g.slug === gameSlug) || allPlayableGames.find(g => g.slug === gameSlug);
+        }
+        if (!featuredGame && gamesForConsole.length > 0) {
+          featuredGame = gamesForConsole[0];
+        }
+
+        return {
+          consoles,
+          activeConsole,
+          gamesForConsole,
+          allPlayableGames,
+          featuredGame,
+          totalGamesForConsole,
+        };
+      } catch (e) {}
+    }
+
+    const snap = loadSnapshot();
+    const consoles = snap.consoles.filter(c => c.hasEmulator).sort((a, b) => a.bitness - b.bitness || a.year - b.year);
+    let activeConsole = null;
+    if (consoleSlug) {
+      activeConsole = consoles.find(c => c.slug === consoleSlug);
+    }
+    if (!activeConsole && consoles.length > 0) {
+      activeConsole = consoles[0];
+    }
+
+    const activeId = activeConsole ? String(activeConsole._id) : null;
+    const activeSlug = activeConsole ? activeConsole.slug : null;
+
+    const gamesForConsole = snap.games.filter(g =>
+      g.isPlayableOnline &&
+      g.consoleId &&
+      (String(g.consoleId._id) === activeId || g.consoleId.slug === activeSlug)
+    ).sort((a, b) => (b.rating || 0) - (a.rating || 0) || (b.year || 0) - (a.year || 0) || a.title.localeCompare(b.title));
+
+    const allPlayableGames = snap.games.filter(g => g.isPlayableOnline);
+    const totalGamesForConsole = snap.games.filter(g =>
+      g.consoleId && (String(g.consoleId._id) === activeId || g.consoleId.slug === activeSlug)
+    ).length;
+
+    let featuredGame = null;
+    if (gameSlug) {
+      featuredGame = gamesForConsole.find(g => g.slug === gameSlug) || allPlayableGames.find(g => g.slug === gameSlug);
+    }
+    if (!featuredGame && gamesForConsole.length > 0) {
+      featuredGame = gamesForConsole[0];
+    }
+
+    return {
+      consoles,
+      activeConsole,
+      gamesForConsole,
+      allPlayableGames,
+      featuredGame,
+      totalGamesForConsole,
+    };
+  },
+
+  async getLegalData() {
+    if (isDbConnected()) {
+      try {
+        const playableGames = await Game.find({ isPlayableOnline: true }).populate('consoleId').lean();
+        return { playableGames };
+      } catch (e) {}
+    }
+    const snap = loadSnapshot();
+    return { playableGames: snap.games.filter(g => g.isPlayableOnline) };
+  },
+
+  async getAboutData() {
+    if (isDbConnected()) {
+      try {
+        const [totalGames, totalConsoles, playableGames] = await Promise.all([
+          Game.countDocuments(),
+          Console.countDocuments(),
+          Game.countDocuments({ isPlayableOnline: true }),
+        ]);
+        return { totalGames, totalConsoles, playableGames };
+      } catch (e) {}
+    }
+    const snap = loadSnapshot();
+    return {
+      totalGames: snap.games.length,
+      totalConsoles: snap.consoles.length,
+      playableGames: snap.games.filter(g => g.isPlayableOnline).length,
+    };
   }
 };
