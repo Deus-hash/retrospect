@@ -578,7 +578,7 @@ const RAW_ENTRIES = [
     'Разбивайте многоцветные 3D-блоки на 64-битной консоли, собирайте бонусы и проходите уровни.',
     'Free Game Jam Homebrew (N64brew)', 'https://github.com/n64brew/Cellar', true],
 
-  // ===================== PLAYSTATION 1 (6 new) =====================
+  // ===================== PLAYSTATION 1 (6 playable) =====================
   ['playstation', 'celeste.cue', 'Celeste Classic (PSX Port)', 2021, 'Maddy Thorson & PSX Homebrew', 'Платформер', '1', 5,
     'Полный 32-битный порт PICO-8 Celeste на оригинальную Sony PlayStation с CD-музыкой.',
     'Официально вдохновлённый открытым исходным кодом Celeste PICO-8 порт для PlayStation 1 с точным управлением и музыкой из CD-аудиодорожек.',
@@ -599,6 +599,10 @@ const RAW_ENTRIES = [
     'Финальное издание прославленного Net Yaroze-хита в духе Boulder Dash для PS1.',
     'Знаменитый хит официальной программы Net Yaroze: прокладывайте подземные туннели, собирайте алмазы и уворачивайтесь от падающих валунов на десятках уровней.',
     'Free Net Yaroze Release', 'https://archive.org/details/psx_rocksngems', true],
+  ['playstation', 'zazerkalye2.cue', 'Zazerkalye 2 (Зазеркалье: Право на хороший день)', 2026, 'Zhelezomes', '3D-приключение', '1', 5,
+    'Сюрреалистичное PS1-приключение по вселенной «Зазеркалье» в эстетике 90-х.',
+    'Играбельная версия «Зазеркалье: Право на хороший день» для оригинальной Sony PlayStation от Zhelezomes на кастомном fixed-point 3D-движке.',
+    'Official Freeware PSX Release (Zhelezomes)', 'https://zazer-kalye.com', true],
 
   // ===================== SEGA SATURN (5 — verified in yabause!) =====================
   ['saturn', 'celeste.cue', 'Celeste Classic (Saturn Port)', 2021, 'en83 / Maddy Thorson', 'Платформер', '1', 5,

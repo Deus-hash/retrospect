@@ -16,11 +16,38 @@ async function syncConsoleControlsHelp() {
   }
 }
 
+async function syncMissingGamesFromSnapshot() {
+  const snapshotPath = path.join(__dirname, '../data/db-snapshot.json');
+  if (!fs.existsSync(snapshotPath)) return;
+  const snapshot = JSON.parse(fs.readFileSync(snapshotPath, 'utf8'));
+  if (!snapshot.games || !snapshot.games.length) return;
+
+  const snapConsoleSlugById = new Map((snapshot.consoles || []).map(c => [String(c._id), c.slug]));
+  const dbConsoles = await Console.find({}, '_id slug').lean();
+  const dbConsoleIdBySlug = new Map(dbConsoles.map(c => [c.slug, c._id]));
+  const existingSlugs = new Set((await Game.find({}, 'slug').lean()).map(g => g.slug));
+
+  const toInsert = [];
+  for (const g of snapshot.games) {
+    if (!g || !g.slug || existingSlugs.has(g.slug)) continue;
+    const cSlug = snapConsoleSlugById.get(String(g.consoleId));
+    const targetConsoleId = cSlug ? dbConsoleIdBySlug.get(cSlug) : g.consoleId;
+    if (!targetConsoleId) continue;
+    const { _id, ...rest } = g;
+    toInsert.push({ ...rest, consoleId: targetConsoleId });
+  }
+  if (toInsert.length > 0) {
+    await Game.insertMany(toInsert);
+    console.log(`AutoSeed: Synced ${toInsert.length} new game(s) from snapshot.`);
+  }
+}
+
 async function autoSeed() {
   try {
     const gameCount = await Game.countDocuments();
     if (gameCount > 0) {
       await syncConsoleControlsHelp();
+      await syncMissingGamesFromSnapshot();
       return; // Already seeded
     }
 
