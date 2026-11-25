@@ -35,6 +35,7 @@ function makeCurated(
 ) {
   const consoleSlug = DIR_TO_CONSOLE[dir];
   const slug = slugify(`${consoleSlug}-${title}`);
+  const hasRom = Boolean(file);
   return {
     title,
     consoleSlug,
@@ -52,15 +53,19 @@ function makeCurated(
     licenseType,
     licenseAuthor: developer,
     licenseUrl,
-    isPlayableOnline: true,
+    isPlayableOnline: hasRom,
     isHomebrew,
-    romFile: `/roms/${dir}/${file}`,
-    _candKey: `${dir}__${file}.png`,
+    romFile: hasRom ? `/roms/${dir}/${file}` : null,
+    _candKey: hasRom ? `${dir}__${file}.png` : `${slug}.png`,
   };
 }
 
 const RAW_ENTRIES = [
-  // ===================== DENDY / NES (39) =====================
+  // ===================== DENDY / NES (39 + Micro Mages catalog entry) =====================
+  ['nes', null, 'Micro Mages', 2019, 'Morphcat Games', 'Платформер / Кооп', '1-4', 5,
+    'Культовый современный NES-хит для 1–4 игроков, уместившийся в 40 КБ картриджа.',
+    'Знаменитый кооперативный вертикальный платформер 2019 года от студии Morphcat Games для оригинальной Nintendo Entertainment System: 26 этапов башен, сражения с боссами и одновременный мультиплеер до 4 человек через Four Score — и всё это в объёме оригинального картриджа 40 КБ. Официальный ROM-файл приобретается у разработчиков на itch.io.',
+    'Commercial Indie ROM (Morphcat Games)', 'https://morphcatgames.itch.io/micromages', true],
   ['nes', 'action53-vol1.nes', 'Action 53 Volume 1: Function 16', 2013, 'NESdev Community', 'Сборник', '1-2', 5,
     'Культовый многоигровой сборник лучших NES-хоумбрю во главе со Streemerz и Lan Master.',
     'Первый том знаменитой антологии Action 53 под названием «Function 16: Streemerz Bundle», объединяющий 16 лучших игр и демо с конкурса NESdev на одной виртуальной картриджной плате iNES Mapper 28.',
