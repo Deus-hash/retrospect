@@ -56,7 +56,7 @@ const consoles = [
     emulatorType: 'nostalgist',
     emulatorCore: 'genesis_plus_gx',
     supportedExtensions: ['.bin', '.gen', '.md', '.smd'],
-    controlsHelp: 'Стрелки — перемещение, Z/X/C — A/B/C, A/S/D — X/Y/Z, Enter — Start',
+    controlsHelp: 'WASD / Стрелки — перемещение, Z/X/C — A/B/C, F/G/H — X/Y/Z, Shift — Mode, Enter — Start',
     color: '#2196f3',
   },
   {
@@ -71,7 +71,7 @@ const consoles = [
     emulatorType: 'nostalgist',
     emulatorCore: 'snes9x',
     supportedExtensions: ['.smc', '.sfc'],
-    controlsHelp: 'Стрелки — перемещение, Z — B, X — A, A — Y, S — X, Q — L, W — R, Enter — Start, Shift — Select',
+    controlsHelp: 'WASD / Стрелки — перемещение, Z/J — B, X/K — A, C — Y, V — X, Q/E — L/R, Enter — Start, Shift — Select',
     color: '#9c27b0',
   },
   {
@@ -86,7 +86,7 @@ const consoles = [
     emulatorType: 'nostalgist',
     emulatorCore: 'beetle_pce_fast',
     supportedExtensions: ['.pce', '.bin'],
-    controlsHelp: 'Стрелки — перемещение, Z — Кнопка I, X — Кнопка II, Enter — Run, Shift — Select',
+    controlsHelp: 'WASD / Стрелки — перемещение, Z — Кнопка II, X — Кнопка I, Enter — Run, Shift — Select',
     color: '#e91e63',
   },
   {
@@ -101,7 +101,7 @@ const consoles = [
     emulatorType: 'nostalgist',
     emulatorCore: 'pcsx_rearmed',
     supportedExtensions: ['.psx', '.exe', '.iso', '.cue', '.bin', '.pbp'],
-    controlsHelp: 'WASD / Стрелки — стик и D-Pad, I/J/K/L — правый стик (камера), Z/X/C/V — ✕/○/□/△, Q/E — L1/R1, R/F — L2/R2, Space — ✕, Enter — Start, Shift — Select',
+    controlsHelp: 'WASD / Стрелки — движение, I/J/K/L — правый стик (камера), Z/X/C/V — ✕/○/□/△, Q/E — L1/R1, R/F — L2/R2, Space — ✕, Enter — Start, Shift — Select',
     color: '#4caf50',
   },
   {
@@ -116,7 +116,7 @@ const consoles = [
     emulatorType: 'nostalgist',
     emulatorCore: 'yabause',
     supportedExtensions: ['.iso', '.cue', '.bin'],
-    controlsHelp: 'Стрелки — перемещение, Z/X/C — A/B/C, A/S/D — X/Y/Z, Q/W — L/R, Enter — Start',
+    controlsHelp: 'WASD / Стрелки — перемещение, Z/X/C — A/B/C, F/G/H — X/Y/Z, Q/E — L/R, Enter — Start',
     color: '#ff9800',
   },
   {

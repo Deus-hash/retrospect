@@ -49,7 +49,7 @@ async function testRoutes() {
     { path: '/emulators?console=playstation', expectStatus: 200, checkBody: 'pcsx_rearmed' },
     { path: '/emulators?console=playstation', expectStatus: 200, checkBody: 'touch-btn--r2' },
     { path: '/emulators?console=playstation', expectStatus: 200, checkBody: 'emulator-landscape-exit' },
-    { path: '/emulators?console=playstation', expectStatus: 200, checkBody: 'unified-emulator.js?v=4.0' },
+    { path: '/emulators?console=playstation', expectStatus: 200, checkBody: 'unified-emulator.js?v=4.1' },
     { path: '/emulators?console=playstation', expectStatus: 200, checkBody: 'emulator.css?v=4.0' },
     { path: '/emulators?console=sega-saturn', expectStatus: 200, checkBody: 'yabause' },
     { path: '/legal', expectStatus: 200, checkBody: 'Используемые технологии' },
